@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light"> <!-- Default theme -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools Hub - Modern & Intuitive Online Utilities</title>
+    <title>Tools Hub Pro - Advanced Online Utilities</title>
     <style>
         :root {
             --primary-blue: rgb(59, 130, 246);
@@ -11,11 +11,11 @@
             --primary-blue-desaturated: rgb(69, 120, 216);
             --accent-blue-light: rgb(96, 165, 250);
 
-            --text-headings: rgb(20, 40, 85); /* Deeper, richer blue for headings */
-            --text-primary: rgb(41, 51, 65); /* Darker, more refined gray */
-            --text-secondary: rgb(85, 95, 109); /* Softer medium gray */
+            --text-headings: rgb(20, 40, 85);
+            --text-primary: rgb(41, 51, 65);
+            --text-secondary: rgb(85, 95, 109);
 
-            --bg-main: rgb(248, 250, 253); /* Very light, cool off-white */
+            --bg-main: rgb(248, 250, 253);
             --bg-card: white;
             --bg-card-hover: rgb(253, 254, 255);
 
@@ -26,7 +26,7 @@
             --shadow-medium: 0 8px 25px rgba(59, 130, 246, 0.1);
             --shadow-strong: 0 12px 35px rgba(59, 130, 246, 0.15);
 
-            --footer-bg: rgb(27, 37, 50); /* Dark, cool gray-blue */
+            --footer-bg: rgb(27, 37, 50);
             --footer-text: rgb(180, 190, 205);
             --footer-link: var(--accent-blue-light);
             --footer-link-hover: white;
@@ -42,8 +42,6 @@
             --transition-medium: 0.3s ease-out;
         }
 
-        /* Dark Mode Variables (Optional - to be toggled with JS) */
-        /*
         html[data-theme="dark"] {
             --text-headings: rgb(210, 220, 255);
             --text-primary: rgb(220, 225, 235);
@@ -57,409 +55,286 @@
             --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.3);
             --footer-bg: rgb(15, 20, 30);
         }
-        */
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
         body {
-            font-family: var(--font-primary);
-            color: var(--text-primary);
-            background-color: var(--bg-main);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            font-family: var(--font-primary); color: var(--text-primary); background-color: var(--bg-main);
+            line-height: 1.7; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden;
         }
-
-        a {
-            text-decoration: none;
-            color: var(--primary-blue);
-            transition: color var(--transition-fast);
-        }
-        a:hover {
-            color: var(--primary-blue-darker);
-        }
-
-        .container {
-            width: 92%;
-            max-width: 1280px; /* Wider max-width for modern layouts */
-            margin: 0 auto;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: var(--font-headings);
-            font-weight: 700; /* Bolder headings */
-            color: var(--text-headings);
-            line-height: 1.3;
-        }
+        a { text-decoration: none; color: var(--primary-blue); transition: color var(--transition-fast); }
+        a:hover { color: var(--primary-blue-darker); }
+        .container { width: 92%; max-width: 1280px; margin: 0 auto; }
+        h1, h2, h3, h4 { font-family: var(--font-headings); font-weight: 700; color: var(--text-headings); line-height: 1.3; }
 
         /* --- Header --- */
         .site-header {
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 1rem 0; position: sticky; top: 0; z-index: 1000;
             transition: background-color var(--transition-medium), box-shadow var(--transition-medium), backdrop-filter var(--transition-medium);
         }
         .site-header.scrolled {
-            background-color: rgba(255, 255, 255, 0.85); /* Light glassmorphism */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid var(--border-subtle);
         }
         html[data-theme="dark"] .site-header.scrolled {
-            background-color: rgba(30, 38, 52, 0.85); /* Dark glassmorphism */
+            background-color: rgba(30, 38, 52, 0.85); border-bottom-color: rgba(255,255,255,0.1);
         }
-
-
-        .site-header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-headings);
-            font-size: clamp(1.5rem, 4vw, 1.8rem); /* Responsive logo size */
-            font-weight: 700;
-            color: var(--text-headings);
-            letter-spacing: -0.5px;
-        }
-
-        .main-nav ul {
-            list-style: none;
-            display: flex;
-            align-items: center;
-        }
-        .main-nav li { margin-left: 2rem; }
+        .site-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-headings); font-size: clamp(1.5rem, 4vw, 1.8rem); font-weight: 700; color: var(--text-headings); letter-spacing: -0.5px; }
+        .main-nav ul { list-style: none; display: flex; align-items: center; }
+        .main-nav li { margin-left: 1.5rem; } /* Reduced margin for more actions */
         .main-nav a {
-            font-weight: 500;
-            color: var(--text-secondary);
-            padding: 0.5rem 0.25rem;
-            position: relative;
-            transition: color var(--transition-fast);
+            font-weight: 500; color: var(--text-secondary); padding: 0.5rem 0.25rem; position: relative; transition: color var(--transition-fast);
         }
-        .main-nav a:hover, .main-nav a.active {
-            color: var(--primary-blue-desaturated);
-        }
+        .main-nav a:hover, .main-nav a.active { color: var(--primary-blue-desaturated); }
         .main-nav a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px; /* Small dot indicator */
-            height: 6px;
-            background-color: var(--primary-blue);
-            border-radius: 50%;
+            content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+            width: 6px; height: 6px; background-color: var(--primary-blue); border-radius: 50%;
         }
-
+        .header-actions { display: flex; align-items: center; gap: 0.5rem; margin-left: 1rem; } /* Added margin-left */
+        .header-action-btn {
+            background-color: transparent; border: none; color: var(--text-secondary); padding: 0.5rem;
+            border-radius: var(--border-radius-sm); cursor: pointer; display: flex; align-items: center; gap: 0.3rem;
+            transition: background-color var(--transition-fast), color var(--transition-fast);
+        }
+        .header-action-btn:hover { background-color: rgba(59, 130, 246, 0.1); color: var(--primary-blue-desaturated); }
+        html[data-theme="dark"] .header-action-btn:hover { background-color: rgba(96, 165, 250, 0.15); }
+        .header-action-btn svg { width: 20px; height: 20px; stroke-width: 2; }
+        .kbd-shortcut {
+            font-size: 0.7rem; padding: 0.1em 0.4em; border-radius: 3px; border: 1px solid var(--border-subtle);
+            background-color: rgba(0,0,0,0.02); color: var(--text-secondary); margin-left: 0.2rem;
+        }
+        html[data-theme="dark"] .kbd-shortcut { border-color: rgba(255,255,255,0.2); background-color: rgba(255,255,255,0.05); }
         .header-contact {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            background-color: rgba(59, 130, 246, 0.05);
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-sm);
-            transition: background-color var(--transition-fast);
+            font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center;
+            background-color: rgba(59, 130, 246, 0.05); padding: 0.5rem 1rem; border-radius: var(--border-radius-sm);
+            transition: background-color var(--transition-fast); margin-left: 1rem; /* Added margin-left */
         }
-        .header-contact:hover {
-            background-color: rgba(59, 130, 246, 0.1);
-        }
+        .header-contact:hover { background-color: rgba(59, 130, 246, 0.1); }
         .header-contact .icon { margin-right: 0.5rem; color: var(--primary-blue); font-size: 1.1rem; }
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-headings); }
 
-        .mobile-menu-toggle {
-            display: none;
-            background: none; border: none;
-            font-size: 1.8rem; cursor: pointer; color: var(--text-headings);
-        }
 
         /* --- Hero Section --- */
         .hero-section {
-            padding: 5rem 0 4rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden; /* For aurora */
-            background-color: var(--bg-main); /* Fallback */
+            padding: 5rem 0 4rem; text-align: center; position: relative; overflow: hidden; background-color: var(--bg-main);
         }
-        /* Aurora Background */
         .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -20%; left: -20%; right: -20%; bottom: -20%;
+            content: ''; position: absolute; top: -20%; left: -20%; right: -20%; bottom: -20%;
             background-image:
                 radial-gradient(ellipse at 20% 25%, hsla(215, 80%, 70%, 0.25) 0px, transparent 50%),
                 radial-gradient(ellipse at 80% 30%, hsla(240, 70%, 75%, 0.2) 0px, transparent 50%),
                 radial-gradient(ellipse at 50% 80%, hsla(190, 80%, 65%, 0.15) 0px, transparent 50%);
             animation: aurora-flow 25s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
-            z-index: 0;
-            opacity: 0.8;
-            will-change: transform; /* Performance hint */
+            z-index: 0; opacity: 0.8; will-change: transform;
         }
         @keyframes aurora-flow {
             0% { transform: translate(-5%, -5%) rotate(0deg) scale(1); }
             100% { transform: translate(5%, 5%) rotate(10deg) scale(1.1); }
         }
-        .hero-content {
-            position: relative; /* Above aurora */
-            z-index: 1;
-        }
+        .hero-content { position: relative; z-index: 1; }
         .hero-section h1 {
-            font-size: clamp(2.8rem, 6vw, 4.5rem);
-            margin-bottom: 1rem;
-            max-width: 900px;
-            margin-left: auto; margin-right: auto;
-            letter-spacing: -1px;
-            background: linear-gradient(45deg, var(--primary-blue-desaturated), var(--primary-blue-darker));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: fadeInDown 0.8s ease-out;
+            font-size: clamp(2.8rem, 6vw, 4.5rem); margin-bottom: 1rem; max-width: 900px; margin-left: auto; margin-right: auto;
+            letter-spacing: -1px; background: linear-gradient(45deg, var(--primary-blue-desaturated), var(--primary-blue-darker));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: fadeInDown 0.8s ease-out;
         }
         .hero-section .subheadline {
-            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-            color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-            max-width: 750px;
-            margin-left: auto; margin-right: auto;
-            animation: fadeInUp 0.8s 0.2s ease-out backwards;
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem); color: var(--text-secondary); margin-bottom: 2.5rem;
+            max-width: 750px; margin-left: auto; margin-right: auto; animation: fadeInUp 0.8s 0.2s ease-out backwards;
         }
         .cta-button {
-            display: inline-flex; /* For icon alignment */
-            align-items: center;
-            gap: 0.5rem;
+            display: inline-flex; align-items: center; gap: 0.5rem;
             background-image: linear-gradient(45deg, var(--primary-blue), var(--primary-blue-darker));
-            color: white;
-            padding: 1rem 2.2rem;
-            border-radius: var(--border-radius-md);
-            font-size: 1.15rem;
-            font-weight: 600; /* Bolder CTA */
+            color: white; padding: 1rem 2.2rem; border-radius: var(--border-radius-md);
+            font-size: 1.15rem; font-weight: 600;
             transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-            box-shadow: var(--shadow-medium);
-            animation: fadeInUp 0.8s 0.4s ease-out backwards;
+            box-shadow: var(--shadow-medium); animation: fadeInUp 0.8s 0.4s ease-out backwards;
         }
-        .cta-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: var(--shadow-strong);
-            color: white;
-        }
-        .cta-button:active {
-            transform: translateY(-1px) scale(1);
-            box-shadow: var(--shadow-soft);
-        }
+        .cta-button:hover { transform: translateY(-3px) scale(1.02); box-shadow: var(--shadow-strong); color: white; }
+        .cta-button:active { transform: translateY(-1px) scale(1); box-shadow: var(--shadow-soft); }
         .cta-button .icon { font-size: 1.2em; }
-
         .tool-variety-showcase {
-            margin-top: 3.5rem;
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            animation: fadeInUp 0.8s 0.6s ease-out backwards;
+            margin-top: 3.5rem; display: flex; justify-content: center; gap: 1.5rem; animation: fadeInUp 0.8s 0.6s ease-out backwards;
         }
         .tool-variety-showcase .showcase-item {
-            background-color: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(5px);
-            padding: 0.8rem 1.2rem;
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            background-color: rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            padding: 0.8rem 1.2rem; border-radius: var(--border-radius-md); box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);
             transition: transform var(--transition-fast), box-shadow var(--transition-fast);
         }
-        .tool-variety-showcase .showcase-item:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-soft);
-        }
+        html[data-theme="dark"] .tool-variety-showcase .showcase-item { background-color: rgba(40, 50, 70, 0.6); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .tool-variety-showcase .showcase-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
         .tool-variety-showcase .icon { font-size: 1.5em; color: var(--primary-blue); }
 
         /* --- Search Section --- */
         .search-section {
-            padding: 3rem 0;
-            background-color: var(--bg-main); /* Consistent with body, or slightly different */
-            border-top: 1px solid var(--border-subtle);
-            border-bottom: 1px solid var(--border-subtle);
+            padding: 3rem 0; background-color: var(--bg-main);
+            border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);
         }
-        .search-bar-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 750px; /* Wider search */
-            margin: 0 auto;
-        }
+        .search-bar-wrapper { position: relative; width: 100%; max-width: 750px; margin: 0 auto; }
         .search-input {
-            width: 100%;
-            padding: 1.1rem 1.5rem 1.1rem 3.5rem;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--border-radius-md);
-            font-size: 1.05rem;
-            box-shadow: var(--shadow-soft);
-            transition: border-color var(--transition-medium), box-shadow var(--transition-medium);
-            background-color: var(--bg-card);
+            width: 100%; padding: 1.1rem 1.5rem 1.1rem 3.5rem; border: 1px solid var(--border-subtle);
+            border-radius: var(--border-radius-md); font-size: 1.05rem; box-shadow: var(--shadow-soft);
+            transition: border-color var(--transition-medium), box-shadow var(--transition-medium); background-color: var(--bg-card);
         }
         .search-input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
+            outline: none; border-color: var(--primary-blue);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), var(--shadow-medium);
         }
         .search-input::placeholder { color: var(--text-secondary); opacity: 0.8; }
+        html[data-theme="dark"] .search-input::placeholder { color: var(--text-secondary); opacity: 0.7; }
         .search-icon {
-            position: absolute;
-            left: 1.2rem; top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.3rem; color: var(--text-secondary);
-            opacity: 0.9; pointer-events: none;
+            position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%);
+            font-size: 1.3rem; color: var(--text-secondary); opacity: 0.9; pointer-events: none;
         }
         .search-input:focus + .search-icon { color: var(--primary-blue); }
 
         /* --- Tool Sections --- */
         .tool-category-section { padding: 4rem 0; }
+        .tool-category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
         .section-heading {
-            font-size: clamp(2rem, 5vw, 2.8rem);
-            margin-bottom: 1rem;
-            text-align: center;
-            display: flex; align-items: center; justify-content: center;
+            font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 0; /* Moved margin to parent */
+            text-align: left; /* Align left with filters */ display: flex; align-items: center;
             gap: 0.75rem; letter-spacing: -0.5px;
         }
         .section-heading .icon { font-size: 1.1em; color: var(--primary-blue-desaturated); }
+        .category-filters { display: flex; gap: 0.5rem; }
+        .filter-btn {
+            background-color: transparent; border: 1px solid var(--border-subtle); color: var(--text-secondary);
+            padding: 0.5rem 1rem; border-radius: var(--border-radius-sm); cursor: pointer; font-weight: 500;
+            transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .filter-btn:hover { background-color: rgba(59, 130, 246, 0.05); border-color: var(--primary-blue); color: var(--primary-blue); }
+        .filter-btn.active { background-color: var(--primary-blue); color: white; border-color: var(--primary-blue); }
         .section-subheading {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-            text-align: center;
-            max-width: 650px;
-            margin-left: auto; margin-right: auto;
+            font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 3rem;
+            text-align: left; /* Align with heading */ max-width: 100%; /* Full width for subheading */
         }
         .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Slightly wider min card size */
-            gap: 2rem; /* Increased gap */
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
         }
         .tool-card {
-            background-color: var(--bg-card);
-            border-radius: var(--border-radius-lg); /* More rounded */
-            padding: 1.75rem;
+            background-color: var(--bg-card); border-radius: var(--border-radius-lg); padding: 1.75rem;
             box-shadow: var(--shadow-soft);
             transition: transform var(--transition-medium), box-shadow var(--transition-medium), border-color var(--transition-medium);
-            display: flex; flex-direction: column;
-            border: 1px solid transparent; /* For hover border */
+            display: flex; flex-direction: column; border: 1px solid transparent; position: relative;
         }
         .tool-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: var(--shadow-strong);
-            border-color: var(--border-subtle);
-            background-color: var(--bg-card-hover);
+            transform: translateY(-8px) scale(1.01); box-shadow: var(--shadow-strong);
+            border-color: var(--border-subtle); background-color: var(--bg-card-hover);
         }
         .tool-card-header { display: flex; align-items: flex-start; margin-bottom: 1rem; }
+        .tool-card-header div { flex-grow: 1; } /* For text alignment */
         .tool-card .tool-icon {
-            font-size: 2rem; /* Larger icon */
-            color: var(--primary-blue);
-            margin-right: 1rem;
-            line-height: 1; /* Align better with text */
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy effect */
+            font-size: 2rem; color: var(--primary-blue); margin-right: 1rem;
+            line-height: 1; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .tool-card:hover .tool-icon { transform: rotate(10deg) scale(1.1); }
-        .tool-card h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-headings);
-            margin-top: 0.1em; /* Align with icon baseline */
-        }
+        .tool-card h3 { font-size: 1.3rem; font-weight: 600; color: var(--text-headings); margin-top: 0.1em; }
         .tool-card .description {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            min-height: 50px; /* Approx 2-3 lines */
-            flex-grow: 1;
+            font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;
+            margin-bottom: 1.5rem; min-height: 50px; flex-grow: 1;
         }
         .tool-button {
-            display: inline-flex; /* For icon alignment */
-            align-items: center;
-            justify-content: center; /* Center text and icon */
-            gap: 0.5rem;
-            width: 100%;
-            background-color: rgba(59, 130, 246, 0.08);
-            color: var(--primary-blue-darker);
-            padding: 0.8rem 1rem;
-            border-radius: var(--border-radius-md);
-            font-weight: 600;
-            text-align: center;
-            border: 1px solid transparent;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%;
+            background-color: rgba(59, 130, 246, 0.08); color: var(--primary-blue-darker);
+            padding: 0.8rem 1rem; border-radius: var(--border-radius-md); font-weight: 600;
+            text-align: center; border: 1px solid transparent;
             transition: background-color var(--transition-medium), color var(--transition-medium), transform var(--transition-fast), border-color var(--transition-medium);
         }
         .tool-button .icon { font-size: 1.1em; }
-        .tool-card:hover .tool-button {
-            background-color: var(--primary-blue);
-            color: white;
-            border-color: var(--primary-blue-darker);
-        }
+        .tool-card:hover .tool-button { background-color: var(--primary-blue); color: white; border-color: var(--primary-blue-darker); }
         .tool-button:active { transform: scale(0.97); }
-        .tool-button:focus-visible {
-            outline: 2px solid var(--primary-blue-darker);
-            outline-offset: 2px;
+        .tool-button:focus-visible { outline: 2px solid var(--primary-blue-darker); outline-offset: 2px; }
+        .favorite-btn {
+            position: absolute; top: 1rem; right: 1rem; background: none; border: none; padding: 0.3rem;
+            cursor: pointer; color: var(--text-secondary); z-index: 5; border-radius: 50%;
+            width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+            transition: color var(--transition-fast), transform var(--transition-fast);
         }
+        .favorite-btn:hover { color: var(--primary-blue); transform: scale(1.1); }
+        .favorite-btn.is-favorite { color: var(--primary-blue); }
+        .favorite-btn.is-favorite:hover { color: var(--primary-blue-darker); }
+        .favorite-btn svg { width: 20px; height: 20px; }
+        .icon-heart-filled { display: none; }
+        .favorite-btn.is-favorite .icon-heart-empty { display: none; }
+        .favorite-btn.is-favorite .icon-heart-filled { display: inline-block; }
+
+
+        /* --- Command Palette --- */
+        .command-palette-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: flex;
+            align-items: flex-start; justify-content: center; z-index: 2000; padding-top: 10vh;
+            opacity: 0; visibility: hidden; transition: opacity var(--transition-medium), visibility var(--transition-medium);
+        }
+        .command-palette-overlay[style*="flex"] { opacity: 1; visibility: visible; }
+        .command-palette {
+            background-color: var(--bg-card); border-radius: var(--border-radius-lg); width: 90%; max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column;
+            max-height: 70vh; transform: scale(0.95); transition: transform var(--transition-medium) 0.05s;
+        }
+        .command-palette-overlay[style*="flex"] .command-palette { transform: scale(1); }
+        .command-palette-header { display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid var(--border-subtle); }
+        .command-palette-search {
+            flex-grow: 1; padding: 0.75rem 1rem; font-size: 1rem; border: none; outline: none;
+            background-color: transparent; color: var(--text-primary);
+        }
+        html[data-theme="dark"] .command-palette-search::placeholder { color: var(--text-secondary); opacity: 0.7; }
+        .command-palette-close {
+            background: none; border: none; font-size: 1.5rem; color: var(--text-secondary);
+            padding: 0.5rem 0.75rem; cursor: pointer; line-height: 1;
+        }
+        .command-palette-results { padding: 0.5rem; overflow-y: auto; flex-grow: 1; }
+        .command-palette-item {
+            display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: var(--border-radius-sm);
+            cursor: pointer; transition: background-color var(--transition-fast); color: var(--text-primary); gap: 0.75rem;
+        }
+        .command-palette-item:hover, .command-palette-item.focused {
+            background-color: rgba(59, 130, 246, 0.1); color: var(--primary-blue-desaturated);
+        }
+        .command-palette-item .tool-icon svg { width: 20px; height: 20px; color: var(--primary-blue); }
+        .command-palette-item .category-hint {
+            margin-left: auto; font-size: 0.8rem; color: var(--text-secondary);
+            background-color: rgba(0,0,0,0.03); padding: 0.2em 0.5em; border-radius: var(--border-radius-sm);
+        }
+        html[data-theme="dark"] .command-palette-item .category-hint { background-color: rgba(255,255,255,0.05); }
+        .command-palette-tip { padding: 1rem; text-align: center; color: var(--text-secondary); font-size: 0.9rem; }
+
 
         /* --- Footer --- */
         .site-footer {
-            background-color: var(--footer-bg);
-            color: var(--footer-text);
-            padding: 4rem 0 2rem;
-            text-align: center;
-            border-top: 3px solid var(--primary-blue-desaturated);
+            background-color: var(--footer-bg); color: var(--footer-text); padding: 4rem 0 2rem;
+            text-align: center; border-top: 3px solid var(--primary-blue-desaturated);
         }
         .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            margin-bottom: 2.5rem;
+            display: flex; flex-direction: column; align-items: center; gap: 2rem; margin-bottom: 2.5rem;
         }
-        .footer-logo-tagline .logo {
-            color: white;
-            font-size: 1.75rem;
-            margin-bottom: 0.5rem;
-        }
+        .footer-logo-tagline .logo { color: white; font-size: 1.75rem; margin-bottom: 0.5rem; }
         .footer-logo-tagline .tagline { font-size: 1rem; color: var(--footer-text); opacity: 0.8;}
         .footer-contact-links .email-link {
-            color: var(--footer-link);
-            display: block;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            font-weight: 500;
+            color: var(--footer-link); display: block; margin-bottom: 1rem; font-size: 1.1rem; font-weight: 500;
         }
         .footer-contact-links .email-link:hover { text-decoration: underline; color: var(--footer-link-hover); }
-        .footer-quick-links a {
-            margin: 0 1rem; color: var(--footer-text); font-size: 0.95rem; opacity: 0.9;
-        }
+        .footer-quick-links a { margin: 0 1rem; color: var(--footer-text); font-size: 0.95rem; opacity: 0.9; }
         .footer-quick-links a:hover { color: var(--footer-link-hover); opacity: 1;}
         .footer-quick-links span { color: var(--text-secondary); }
         .copyright {
-            font-size: 0.85rem;
-            color: var(--footer-text);
-            opacity: 0.7;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 2rem;
-            margin-top: 2rem;
+            font-size: 0.85rem; color: var(--footer-text); opacity: 0.7;
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; margin-top: 2rem;
         }
 
         /* --- Responsive Adjustments --- */
+        @media (max-width: 1024px) { /* Adjust breakpoint for header actions */
+            .main-nav li { margin-left: 1rem; }
+            .header-actions { margin-left: 0.5rem; }
+            .header-contact { display: none; } /* Hide email on medium screens if actions take space */
+        }
         @media (max-width: 992px) {
             .main-nav ul {
-                display: none; flex-direction: column;
-                position: absolute; top: calc(100% + 1px); left: 0; width: 100%;
-                background-color: var(--bg-card);
-                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                display: none; flex-direction: column; position: absolute; top: calc(100% + 1px); left: 0; width: 100%;
+                background-color: var(--bg-card); box-shadow: 0 8px 16px rgba(0,0,0,0.1);
                 padding: 1rem 0; border-top: 1px solid var(--border-subtle);
             }
             .main-nav.active ul { display: flex; }
@@ -467,23 +342,24 @@
             .main-nav a { padding: 0.9rem 1.5rem; display: block; width: 100%; font-size: 1.05rem; }
             .main-nav a.active::after { display: none; }
             .main-nav a.active { background-color: rgba(59, 130, 246, 0.05); }
-            .header-contact { display: none; }
             .mobile-menu-toggle { display: block; }
             .main-nav .header-contact-mobile {
-                display: block; padding: 0.9rem 1.5rem;
-                font-size: 1rem; color: var(--text-secondary);
+                display: block; padding: 0.9rem 1.5rem; font-size: 1rem; color: var(--text-secondary);
             }
             .main-nav .header-contact-mobile .icon { margin-right: 0.5rem; }
+            .header-actions { /* Keep actions, but maybe hide kbd */ }
         }
-
         @media (min-width: 768px) {
-            .footer-content {
-                flex-direction: row; justify-content: space-between;
-                align-items: flex-start; text-align: left;
-            }
+            .footer-content { flex-direction: row; justify-content: space-between; align-items: flex-start; text-align: left; }
             .footer-logo-tagline, .footer-contact-links { text-align: left; }
         }
-
+        @media (max-width: 768px) {
+             .header-actions .kbd-shortcut { display: none; }
+             .command-palette { max-width: 95%; padding-top: 5vh; }
+             .tool-category-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+             .section-subheading { text-align: center; max-width: 600px; margin-left:auto; margin-right:auto; }
+             .section-heading { text-align: center; justify-content: center; width: 100%;}
+        }
         @media (max-width: 576px) {
             .tool-grid { grid-template-columns: 1fr; }
             .hero-section h1 { font-size: 2.2rem; }
@@ -496,20 +372,25 @@
         }
 
         /* --- Animations --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="command-palette-overlay" id="commandPaletteOverlay" style="display: none;">
+        <div class="command-palette">
+            <div class="command-palette-header">
+                <input type="search" id="commandPaletteSearch" placeholder="Search tools or press Esc to close...">
+                <button class="command-palette-close" id="commandPaletteClose" aria-label="Close command palette">×</button>
+            </div>
+            <div class="command-palette-results" id="commandPaletteResults">
+                <p class="command-palette-tip">Start typing to find a tool. Use ↑ and ↓ to navigate.</p>
+            </div>
+        </div>
+    </div>
 
     <header class="site-header" id="siteHeader">
         <div class="container">
@@ -524,6 +405,18 @@
                     </li>
                 </ul>
             </nav>
+
+            <div class="header-actions">
+                <button class="header-action-btn" id="commandPaletteToggle" aria-label="Open command palette (Ctrl+K)">
+                    <svg><use xlink:href="#icon-search"></use></svg>
+                    <kbd class="kbd-shortcut">Ctrl+K</kbd>
+                </button>
+                <button class="header-action-btn" id="darkModeToggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon"><use xlink:href="#icon-sun"></use></svg>
+                    <svg class="moon-icon" style="display:none;"><use xlink:href="#icon-moon"></use></svg>
+                </button>
+            </div>
+
             <a href="mailto:toolshub@gmail.com" class="header-contact" id="headerContactDesktop">
                 <span class="icon">📧</span> toolsHub@gmail.com
             </a>
@@ -561,100 +454,108 @@
         </section>
 
         <div id="tools">
+             <!-- Favorite Tools Section (Moved up, will be shown/hidden by JS) -->
+            <section id="favorite-tools-section" class="tool-category-section" style="display: none;">
+                <div class="container">
+                    <div class="tool-category-header">
+                        <h2 class="section-heading"><span class="icon">⭐</span> Favorite Tools</h2>
+                    </div>
+                    <p class="section-subheading">Your most-used tools, just a click away.</p>
+                    <div class="tool-grid" id="favoriteToolsGrid">
+                        <p id="noFavoritesMessage" style="display:none; text-align:center; color: var(--text-secondary);">You haven't favorited any tools yet. Click the ❤️ on a tool to add it here!</p>
+                    </div>
+                </div>
+            </section>
+
             <section class="tool-category-section">
                 <div class="container">
-                    <h2 class="section-heading"><span class="icon">🖼️</span> Image Tools</h2>
+                    <div class="tool-category-header">
+                        <h2 class="section-heading"><span class="icon">🖼️</span> Image Tools</h2>
+                        <div class="category-filters" id="imageToolFilters" style="display: none;"> {/* Initially hidden, JS can enable */}
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="converter">Converters</button>
+                            <button class="filter-btn" data-filter="optimizer">Optimizers</button>
+                        </div>
+                    </div>
                     <p class="section-subheading">Craft and refine your visuals with our powerful suite of image manipulation tools. Perfect for designers, marketers, and everyday users.</p>
                     <div class="tool-grid">
-                        <!-- Image Tools Cards (Repeat for all specified tools) -->
-                        <article class="tool-card">
-                            <div class="tool-card-header">
-                                <span class="tool-icon">🔄</span>
-                                <div><h3>Image Converter</h3></div>
-                            </div>
+                        <article class="tool-card" data-tool-id="image-converter" data-tool-name="Image Converter" data-tool-keywords="jpg,png,webp,gif,convert,image" data-category="converter">
+                            <button class="favorite-btn" aria-label="Add to favorites">
+                                <svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg>
+                                <svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg>
+                            </button>
+                            <div class="tool-card-header"><span class="tool-icon">🔄</span><div><h3>Image Converter</h3></div></div>
                             <p class="description">Seamlessly convert images between JPG, PNG, WEBP, GIF, and more formats.</p>
-                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
-                        <article class="tool-card">
-                            <div class="tool-card-header">
-                                <span class="tool-icon">📉</span>
-                                <div><h3>Image Compressor</h3></div>
-                            </div>
+                        <article class="tool-card" data-tool-id="image-compressor" data-tool-name="Image Compressor" data-tool-keywords="compress,reduce,optimize,image,jpg,png" data-category="optimizer">
+                            <button class="favorite-btn" aria-label="Add to favorites">
+                                <svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg>
+                                <svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg>
+                            </button>
+                            <div class="tool-card-header"><span class="tool-icon">📉</span><div><h3>Image Compressor</h3></div></div>
                             <p class="description">Drastically reduce image file sizes while maintaining excellent quality.</p>
-                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
-                         <article class="tool-card">
-                            <div class="tool-card-header">
-                                <span class="tool-icon">📏</span>
-                                <div><h3>Image Resizer</h3></div>
-                            </div>
+                         <article class="tool-card" data-tool-id="image-resizer" data-tool-name="Image Resizer" data-tool-keywords="resize,scale,dimensions,image" data-category="editor">
+                            <button class="favorite-btn" aria-label="Add to favorites">
+                                <svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg>
+                                <svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg>
+                            </button>
+                            <div class="tool-card-header"><span class="tool-icon">📏</span><div><h3>Image Resizer</h3></div></div>
                             <p class="description">Quickly resize images to exact dimensions or percentages.</p>
-                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
-                        <article class="tool-card">
-                            <div class="tool-card-header">
-                                <span class="tool-icon">✂️</span>
-                                <div><h3>Image Cropper</h3></div>
-                            </div>
+                        <article class="tool-card" data-tool-id="image-cropper" data-tool-name="Image Cropper" data-tool-keywords="crop,trim,cut,image" data-category="editor">
+                            <button class="favorite-btn" aria-label="Add to favorites">
+                                <svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg>
+                                <svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg>
+                            </button>
+                            <div class="tool-card-header"><span class="tool-icon">✂️</span><div><h3>Image Cropper</h3></div></div>
                             <p class="description">Crop images precisely to any aspect ratio or selection.</p>
-                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
-                         <article class="tool-card">
-                            <div class="tool-card-header">
-                                <span class="tool-icon">📄➡️🅰️</span>
-                                <div><h3>Image to Text (OCR)</h3></div>
-                            </div>
+                         <article class="tool-card" data-tool-id="image-to-text" data-tool-name="Image to Text (OCR)" data-tool-keywords="ocr,extract text,image text" data-category="utility">
+                            <button class="favorite-btn" aria-label="Add to favorites">
+                                <svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg>
+                                <svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg>
+                            </button>
+                            <div class="tool-card-header"><span class="tool-icon">📄➡️🅰️</span><div><h3>Image to Text (OCR)</h3></div></div>
                             <p class="description">Extract editable text from images with high accuracy OCR.</p>
-                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
-                        <article class="tool-card">
-                            <div class="tool-card-header">
-                                <span class="tool-icon">🔃</span>
-                                <div><h3>Image Rotator/Flipper</h3></div>
-                            </div>
+                        <article class="tool-card" data-tool-id="image-rotator" data-tool-name="Image Rotator/Flipper" data-tool-keywords="rotate,flip,orientation,image" data-category="editor">
+                            <button class="favorite-btn" aria-label="Add to favorites">
+                                <svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg>
+                                <svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg>
+                            </button>
+                            <div class="tool-card-header"><span class="tool-icon">🔃</span><div><h3>Image Rotator/Flipper</h3></div></div>
                             <p class="description">Easily rotate and flip images to the perfect orientation.</p>
-                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
                     </div>
                 </div>
             </section>
 
-            <!-- Other Tool Sections: Document, Calculator, Text, Web/Dev, Color, SEO, Utility -->
-            <!-- Follow the same structure as Image Tools section -->
-             <section class="tool-category-section">
+            <!-- Repeat for ALL other tool sections, adding data-tool-id, data-tool-name, data-tool-keywords, and data-category to each article.tool-card -->
+            <!-- Example: Document Tools -->
+            <section class="tool-category-section">
                 <div class="container">
-                    <h2 class="section-heading"><span class="icon">📄</span> Document Tools</h2>
+                     <div class="tool-category-header">
+                        <h2 class="section-heading"><span class="icon">📄</span> Document Tools</h2>
+                        </div>
                     <p class="section-subheading">Streamline your document workflows. Convert, compress, merge, split, and secure your files with intuitive tools.</p>
                     <div class="tool-grid">
-                        <article class="tool-card">
+                        <article class="tool-card" data-tool-id="pdf-to-word" data-tool-name="PDF to Word / Word to PDF" data-tool-keywords="pdf,word,docx,convert,document" data-category="converter">
+                             <button class="favorite-btn" aria-label="Add to favorites"><svg class="icon-heart-empty"><use xlink:href="#icon-heart-empty"></use></svg><svg class="icon-heart-filled"><use xlink:href="#icon-heart-filled"></use></svg></button>
                             <div class="tool-card-header"><span class="tool-icon">🔄</span><div><h3>PDF to Word / Word to PDF</h3></div></div>
-                            <p class="description">Effortlessly convert PDFs to editable Word files and vice-versa.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                            <p class="description">Effortlessly convert PDFs to editable Word files and vice-versa.</p><a href="#" class="tool-button use-tool-link">Use Tool <span class="icon">→</span></a>
                         </article>
-                        <article class="tool-card">
-                            <div class="tool-card-header"><span class="tool-icon">📉</span><div><h3>PDF Compressor</h3></div></div>
-                            <p class="description">Significantly reduce PDF file sizes for easy sharing and storage.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
-                        </article>
-                         <article class="tool-card">
-                            <div class="tool-card-header"><span class="tool-icon">➕➖</span><div><h3>PDF Merger & Splitter</h3></div></div>
-                            <p class="description">Combine multiple PDFs or split a single PDF into several files.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
-                        </article>
-                         <article class="tool-card">
-                            <div class="tool-card-header"><span class="tool-icon">📑</span><div><h3>Document Converter</h3></div></div>
-                            <p class="description">Convert between various document formats like DOCX, ODT, TXT.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
-                        </article>
-                        <article class="tool-card">
-                            <div class="tool-card-header"><span class="tool-icon">🔒🔓</span><div><h3>PDF Lock/Unlock</h3></div></div>
-                            <p class="description">Secure your PDFs with passwords or remove existing protection.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
-                        </article>
-                        <article class="tool-card">
-                            <div class="tool-card-header"><span class="tool-icon">✍️</span><div><h3>eSign PDF</h3></div></div>
-                            <p class="description">Electronically sign PDF documents quickly and securely.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
-                        </article>
+                        <!-- Add more document tools here with data attributes -->
                     </div>
                 </div>
             </section>
 
-            <!-- Add all other tool sections (Calculator, Text, Web/Dev, Color, SEO, Utility) here, following the same pattern -->
 
         </div>
     </main>
@@ -680,15 +581,20 @@
         </div>
     </footer>
 
+    <svg width="0" height="0" style="position:absolute; visibility: hidden;">
+      <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></symbol>
+      <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></symbol>
+      <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol>
+      <symbol id="icon-heart-empty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+      <symbol id="icon-heart-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></symbol>
+    </svg>
+
     <script>
         // --- Sticky Header with Glassmorphism on Scroll ---
         const siteHeader = document.getElementById('siteHeader');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                siteHeader.classList.add('scrolled');
-            } else {
-                siteHeader.classList.remove('scrolled');
-            }
+            if (window.scrollY > 50) siteHeader.classList.add('scrolled');
+            else siteHeader.classList.remove('scrolled');
         });
 
         // --- Mobile Menu Toggle ---
@@ -696,23 +602,15 @@
         const mainNav = document.getElementById('mainNav');
         const menuIconOpen = mobileMenuToggle.querySelector('.menu-icon-open');
         const menuIconClose = mobileMenuToggle.querySelector('.menu-icon-close');
-
         if (mobileMenuToggle && mainNav) {
             mobileMenuToggle.addEventListener('click', () => {
                 mainNav.classList.toggle('active');
                 const isExpanded = mainNav.classList.contains('active');
                 mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
-                if (isExpanded) {
-                    menuIconOpen.style.display = 'none';
-                    menuIconClose.style.display = 'inline-block';
-                } else {
-                    menuIconOpen.style.display = 'inline-block';
-                    menuIconClose.style.display = 'none';
-                }
+                menuIconOpen.style.display = isExpanded ? 'none' : 'inline-block';
+                menuIconClose.style.display = isExpanded ? 'inline-block' : 'none';
             });
         }
-
-        // --- Close Mobile Menu on Link Click ---
         const navLinks = mainNav.querySelectorAll('a');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -729,38 +627,232 @@
         const allNavLinks = document.querySelectorAll('.main-nav a');
         const sections = document.querySelectorAll('main section[id], footer[id]');
         function updateActiveLink() {
-            let current = 'home'; // Default to home
+            let current = 'home';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - (siteHeader.offsetHeight + 20)) {
+                if (pageYOffset >= sectionTop - (siteHeader.offsetHeight + 60)) { // Increased offset
                     current = section.getAttribute('id');
                 }
             });
-
             allNavLinks.forEach(link => {
                 link.classList.remove('active');
-                const href = link.getAttribute('href').substring(1);
-                if (href === current) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('href').substring(1) === current) link.classList.add('active');
             });
         }
         window.addEventListener('scroll', updateActiveLink);
-        window.addEventListener('load', updateActiveLink); // Initial check
+        window.addEventListener('load', updateActiveLink);
 
         // --- Update Copyright Year ---
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // --- (Optional) Live Search Filtering Placeholder ---
-        // This would require more JS to filter .tool-card elements
-        // const toolSearchInput = document.getElementById('toolSearchInput');
-        // if (toolSearchInput) {
-        //     toolSearchInput.addEventListener('input', (e) => {
-        //         const searchTerm = e.target.value.toLowerCase();
-        //         console.log('Searching for:', searchTerm);
-        //         // Add filtering logic here
-        //     });
-        // }
+
+        // --- ADVANCED FEATURES SCRIPT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const allToolCards = Array.from(document.querySelectorAll('.tool-card'));
+            const favoriteToolsSection = document.getElementById('favorite-tools-section');
+            const favoriteToolsGrid = document.getElementById('favoriteToolsGrid');
+            const noFavoritesMessage = document.getElementById('noFavoritesMessage');
+            const htmlElement = document.documentElement;
+
+            // --- 1. Dark Mode Toggle ---
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const sunIcon = darkModeToggle.querySelector('.sun-icon');
+            const moonIcon = darkModeToggle.querySelector('.moon-icon');
+
+            function setLightMode() {
+                htmlElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                sunIcon.style.display = 'inline-block'; // Sun for light mode
+                moonIcon.style.display = 'none';
+                darkModeToggle.setAttribute('aria-label', 'Switch to dark mode');
+            }
+            function setDarkMode() {
+                htmlElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'inline-block'; // Moon for dark mode
+                darkModeToggle.setAttribute('aria-label', 'Switch to light mode');
+            }
+            const currentTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (currentTheme === 'dark' || (!currentTheme && prefersDark)) setDarkMode(); else setLightMode();
+            darkModeToggle.addEventListener('click', () => {
+                if (htmlElement.getAttribute('data-theme') === 'dark') setLightMode(); else setDarkMode();
+            });
+
+            // --- 2. Command Palette ---
+            const commandPaletteOverlay = document.getElementById('commandPaletteOverlay');
+            const commandPaletteToggle = document.getElementById('commandPaletteToggle');
+            const commandPaletteSearch = document.getElementById('commandPaletteSearch');
+            const commandPaletteResults = document.getElementById('commandPaletteResults');
+            const commandPaletteClose = document.getElementById('commandPaletteClose');
+            let commandPaletteItems = [];
+            let focusedItemIndex = -1;
+
+            function openCommandPalette() {
+                commandPaletteOverlay.style.display = 'flex';
+                commandPaletteSearch.value = '';
+                populateCommandPaletteResults('');
+                commandPaletteSearch.focus();
+                focusedItemIndex = -1;
+            }
+            function closeCommandPalette() { commandPaletteOverlay.style.display = 'none'; }
+
+            commandPaletteToggle.addEventListener('click', openCommandPalette);
+            commandPaletteClose.addEventListener('click', closeCommandPalette);
+            commandPaletteOverlay.addEventListener('click', (e) => { if (e.target === commandPaletteOverlay) closeCommandPalette(); });
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCommandPalette(); }
+                if (e.key === 'Escape' && commandPaletteOverlay.style.display === 'flex') closeCommandPalette();
+
+                if (commandPaletteOverlay.style.display === 'flex' && commandPaletteItems.length > 0) {
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        focusedItemIndex = (focusedItemIndex + 1) % commandPaletteItems.length;
+                        updateFocus();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        focusedItemIndex = (focusedItemIndex - 1 + commandPaletteItems.length) % commandPaletteItems.length;
+                        updateFocus();
+                    } else if (e.key === 'Enter' && focusedItemIndex > -1) {
+                        e.preventDefault();
+                        commandPaletteItems[focusedItemIndex].click();
+                    }
+                }
+            });
+            function updateFocus() {
+                commandPaletteItems.forEach((item, index) => {
+                    item.classList.toggle('focused', index === focusedItemIndex);
+                    if (index === focusedItemIndex) item.scrollIntoView({ block: 'nearest' });
+                });
+            }
+            commandPaletteSearch.addEventListener('input', (e) => {
+                 populateCommandPaletteResults(e.target.value.toLowerCase());
+                 focusedItemIndex = -1; // Reset focus on new input
+            });
+            function populateCommandPaletteResults(query) {
+                commandPaletteResults.innerHTML = '';
+                const filteredTools = allToolCards.filter(card => {
+                    const name = card.dataset.toolName?.toLowerCase() || '';
+                    const keywords = card.dataset.toolKeywords?.toLowerCase() || '';
+                    return name.includes(query) || keywords.includes(query);
+                });
+                commandPaletteItems = []; // Reset for current results
+
+                if (filteredTools.length > 0) {
+                    filteredTools.forEach(card => {
+                        const resultItem = document.createElement('a');
+                        resultItem.href = card.querySelector('.use-tool-link')?.href || '#';
+                        resultItem.classList.add('command-palette-item');
+                        resultItem.innerHTML = `
+                            <span class="tool-icon">${card.querySelector('.tool-icon')?.innerHTML || ''}</span>
+                            <span>${card.dataset.toolName}</span>
+                            <span class="category-hint">${card.closest('.tool-category-section')?.querySelector('.section-heading .icon')?.textContent || ''}</span>`;
+                        resultItem.addEventListener('click', closeCommandPalette);
+                        commandPaletteResults.appendChild(resultItem);
+                        commandPaletteItems.push(resultItem);
+                    });
+                } else if (query) {
+                    commandPaletteResults.innerHTML = `<p class="command-palette-tip">No tools found for "${query}".</p>`;
+                } else {
+                     commandPaletteResults.innerHTML = `<p class="command-palette-tip">Start typing to find a tool. Use ↑ and ↓ to navigate.</p>`;
+                }
+            }
+
+            // --- 3. Favorite Tools ---
+            let favoriteToolIds = JSON.parse(localStorage.getItem('favoriteTools')) || [];
+            function updateFavoriteButtonState(button, toolId) {
+                const heartEmpty = button.querySelector('.icon-heart-empty');
+                const heartFilled = button.querySelector('.icon-heart-filled');
+                if (favoriteToolIds.includes(toolId)) {
+                    button.classList.add('is-favorite'); button.setAttribute('aria-label', 'Remove from favorites');
+                    heartEmpty.style.display = 'none'; heartFilled.style.display = 'inline-block';
+                } else {
+                    button.classList.remove('is-favorite'); button.setAttribute('aria-label', 'Add to favorites');
+                    heartEmpty.style.display = 'inline-block'; heartFilled.style.display = 'none';
+                }
+            }
+            function toggleFavorite(toolId, button) {
+                if (favoriteToolIds.includes(toolId)) favoriteToolIds = favoriteToolIds.filter(id => id !== toolId);
+                else favoriteToolIds.push(toolId);
+                localStorage.setItem('favoriteTools', JSON.stringify(favoriteToolIds));
+                updateFavoriteButtonState(button, toolId);
+                renderFavoriteTools();
+            }
+            function renderFavoriteTools() {
+                if (!favoriteToolsGrid || !favoriteToolsSection) return;
+                favoriteToolsGrid.innerHTML = '';
+                const favoritedCardsOriginal = allToolCards.filter(card => favoriteToolIds.includes(card.dataset.toolId));
+
+                if (favoritedCardsOriginal.length > 0) {
+                    favoritedCardsOriginal.forEach(originalCard => {
+                        const clone = originalCard.cloneNode(true);
+                        const favBtnClone = clone.querySelector('.favorite-btn');
+                        if (favBtnClone) {
+                            updateFavoriteButtonState(favBtnClone, originalCard.dataset.toolId);
+                            favBtnClone.addEventListener('click', () => {
+                                toggleFavorite(originalCard.dataset.toolId, favBtnClone);
+                                const originalFavBtn = originalCard.querySelector('.favorite-btn');
+                                if (originalFavBtn) updateFavoriteButtonState(originalFavBtn, originalCard.dataset.toolId);
+                            });
+                        }
+                        favoriteToolsGrid.appendChild(clone);
+                    });
+                    favoriteToolsSection.style.display = 'block';
+                    if(noFavoritesMessage) noFavoritesMessage.style.display = 'none';
+                } else {
+                    favoriteToolsSection.style.display = 'block'; // Show section for the message
+                    if(noFavoritesMessage) noFavoritesMessage.style.display = 'block';
+                }
+            }
+            allToolCards.forEach(card => {
+                const favBtn = card.querySelector('.favorite-btn'); const toolId = card.dataset.toolId;
+                if (favBtn && toolId) { updateFavoriteButtonState(favBtn, toolId); favBtn.addEventListener('click', () => toggleFavorite(toolId, favBtn)); }
+            });
+            renderFavoriteTools(); // Initial render
+
+
+            // --- 4. Main Page Search (Live Filtering) ---
+            const mainSearchInput = document.getElementById('toolSearchInput');
+            if(mainSearchInput) {
+                mainSearchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    filterToolGrid(query, 'all'); // Default to all categories
+                });
+            }
+
+            // --- 5. Category Filters (Example for Image Tools) ---
+            const imageToolFiltersContainer = document.getElementById('imageToolFilters');
+            if (imageToolFiltersContainer) { // Only run if filters exist
+                // imageToolFiltersContainer.style.display = 'flex'; // Make filters visible
+                const filterButtons = imageToolFiltersContainer.querySelectorAll('.filter-btn');
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const currentCategory = button.dataset.filter;
+                        const currentSearchQuery = mainSearchInput.value.toLowerCase().trim();
+                        filterToolGrid(currentSearchQuery, currentCategory, imageToolFiltersContainer.closest('.tool-category-section'));
+                    });
+                });
+            }
+
+            function filterToolGrid(query, category, sectionContext = document) {
+                const cardsToFilter = sectionContext === document ? allToolCards : Array.from(sectionContext.querySelectorAll('.tool-card'));
+
+                cardsToFilter.forEach(card => {
+                    const name = card.dataset.toolName?.toLowerCase() || '';
+                    const keywords = card.dataset.toolKeywords?.toLowerCase() || '';
+                    const cardCategory = card.dataset.category?.toLowerCase() || 'all';
+
+                    const matchesQuery = query === '' || name.includes(query) || keywords.includes(query);
+                    const matchesCategory = category === 'all' || cardCategory === category;
+
+                    card.style.display = (matchesQuery && matchesCategory) ? 'flex' : 'none';
+                });
+            }
+
+        });
     </script>
 </body>
 </html>
