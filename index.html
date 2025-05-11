@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools Hub - Modern & Intuitive Online Utilities</title>
+    <style>
+        :root {
+            --primary-blue: rgb(59, 130, 246);
+            --primary-blue-darker: rgb(37, 99, 235);
+            --primary-blue-desaturated: rgb(69, 120, 216);
+            --accent-blue-light: rgb(96, 165, 250);
+
+            --text-headings: rgb(20, 40, 85); /* Deeper, richer blue for headings */
+            --text-primary: rgb(41, 51, 65); /* Darker, more refined gray */
+            --text-secondary: rgb(85, 95, 109); /* Softer medium gray */
+
+            --bg-main: rgb(248, 250, 253); /* Very light, cool off-white */
+            --bg-card: white;
+            --bg-card-hover: rgb(253, 254, 255);
+
+            --border-subtle: rgba(59, 130, 246, 0.15);
+            --border-strong: rgba(59, 130, 246, 0.3);
+
+            --shadow-soft: 0 4px 15px rgba(59, 130, 246, 0.07);
+            --shadow-medium: 0 8px 25px rgba(59, 130, 246, 0.1);
+            --shadow-strong: 0 12px 35px rgba(59, 130, 246, 0.15);
+
+            --footer-bg: rgb(27, 37, 50); /* Dark, cool gray-blue */
+            --footer-text: rgb(180, 190, 205);
+            --footer-link: var(--accent-blue-light);
+            --footer-link-hover: white;
+
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --font-headings: 'Poppins', var(--font-primary);
+
+            --border-radius-sm: 6px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 16px;
+
+            --transition-fast: 0.2s ease-out;
+            --transition-medium: 0.3s ease-out;
+        }
+
+        /* Dark Mode Variables (Optional - to be toggled with JS) */
+        /*
+        html[data-theme="dark"] {
+            --text-headings: rgb(210, 220, 255);
+            --text-primary: rgb(220, 225, 235);
+            --text-secondary: rgb(160, 170, 185);
+            --bg-main: rgb(20, 25, 35);
+            --bg-card: rgb(30, 38, 52);
+            --bg-card-hover: rgb(35, 43, 58);
+            --border-subtle: rgba(96, 165, 250, 0.2);
+            --border-strong: rgba(96, 165, 250, 0.4);
+            --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.2);
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.3);
+            --footer-bg: rgb(15, 20, 30);
+        }
+        */
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-primary);
+            background-color: var(--bg-main);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-blue);
+            transition: color var(--transition-fast);
+        }
+        a:hover {
+            color: var(--primary-blue-darker);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1280px; /* Wider max-width for modern layouts */
+            margin: 0 auto;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-headings);
+            font-weight: 700; /* Bolder headings */
+            color: var(--text-headings);
+            line-height: 1.3;
+        }
+
+        /* --- Header --- */
+        .site-header {
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color var(--transition-medium), box-shadow var(--transition-medium), backdrop-filter var(--transition-medium);
+        }
+        .site-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.85); /* Light glassmorphism */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        html[data-theme="dark"] .site-header.scrolled {
+            background-color: rgba(30, 38, 52, 0.85); /* Dark glassmorphism */
+        }
+
+
+        .site-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-headings);
+            font-size: clamp(1.5rem, 4vw, 1.8rem); /* Responsive logo size */
+            font-weight: 700;
+            color: var(--text-headings);
+            letter-spacing: -0.5px;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        .main-nav li { margin-left: 2rem; }
+        .main-nav a {
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding: 0.5rem 0.25rem;
+            position: relative;
+            transition: color var(--transition-fast);
+        }
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--primary-blue-desaturated);
+        }
+        .main-nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px; /* Small dot indicator */
+            height: 6px;
+            background-color: var(--primary-blue);
+            border-radius: 50%;
+        }
+
+        .header-contact {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            background-color: rgba(59, 130, 246, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            transition: background-color var(--transition-fast);
+        }
+        .header-contact:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        .header-contact .icon { margin-right: 0.5rem; color: var(--primary-blue); font-size: 1.1rem; }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none; border: none;
+            font-size: 1.8rem; cursor: pointer; color: var(--text-headings);
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            padding: 5rem 0 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden; /* For aurora */
+            background-color: var(--bg-main); /* Fallback */
+        }
+        /* Aurora Background */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -20%; left: -20%; right: -20%; bottom: -20%;
+            background-image:
+                radial-gradient(ellipse at 20% 25%, hsla(215, 80%, 70%, 0.25) 0px, transparent 50%),
+                radial-gradient(ellipse at 80% 30%, hsla(240, 70%, 75%, 0.2) 0px, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, hsla(190, 80%, 65%, 0.15) 0px, transparent 50%);
+            animation: aurora-flow 25s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+            z-index: 0;
+            opacity: 0.8;
+            will-change: transform; /* Performance hint */
+        }
+        @keyframes aurora-flow {
+            0% { transform: translate(-5%, -5%) rotate(0deg) scale(1); }
+            100% { transform: translate(5%, 5%) rotate(10deg) scale(1.1); }
+        }
+        .hero-content {
+            position: relative; /* Above aurora */
+            z-index: 1;
+        }
+        .hero-section h1 {
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            margin-bottom: 1rem;
+            max-width: 900px;
+            margin-left: auto; margin-right: auto;
+            letter-spacing: -1px;
+            background: linear-gradient(45deg, var(--primary-blue-desaturated), var(--primary-blue-darker));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        .hero-section .subheadline {
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 750px;
+            margin-left: auto; margin-right: auto;
+            animation: fadeInUp 0.8s 0.2s ease-out backwards;
+        }
+        .cta-button {
+            display: inline-flex; /* For icon alignment */
+            align-items: center;
+            gap: 0.5rem;
+            background-image: linear-gradient(45deg, var(--primary-blue), var(--primary-blue-darker));
+            color: white;
+            padding: 1rem 2.2rem;
+            border-radius: var(--border-radius-md);
+            font-size: 1.15rem;
+            font-weight: 600; /* Bolder CTA */
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            box-shadow: var(--shadow-medium);
+            animation: fadeInUp 0.8s 0.4s ease-out backwards;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-strong);
+            color: white;
+        }
+        .cta-button:active {
+            transform: translateY(-1px) scale(1);
+            box-shadow: var(--shadow-soft);
+        }
+        .cta-button .icon { font-size: 1.2em; }
+
+        .tool-variety-showcase {
+            margin-top: 3.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s 0.6s ease-out backwards;
+        }
+        .tool-variety-showcase .showcase-item {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        .tool-variety-showcase .showcase-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-soft);
+        }
+        .tool-variety-showcase .icon { font-size: 1.5em; color: var(--primary-blue); }
+
+        /* --- Search Section --- */
+        .search-section {
+            padding: 3rem 0;
+            background-color: var(--bg-main); /* Consistent with body, or slightly different */
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .search-bar-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 750px; /* Wider search */
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 1.1rem 1.5rem 1.1rem 3.5rem;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--border-radius-md);
+            font-size: 1.05rem;
+            box-shadow: var(--shadow-soft);
+            transition: border-color var(--transition-medium), box-shadow var(--transition-medium);
+            background-color: var(--bg-card);
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25), var(--shadow-medium);
+        }
+        .search-input::placeholder { color: var(--text-secondary); opacity: 0.8; }
+        .search-icon {
+            position: absolute;
+            left: 1.2rem; top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem; color: var(--text-secondary);
+            opacity: 0.9; pointer-events: none;
+        }
+        .search-input:focus + .search-icon { color: var(--primary-blue); }
+
+        /* --- Tool Sections --- */
+        .tool-category-section { padding: 4rem 0; }
+        .section-heading {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 1rem;
+            text-align: center;
+            display: flex; align-items: center; justify-content: center;
+            gap: 0.75rem; letter-spacing: -0.5px;
+        }
+        .section-heading .icon { font-size: 1.1em; color: var(--primary-blue-desaturated); }
+        .section-subheading {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            text-align: center;
+            max-width: 650px;
+            margin-left: auto; margin-right: auto;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Slightly wider min card size */
+            gap: 2rem; /* Increased gap */
+        }
+        .tool-card {
+            background-color: var(--bg-card);
+            border-radius: var(--border-radius-lg); /* More rounded */
+            padding: 1.75rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform var(--transition-medium), box-shadow var(--transition-medium), border-color var(--transition-medium);
+            display: flex; flex-direction: column;
+            border: 1px solid transparent; /* For hover border */
+        }
+        .tool-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: var(--shadow-strong);
+            border-color: var(--border-subtle);
+            background-color: var(--bg-card-hover);
+        }
+        .tool-card-header { display: flex; align-items: flex-start; margin-bottom: 1rem; }
+        .tool-card .tool-icon {
+            font-size: 2rem; /* Larger icon */
+            color: var(--primary-blue);
+            margin-right: 1rem;
+            line-height: 1; /* Align better with text */
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy effect */
+        }
+        .tool-card:hover .tool-icon { transform: rotate(10deg) scale(1.1); }
+        .tool-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-headings);
+            margin-top: 0.1em; /* Align with icon baseline */
+        }
+        .tool-card .description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            min-height: 50px; /* Approx 2-3 lines */
+            flex-grow: 1;
+        }
+        .tool-button {
+            display: inline-flex; /* For icon alignment */
+            align-items: center;
+            justify-content: center; /* Center text and icon */
+            gap: 0.5rem;
+            width: 100%;
+            background-color: rgba(59, 130, 246, 0.08);
+            color: var(--primary-blue-darker);
+            padding: 0.8rem 1rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: background-color var(--transition-medium), color var(--transition-medium), transform var(--transition-fast), border-color var(--transition-medium);
+        }
+        .tool-button .icon { font-size: 1.1em; }
+        .tool-card:hover .tool-button {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue-darker);
+        }
+        .tool-button:active { transform: scale(0.97); }
+        .tool-button:focus-visible {
+            outline: 2px solid var(--primary-blue-darker);
+            outline-offset: 2px;
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 3px solid var(--primary-blue-desaturated);
+        }
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .footer-logo-tagline .logo {
+            color: white;
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .footer-logo-tagline .tagline { font-size: 1rem; color: var(--footer-text); opacity: 0.8;}
+        .footer-contact-links .email-link {
+            color: var(--footer-link);
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        .footer-contact-links .email-link:hover { text-decoration: underline; color: var(--footer-link-hover); }
+        .footer-quick-links a {
+            margin: 0 1rem; color: var(--footer-text); font-size: 0.95rem; opacity: 0.9;
+        }
+        .footer-quick-links a:hover { color: var(--footer-link-hover); opacity: 1;}
+        .footer-quick-links span { color: var(--text-secondary); }
+        .copyright {
+            font-size: 0.85rem;
+            color: var(--footer-text);
+            opacity: 0.7;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 992px) {
+            .main-nav ul {
+                display: none; flex-direction: column;
+                position: absolute; top: calc(100% + 1px); left: 0; width: 100%;
+                background-color: var(--bg-card);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                padding: 1rem 0; border-top: 1px solid var(--border-subtle);
+            }
+            .main-nav.active ul { display: flex; }
+            .main-nav li { margin-left: 0; width: 100%; text-align: left; }
+            .main-nav a { padding: 0.9rem 1.5rem; display: block; width: 100%; font-size: 1.05rem; }
+            .main-nav a.active::after { display: none; }
+            .main-nav a.active { background-color: rgba(59, 130, 246, 0.05); }
+            .header-contact { display: none; }
+            .mobile-menu-toggle { display: block; }
+            .main-nav .header-contact-mobile {
+                display: block; padding: 0.9rem 1.5rem;
+                font-size: 1rem; color: var(--text-secondary);
+            }
+            .main-nav .header-contact-mobile .icon { margin-right: 0.5rem; }
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row; justify-content: space-between;
+                align-items: flex-start; text-align: left;
+            }
+            .footer-logo-tagline, .footer-contact-links { text-align: left; }
+        }
+
+        @media (max-width: 576px) {
+            .tool-grid { grid-template-columns: 1fr; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .hero-section .subheadline { font-size: 1rem; }
+            .cta-button { padding: 0.8rem 1.8rem; font-size: 1rem; }
+            .tool-variety-showcase { flex-direction: column; gap: 0.8rem; align-items: center;}
+            .section-heading { font-size: 1.8rem; }
+            .section-subheading { font-size: 0.95rem; }
+            .tool-card h3 { font-size: 1.15rem; }
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="site-header" id="siteHeader">
+        <div class="container">
+            <a href="#home" class="logo">Tools Wonder</a>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="#contact-footer">Contact</a></li>
+                    <li class="header-contact-mobile">
+                        <span class="icon">📧</span> toolsHub@gmail.com
+                    </li>
+                </ul>
+            </nav>
+            <a href="mailto:toolshub@gmail.com" class="header-contact" id="headerContactDesktop">
+                <span class="icon">📧</span> toolsHub@gmail.com
+            </a>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon-open"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon-close" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </header>
+
+    <main id="home">
+        <section class="hero-section">
+            <div class="hero-content container">
+                <h1>Your Daily Tools, <br class="d-sm-none">All in One Place</h1>
+                <p class="subheadline">Convert, calculate, compress, and simplify your everyday tasks — fast, free, and beautifully designed for you.</p>
+                <a href="#tools" class="cta-button">
+                    Explore Tools <span class="icon">✨</span>
+                </a>
+                <div class="tool-variety-showcase">
+                    <div class="showcase-item"><span class="icon">🖼️</span> Image Magic</div>
+                    <div class="showcase-item"><span class="icon">📄</span> Document Flow</div>
+                    <div class="showcase-item"><span class="icon">💻</span> Code Helpers</div>
+                    <div class="showcase-item"><span class="icon">🧮</span> Smart Calculators</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="search-section">
+            <div class="container">
+                <div class="search-bar-wrapper">
+                    <input type="search" id="toolSearchInput" class="search-input" placeholder="Search any tool… e.g., 'PDF to Word', 'Color Picker'">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+        </section>
+
+        <div id="tools">
+            <section class="tool-category-section">
+                <div class="container">
+                    <h2 class="section-heading"><span class="icon">🖼️</span> Image Tools</h2>
+                    <p class="section-subheading">Craft and refine your visuals with our powerful suite of image manipulation tools. Perfect for designers, marketers, and everyday users.</p>
+                    <div class="tool-grid">
+                        <!-- Image Tools Cards (Repeat for all specified tools) -->
+                        <article class="tool-card">
+                            <div class="tool-card-header">
+                                <span class="tool-icon">🔄</span>
+                                <div><h3>Image Converter</h3></div>
+                            </div>
+                            <p class="description">Seamlessly convert images between JPG, PNG, WEBP, GIF, and more formats.</p>
+                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                        <article class="tool-card">
+                            <div class="tool-card-header">
+                                <span class="tool-icon">📉</span>
+                                <div><h3>Image Compressor</h3></div>
+                            </div>
+                            <p class="description">Drastically reduce image file sizes while maintaining excellent quality.</p>
+                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                         <article class="tool-card">
+                            <div class="tool-card-header">
+                                <span class="tool-icon">📏</span>
+                                <div><h3>Image Resizer</h3></div>
+                            </div>
+                            <p class="description">Quickly resize images to exact dimensions or percentages.</p>
+                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                        <article class="tool-card">
+                            <div class="tool-card-header">
+                                <span class="tool-icon">✂️</span>
+                                <div><h3>Image Cropper</h3></div>
+                            </div>
+                            <p class="description">Crop images precisely to any aspect ratio or selection.</p>
+                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                         <article class="tool-card">
+                            <div class="tool-card-header">
+                                <span class="tool-icon">📄➡️🅰️</span>
+                                <div><h3>Image to Text (OCR)</h3></div>
+                            </div>
+                            <p class="description">Extract editable text from images with high accuracy OCR.</p>
+                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                        <article class="tool-card">
+                            <div class="tool-card-header">
+                                <span class="tool-icon">🔃</span>
+                                <div><h3>Image Rotator/Flipper</h3></div>
+                            </div>
+                            <p class="description">Easily rotate and flip images to the perfect orientation.</p>
+                            <a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other Tool Sections: Document, Calculator, Text, Web/Dev, Color, SEO, Utility -->
+            <!-- Follow the same structure as Image Tools section -->
+             <section class="tool-category-section">
+                <div class="container">
+                    <h2 class="section-heading"><span class="icon">📄</span> Document Tools</h2>
+                    <p class="section-subheading">Streamline your document workflows. Convert, compress, merge, split, and secure your files with intuitive tools.</p>
+                    <div class="tool-grid">
+                        <article class="tool-card">
+                            <div class="tool-card-header"><span class="tool-icon">🔄</span><div><h3>PDF to Word / Word to PDF</h3></div></div>
+                            <p class="description">Effortlessly convert PDFs to editable Word files and vice-versa.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                        <article class="tool-card">
+                            <div class="tool-card-header"><span class="tool-icon">📉</span><div><h3>PDF Compressor</h3></div></div>
+                            <p class="description">Significantly reduce PDF file sizes for easy sharing and storage.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                         <article class="tool-card">
+                            <div class="tool-card-header"><span class="tool-icon">➕➖</span><div><h3>PDF Merger & Splitter</h3></div></div>
+                            <p class="description">Combine multiple PDFs or split a single PDF into several files.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                         <article class="tool-card">
+                            <div class="tool-card-header"><span class="tool-icon">📑</span><div><h3>Document Converter</h3></div></div>
+                            <p class="description">Convert between various document formats like DOCX, ODT, TXT.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                        <article class="tool-card">
+                            <div class="tool-card-header"><span class="tool-icon">🔒🔓</span><div><h3>PDF Lock/Unlock</h3></div></div>
+                            <p class="description">Secure your PDFs with passwords or remove existing protection.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                        <article class="tool-card">
+                            <div class="tool-card-header"><span class="tool-icon">✍️</span><div><h3>eSign PDF</h3></div></div>
+                            <p class="description">Electronically sign PDF documents quickly and securely.</p><a href="#" class="tool-button">Use Tool <span class="icon">→</span></a>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Add all other tool sections (Calculator, Text, Web/Dev, Color, SEO, Utility) here, following the same pattern -->
+
+        </div>
+    </main>
+
+    <footer class="site-footer" id="contact-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo-tagline">
+                    <div class="logo">Tools Wonder</div>
+                    <p class="tagline">Simplifying your digital life, beautifully.</p>
+                </div>
+                <div class="footer-contact-links">
+                    <p style="font-weight: 600; margin-bottom: 0.5rem; opacity: 0.9;">Get in Touch:</p>
+                    <a href="mailto:toolshub@gmail.com" class="email-link">toolshub@gmail.com</a>
+                    <div class="footer-quick-links">
+                        <a href="#privacy">Privacy Policy</a>
+                        <span>|</span>
+                        <a href="#terms">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+            <p class="copyright">© <span id="currentYear"></span> Tools Hub. All rights reserved. Crafted with ❤️.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Sticky Header with Glassmorphism on Scroll ---
+        const siteHeader = document.getElementById('siteHeader');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                siteHeader.classList.add('scrolled');
+            } else {
+                siteHeader.classList.remove('scrolled');
+            }
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mainNav = document.getElementById('mainNav');
+        const menuIconOpen = mobileMenuToggle.querySelector('.menu-icon-open');
+        const menuIconClose = mobileMenuToggle.querySelector('.menu-icon-close');
+
+        if (mobileMenuToggle && mainNav) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+                const isExpanded = mainNav.classList.contains('active');
+                mobileMenuToggle.setAttribute('aria-expanded', isExpanded);
+                if (isExpanded) {
+                    menuIconOpen.style.display = 'none';
+                    menuIconClose.style.display = 'inline-block';
+                } else {
+                    menuIconOpen.style.display = 'inline-block';
+                    menuIconClose.style.display = 'none';
+                }
+            });
+        }
+
+        // --- Close Mobile Menu on Link Click ---
+        const navLinks = mainNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                    menuIconOpen.style.display = 'inline-block';
+                    menuIconClose.style.display = 'none';
+                }
+            });
+        });
+
+        // --- Active Link Highlighting on Scroll ---
+        const allNavLinks = document.querySelectorAll('.main-nav a');
+        const sections = document.querySelectorAll('main section[id], footer[id]');
+        function updateActiveLink() {
+            let current = 'home'; // Default to home
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - (siteHeader.offsetHeight + 20)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            allNavLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href').substring(1);
+                if (href === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateActiveLink);
+        window.addEventListener('load', updateActiveLink); // Initial check
+
+        // --- Update Copyright Year ---
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- (Optional) Live Search Filtering Placeholder ---
+        // This would require more JS to filter .tool-card elements
+        // const toolSearchInput = document.getElementById('toolSearchInput');
+        // if (toolSearchInput) {
+        //     toolSearchInput.addEventListener('input', (e) => {
+        //         const searchTerm = e.target.value.toLowerCase();
+        //         console.log('Searching for:', searchTerm);
+        //         // Add filtering logic here
+        //     });
+        // }
+    </script>
+</body>
+</html>
