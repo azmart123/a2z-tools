@@ -12,20 +12,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* ======================= General Styles ======================= */
+        /* ======================= General Styles & Variables ======================= */
         :root {
-            --primary-blue: #007bff;
-            --primary-blue-dark: #0056b3;
-            --light-blue-bg: #e7f3ff;
-            --text-dark: #212529;
-            --text-light: #6c757d;
-            --bg-light-gray: #f8f9fa;
-            --border-color: #dee2e6;
-            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --card-hover-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-            --border-radius: 8px;
+            --primary-blue: #007bff;        /* Main interactive blue */
+            --primary-blue-dark: #0056b3;   /* Darker blue for hover states */
+            --light-blue-bg: #e7f3ff;     /* Very light blue for subtle backgrounds */
+            --accent-blue: #3399ff;       /* A slightly lighter, brighter blue for highlights */
+            --text-dark: #212529;         /* Main text color */
+            --text-light: #6c757d;        /* Lighter text for subheadlines, descriptions */
+            --bg-white: #ffffff;
+            --bg-light-gray: #f8f9fa;     /* Light gray for alternating sections */
+            --border-color: #dee2e6;      /* Standard border color */
+            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* Softer, slightly larger shadow */
+            --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;         /* Consistent rounded corners */
             --font-primary: 'Roboto', sans-serif;
             --font-headings: 'Montserrat', sans-serif;
+            --transition-speed: 0.3s;     /* Standard transition speed */
         }
 
         * {
@@ -41,8 +44,10 @@
         body {
             font-family: var(--font-primary);
             color: var(--text-dark);
-            line-height: 1.6;
-            background-color: #fff;
+            line-height: 1.7; /* Slightly increased line-height for readability */
+            background-color: var(--bg-white);
+            -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
+            -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
         }
 
         .container {
@@ -55,6 +60,7 @@
         a {
             text-decoration: none;
             color: var(--primary-blue);
+            transition: color var(--transition-speed) ease;
         }
 
         a:hover {
@@ -64,25 +70,25 @@
         h1, h2, h3 {
             font-family: var(--font-headings);
             font-weight: 700;
-            margin-bottom: 0.5em;
+            margin-bottom: 0.6em; /* Adjusted margin */
         }
 
         h2 {
-            font-size: 2.2rem;
+            font-size: 2.3rem; /* Slightly larger section titles */
             color: var(--text-dark);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
             border-bottom: 2px solid var(--light-blue-bg);
             display: flex;
             align-items: center;
-            gap: 12px; /* Increased gap for icon and text */
+            gap: 15px;
             text-align: center;
             justify-content: center;
         }
 
         h2 i {
-            color: var(--primary-blue);
-            font-size: 2rem;
+            color: var(--accent-blue); /* Using accent blue for section icons */
+            font-size: 2.1rem; /* Slightly adjusted icon size */
         }
 
         p {
@@ -92,17 +98,18 @@
         img {
             max-width: 100%;
             height: auto;
+            display: block; /* Prevents bottom space */
         }
 
         /* ======================= Header ======================= */
         .site-header {
-            background-color: #fff;
+            background-color: var(--bg-white);
             padding: 15px 0;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06); /* Slightly more defined shadow */
         }
 
         .header-container {
@@ -113,23 +120,23 @@
 
         .logo a {
             font-family: var(--font-headings);
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 1.9rem; /* Slightly larger logo */
+            font-weight: 700; /* Already bold, ensuring it */
             color: var(--text-dark);
         }
 
         .main-nav ul {
             list-style: none;
             display: flex;
-            gap: 25px;
+            gap: 30px; /* Increased gap */
         }
 
         .main-nav a {
             font-weight: 500;
             color: var(--text-light);
-            padding: 5px 0;
+            padding: 8px 0; /* Slightly more padding for easier click */
             position: relative;
-            transition: color 0.3s ease;
+            transition: color var(--transition-speed) ease;
         }
 
         .main-nav a.active,
@@ -140,12 +147,12 @@
         .main-nav a::after {
             content: '';
             position: absolute;
-            bottom: -2px;
+            bottom: 0; /* Position underline at the very bottom of padding */
             left: 0;
             width: 0;
-            height: 2px;
+            height: 2.5px; /* Slightly thicker underline */
             background-color: var(--primary-blue);
-            transition: width 0.3s ease;
+            transition: width var(--transition-speed) ease;
         }
 
         .main-nav a.active::after,
@@ -158,10 +165,11 @@
             color: var(--text-light);
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px; /* Increased gap */
         }
         .header-contact .email-link i {
             color: var(--primary-blue);
+            font-size: 1rem; /* Slightly larger email icon */
         }
 
         .nav-toggle {
@@ -175,30 +183,30 @@
 
         .hamburger {
             display: block;
-            width: 25px;
+            width: 28px; /* Slightly larger hamburger */
             height: 3px;
             background-color: var(--text-dark);
             position: relative;
-            transition: background-color 0.3s ease;
+            transition: background-color var(--transition-speed) ease;
         }
 
         .hamburger::before,
         .hamburger::after {
             content: '';
             position: absolute;
-            width: 25px;
+            width: 28px;
             height: 3px;
             background-color: var(--text-dark);
             left: 0;
-            transition: transform 0.3s ease, top 0.3s ease;
+            transition: transform var(--transition-speed) ease, top var(--transition-speed) ease;
         }
 
         .hamburger::before {
-            top: -8px;
+            top: -9px; /* Adjusted spacing */
         }
 
         .hamburger::after {
-            top: 8px;
+            top: 9px;
         }
 
         .nav-toggle.active .hamburger {
@@ -215,51 +223,52 @@
 
         /* ======================= Hero Section ======================= */
         .hero-section {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue-bg) 70%, #ffffff 100%);
-            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 40%, var(--light-blue-bg) 80%, var(--bg-white) 100%); /* Refined gradient */
+            padding: 90px 0; /* Increased padding */
             text-align: center;
             color: var(--text-dark);
+            overflow: hidden; /* For animations */
         }
 
         .hero-section h1 {
-            font-size: 2.8rem;
-            color: #fff;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-size: 3rem; /* Larger headline */
+            color: var(--bg-white);
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.25);
         }
 
         .hero-section .subheadline {
-            font-size: 1.2rem;
-            color: #f0f0f0;
-            max-width: 700px;
-            margin: 0 auto 30px auto;
+            font-size: 1.3rem; /* Larger subheadline */
+            color: var(--light-blue-bg); /* Brighter color on the darker part of gradient */
+            max-width: 750px; /* Slightly wider */
+            margin: 0 auto 35px auto;
         }
 
         .cta-button {
-            background-color: #fff;
+            background-color: var(--bg-white);
             color: var(--primary-blue);
-            padding: 15px 30px;
-            font-size: 1.1rem;
+            padding: 16px 35px; /* Larger CTA */
+            font-size: 1.15rem;
             font-weight: 700;
             border-radius: var(--border-radius);
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform 0.2s ease, box-shadow var(--transition-speed) ease;
             display: inline-block;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.18);
             border: 2px solid transparent;
         }
 
         .cta-button:hover {
             background-color: var(--primary-blue-dark);
-            color: #fff;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            color: var(--bg-white);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 7px 15px rgba(0,0,0,0.22);
         }
 
         .hero-icons {
-            margin-top: 40px;
+            margin-top: 45px;
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 35px; /* Increased gap */
             flex-wrap: wrap;
         }
 
@@ -267,100 +276,119 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 10px;
+            font-size: 0.95rem;
             color: var(--text-dark);
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.8); /* More pronounced background */
+            padding: 12px 18px; /* Adjusted padding */
             border-radius: var(--border-radius);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
         }
         .hero-icons span:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px) scale(1.05); /* More pronounced hover */
+            box-shadow: 0 5px 10px rgba(0,0,0,0.12);
         }
 
         .hero-icons span i {
-            color: var(--primary-blue);
-            font-size: 1.8rem;
+            color: var(--accent-blue);
+            font-size: 2rem; /* Larger icons */
         }
 
         /* ======================= Search Bar Section ======================= */
         .search-section {
-            padding: 40px 0;
-            background-color: #fff;
+            padding: 50px 0; /* Increased padding */
+            background-color: var(--bg-white);
         }
 
         #toolSearchForm {
             display: flex;
-            max-width: 700px;
+            max-width: 750px; /* Slightly wider */
             margin: 0 auto;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* More prominent shadow */
         }
 
         #toolSearchInput {
             flex-grow: 1;
-            padding: 15px 20px;
-            font-size: 1rem;
+            padding: 18px 22px; /* Increased padding for larger feel */
+            font-size: 1.05rem; /* Slightly larger font */
             border: none;
             outline: none;
         }
         #toolSearchInput::placeholder {
             color: var(--text-light);
+            opacity: 0.8; /* Make placeholder slightly less prominent */
         }
+        #toolSearchInput:focus {
+            box-shadow: inset 0 0 0 2px var(--primary-blue); /* Focus indicator */
+        }
+
 
         #toolSearchForm button {
             background-color: var(--primary-blue);
-            color: #fff;
+            color: var(--bg-white);
             border: none;
-            padding: 0 25px;
+            padding: 0 28px; /* Increased padding */
             cursor: pointer;
-            font-size: 1.1rem;
-            transition: background-color 0.3s ease;
+            font-size: 1.15rem; /* Matched input font size */
+            transition: background-color var(--transition-speed) ease;
         }
 
         #toolSearchForm button:hover {
             background-color: var(--primary-blue-dark);
         }
+        #no-results-message-container {
+            margin-top: 15px;
+        }
+        #no-results-message {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            background-color: var(--light-blue-bg);
+            border-radius: var(--border-radius);
+            border: 1px dashed var(--border-color);
+        }
+
 
         /* ======================= Tool Categories ======================= */
         .tool-category {
-            padding: 60px 0;
+            padding: 70px 0; /* Increased padding */
         }
         .tool-category:nth-child(even) {
             background-color: var(--light-blue-bg);
         }
         .tool-category:nth-child(odd) {
-            background-color: #fff;
+            background-color: var(--bg-white);
         }
 
         .category-subheading {
-            font-size: 1.1rem;
+            font-size: 1.15rem; /* Slightly larger */
             color: var(--text-light);
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            margin-top: -10px;
+            margin-top: -15px;
         }
 
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Min card width */
+            gap: 35px; /* Increased gap */
         }
 
         .tool-card {
-            background-color: #fff;
+            background-color: var(--bg-white);
             border-radius: var(--border-radius);
-            padding: 25px;
+            padding: 28px; /* Increased padding */
             text-align: center;
             box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -372,131 +400,139 @@
         }
 
         .tool-card:hover {
-            transform: translateY(-5px) scale(1.01);
+            transform: translateY(-6px) scale(1.02); /* More pronounced lift */
             box-shadow: var(--card-hover-shadow);
             border-color: var(--primary-blue);
         }
 
         .tool-icon {
-            font-size: 2.5rem;
+            font-size: 2.8rem; /* Larger tool icons */
             color: var(--primary-blue);
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            transition: transform var(--transition-speed) ease; /* Icon animation on hover */
         }
-        .tool-icon .fa-stack { /* For combined icons if needed */
-            font-size: 1em; /* Reset stack size to be relative to parent */
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1) rotate(-5deg); /* Slight scale and rotate on card hover */
+        }
+        .tool-icon .fa-stack {
+            font-size: 1em;
         }
 
 
         .tool-card h3 {
-            font-size: 1.3rem;
+            font-size: 1.35rem; /* Slightly larger card title */
             color: var(--text-dark);
-            margin-bottom: 10px;
-            min-height: 2.6em; /* Reserve space for two lines of title */
+            margin-bottom: 12px;
+            min-height: 2.8em; /* Ensure space for two lines if needed */
+            display: flex; /* To center vertically if only one line */
+            align-items: center;
+            justify-content: center;
         }
 
         .tool-card p {
             font-size: 0.9rem;
             color: var(--text-light);
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             flex-grow: 1;
-            min-height: 40px; /* Ensures more consistent card height for short descriptions */
+            min-height: 45px;
         }
 
         .tool-button {
             background-color: var(--primary-blue);
-            color: #fff;
-            padding: 10px 20px;
+            color: var(--bg-white);
+            padding: 12px 24px; /* Increased padding */
             border-radius: var(--border-radius);
             font-weight: 500;
             display: inline-block;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color var(--transition-speed) ease, transform 0.2s ease;
             border: 1px solid var(--primary-blue);
             text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
+            font-size: 0.88rem; /* Slightly adjusted */
+            letter-spacing: 0.6px;
         }
 
         .tool-button:hover {
             background-color: var(--primary-blue-dark);
             border-color: var(--primary-blue-dark);
-            color: #fff;
-            transform: translateY(-2px);
+            color: var(--bg-white);
+            transform: translateY(-2px) scale(1.02); /* Slight lift and scale */
         }
 
         /* ======================= Footer ======================= */
         .site-footer {
             background-color: var(--text-dark);
-            color: #adb5bd;
-            padding: 50px 0 0;
+            color: #c0c8d1; /* Slightly lighter footer text */
+            padding: 60px 0 0; /* Increased padding */
         }
 
         .footer-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            padding-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Min col width */
+            gap: 35px; /* Increased gap */
+            padding-bottom: 45px;
         }
 
         .footer-about .logo {
             font-family: var(--font-headings);
-            font-size: 1.8rem;
+            font-size: 1.9rem; /* Match header logo */
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 10px;
+            color: var(--bg-white);
+            margin-bottom: 12px;
         }
 
         .footer-about p, .footer-contact p {
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            font-size: 0.92rem; /* Slightly larger */
+            margin-bottom: 12px;
+            line-height: 1.8; /* Increased for footer readability */
         }
         .website-builder {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 15px;
+            font-size: 0.82rem;
+            color: #9098a1; /* Lighter gray */
+            margin-top: 18px;
         }
 
         .footer-contact h4, .footer-links h4 {
-            color: #fff;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            color: var(--bg-white);
+            font-size: 1.25rem; /* Slightly larger footer headings */
+            margin-bottom: 18px;
             font-family: var(--font-headings);
         }
 
         .footer-contact a {
-            color: #adb5bd;
-            transition: color 0.3s ease;
+            color: #c0c8d1;
+            transition: color var(--transition-speed) ease;
         }
         .footer-contact a:hover {
-            color: #fff;
+            color: var(--bg-white);
         }
         .footer-contact .social-media {
-            margin-top: 15px;
-            margin-bottom: 10px;
+            margin-top: 18px;
+            margin-bottom: 12px;
         }
         .footer-contact .social-media a {
-            color: #fff;
-            font-size: 1.5rem;
-            margin-right: 15px;
-            transition: color 0.3s ease, transform 0.2s ease;
+            color: var(--bg-white);
+            font-size: 1.6rem; /* Larger social icons */
+            margin-right: 18px;
+            transition: color var(--transition-speed) ease, transform 0.2s ease;
             display: inline-block;
         }
         .footer-contact .social-media a:hover {
-            color: var(--primary-blue);
-            transform: scale(1.1);
+            color: var(--accent-blue); /* Use accent blue for hover */
+            transform: scale(1.15) translateY(-2px); /* More pronounced hover */
         }
-        .footer-contact .social-media .telegram-link { /* Specific styling for telegram text link */
-            font-size: 0.9rem;
+        .footer-contact .social-media .telegram-link {
+            font-size: 0.92rem;
             vertical-align: middle;
         }
         .footer-contact .social-media .telegram-link i {
-             font-size: 1.2rem;
-             margin-right: 5px;
+             font-size: 1.25rem;
+             margin-right: 6px;
         }
 
         .footer-contact .telegram-desc {
-            font-size: 0.8rem;
-            color: #888;
-            line-height: 1.4;
+            font-size: 0.82rem;
+            color: #9098a1;
+            line-height: 1.5;
         }
 
 
@@ -505,58 +541,67 @@
         }
 
         .footer-links li {
-            margin-bottom: 8px;
+            margin-bottom: 10px; /* Increased spacing */
         }
 
         .footer-links a {
-            color: #adb5bd;
-            transition: color 0.3s ease, padding-left 0.3s ease;
-            font-size: 0.9rem;
+            color: #c0c8d1;
+            transition: color var(--transition-speed) ease, padding-left var(--transition-speed) ease;
+            font-size: 0.92rem;
         }
 
         .footer-links a:hover {
-            color: #fff;
-            padding-left: 5px;
+            color: var(--bg-white);
+            padding-left: 8px; /* More indent on hover */
         }
+        .footer-links a::before { /* Optional: add a small bullet or dash */
+            content: "• ";
+            color: var(--primary-blue);
+            margin-right: 5px;
+            opacity: 0.6;
+        }
+        .footer-links a:hover::before {
+            opacity: 1;
+        }
+
 
         .footer-bottom {
             text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #495057;
-            font-size: 0.9rem;
+            padding: 25px 0; /* Increased padding */
+            border-top: 1px solid #404850; /* Slightly adjusted border color */
+            font-size: 0.92rem;
         }
 
-        /* Animation Helper */
-        .fade-in-up {
+        /* Animation Helper Classes */
+        .anim-slide-in-up {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transform: translateY(30px); /* Start further down */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smoother, longer transition */
         }
-        .fade-in-up.visible {
+        .anim-slide-in-up.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        #no-results-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.1rem;
-            color: var(--text-light);
-        }
+        .anim-slide-in-up.delay-1 { transition-delay: 0.1s; }
+        .anim-slide-in-up.delay-2 { transition-delay: 0.2s; }
+        .anim-slide-in-up.delay-3 { transition-delay: 0.3s; }
+        .anim-slide-in-up.delay-4 { transition-delay: 0.4s; }
+        .anim-slide-in-up.delay-5 { transition-delay: 0.5s; }
 
 
         /* ======================= Responsive Design ======================= */
         @media (max-width: 992px) {
             .hero-section h1 {
-                font-size: 2.4rem;
+                font-size: 2.6rem;
             }
             .hero-section .subheadline {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
             }
             .tool-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             }
             h2 {
-                font-size: 2rem;
+                font-size: 2.1rem;
             }
         }
 
@@ -565,24 +610,42 @@
                 position: relative;
             }
             .main-nav {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: #fff;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                max-height: 0;
+                position: fixed; /* Fixed position for full screen overlay feel */
+                top: 0; /* Start from top of viewport */
+                left: -100%; /* Start off-screen */
+                width: 80%; /* Not full width for an overlay effect */
+                max-width: 300px; /* Max width for the nav panel */
+                height: 100vh; /* Full viewport height */
+                background-color: var(--bg-white);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.15); /* Shadow on the panel */
                 overflow-y: auto;
-                transition: max-height 0.5s ease-in-out;
+                transition: left 0.4s ease-in-out; /* Smoother transition for slide-in */
+                padding-top: 70px; /* Space for a close button or logo */
             }
             .main-nav.active {
-                max-height: calc(100vh - 70px); /* Approx height of header */
-                border-top: 1px solid var(--border-color);
+                left: 0; /* Slide in from left */
             }
+            .nav-overlay { /* Optional overlay for behind the nav */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 999; /* Below header, above content */
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
+            }
+            .nav-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
 
             .main-nav ul {
                 flex-direction: column;
-                padding: 15px 0;
+                padding: 20px 0; /* Padding inside the nav panel */
                 gap: 0;
             }
             .main-nav li {
@@ -590,10 +653,11 @@
             }
             .main-nav a {
                 display: block;
-                padding: 12px 20px;
+                padding: 15px 25px; /* Generous padding for tap targets */
                 text-align: left;
                 width: 100%;
                 border-bottom: 1px solid var(--light-blue-bg);
+                font-size: 1.05rem; /* Larger font for mobile nav */
             }
             .main-nav li:last-child a {
                 border-bottom: none;
@@ -604,64 +668,69 @@
 
             .nav-toggle {
                 display: block;
-                order: 1;
+                order: 1; /* Ensure it's on the right */
+                position: relative; /* To ensure it's clickable */
+                z-index: 1002; /* Above overlay and nav when nav is closed */
             }
+            .nav-toggle.active { /* Style when nav is open */
+                 /* Position inside nav panel, or keep in header */
+            }
+
             .header-contact {
                 display: none;
             }
             .logo a {
-                font-size: 1.6rem;
+                font-size: 1.7rem;
             }
 
             .hero-section {
-                padding: 60px 0;
+                padding: 70px 0;
             }
             .hero-section h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             .hero-icons {
-                gap: 15px;
+                gap: 18px;
             }
             .hero-icons span {
-                font-size: 0.85rem;
-                padding: 8px 12px;
+                font-size: 0.9rem;
+                padding: 10px 15px;
             }
             .hero-icons span i {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
 
             .search-section {
-                padding: 30px 0;
+                padding: 40px 0;
             }
             #toolSearchInput, #toolSearchForm button {
-                font-size: 0.9rem;
-                padding: 12px 15px;
+                font-size: 1rem;
+                padding: 14px 18px;
             }
             #toolSearchForm button {
-                padding: 0 20px;
+                padding: 0 22px;
             }
 
             h2 {
-                font-size: 1.8rem;
+                font-size: 1.9rem;
                 justify-content: flex-start;
                 text-align: left;
-                padding-left: 0; /* Removed fixed padding here, container handles it */
             }
+             h2 i { font-size: 1.9rem; }
             .category-subheading {
-                font-size: 1rem;
-                margin-bottom: 30px;
+                font-size: 1.05rem;
+                margin-bottom: 35px;
                 text-align: left;
-                 padding-left: 0; /* Removed fixed padding here */
             }
             .tool-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 25px;
             }
              .tool-card {
-                padding: 20px;
+                padding: 22px;
             }
             .tool-card h3 {
-                min-height: auto; /* Reset min-height for stacked titles */
+                min-height: auto;
             }
 
 
@@ -676,29 +745,27 @@
                 justify-content: flex-start;
             }
              .footer-contact .social-media a {
-                margin-right: 15px;
+                margin-right: 18px;
                 margin-left: 0;
             }
         }
 
         @media (max-width: 480px) {
             .hero-section h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             .hero-section .subheadline {
-                font-size: 1rem;
+                font-size: 1.05rem;
             }
             .cta-button {
-                padding: 12px 25px;
-                font-size: 1rem;
+                padding: 14px 28px;
+                font-size: 1.05rem;
             }
             .hero-icons {
-                flex-direction: row;
-                gap: 10px;
-                justify-content: center;
+                gap: 12px;
             }
             .hero-icons span {
-                 flex-basis: calc(50% - 10px);
+                 flex-basis: calc(50% - 12px);
                  text-align: center;
             }
 
@@ -711,23 +778,32 @@
             #toolSearchInput {
                 border-radius: var(--border-radius);
                 border: 1px solid var(--border-color);
-                margin-bottom: 10px;
+                margin-bottom: 12px;
             }
             #toolSearchForm button {
                 border-radius: var(--border-radius);
             }
+             .tool-grid {
+                gap: 20px; /* Slightly less gap on very small screens */
+            }
+            .tool-card {
+                padding: 20px; /* Adjust card padding */
+            }
+            h2 { font-size: 1.7rem; }
+            h2 i { font-size: 1.7rem; }
         }
     </style>
 </head>
 <body>
 
+    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
     <!-- ======================= Top Header ======================= -->
     <header class="site-header">
         <div class="container header-container">
             <div class="logo">
                 <a href="index.html">Tools Wonder</a>
             </div>
-            <nav class="main-nav">
+            <nav class="main-nav" id="mainNav">
                 <ul>
                     <li><a href="index.html" class="active">Home</a></li>
                     <li><a href="#tools-section-start">Tools</a></li>
@@ -735,11 +811,11 @@
                 </ul>
             </nav>
             <div class="header-contact">
-                <a href="mailto:a2zstorekerala@gmail.com" class="email-link">
+                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
                     <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
                 </a>
             </div>
-            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
                 <span class="hamburger"></span>
             </button>
         </div>
@@ -748,14 +824,14 @@
     <!-- ======================= Hero Section ======================= -->
     <section class="hero-section">
         <div class="container">
-            <h1 class="fade-in-up">Your Daily Tools, All in One Place</h1>
-            <p class="subheadline fade-in-up">Convert, calculate, compress, and simplify your everyday tasks — fast and free.</p>
-            <a href="#tools-section-start" class="cta-button fade-in-up">Explore Tools</a>
+            <h1 class="anim-slide-in-up">Your Daily Tools, All in One Place</h1>
+            <p class="subheadline anim-slide-in-up delay-1">Convert, calculate, compress, and simplify your everyday tasks — fast and free.</p>
+            <a href="#tools-section-start" class="cta-button anim-slide-in-up delay-2">Explore Tools</a>
             <div class="hero-icons">
-                <span class="fade-in-up"><i class="fas fa-image"></i> Image</span>
-                <span class="fade-in-up"><i class="fas fa-font"></i> Text</span>
-                <span class="fade-in-up"><i class="fas fa-code"></i> Code</span>
-                <span class="fade-in-up"><i class="fas fa-video"></i> Video</span>
+                <span class="anim-slide-in-up delay-3"><i class="fas fa-image"></i> Image</span>
+                <span class="anim-slide-in-up delay-3"><i class="fas fa-font"></i> Text</span>
+                <span class="anim-slide-in-up delay-4"><i class="fas fa-code"></i> Code</span>
+                <span class="anim-slide-in-up delay-4"><i class="fas fa-video"></i> Video</span>
             </div>
         </div>
     </section>
@@ -763,11 +839,11 @@
     <!-- ======================= Search Bar Section ======================= -->
     <section class="search-section">
         <div class="container">
-            <form id="toolSearchForm" onsubmit="return false;">
-                <input type="search" id="toolSearchInput" placeholder="Search a tool (e.g., 'PDF Converter', 'Image Resizer')...">
+            <form id="toolSearchForm" onsubmit="return false;" role="search">
+                <input type="search" id="toolSearchInput" placeholder="Search a tool (e.g., 'PDF Converter', 'Image Resizer')..." aria-label="Search for a tool">
                 <button type="button" aria-label="Search"><i class="fas fa-search"></i></button>
             </form>
-            <div id="no-results-message-container"></div> <!-- Container for no results message -->
+            <div id="no-results-message-container"></div>
         </div>
     </section>
 
@@ -778,119 +854,119 @@
                 <h2><i class="fas fa-image"></i> Image Tools</h2>
                 <p class="category-subheading">Manipulate, convert, and optimize your images with ease.</p>
                 <div class="tool-grid">
-                    <div class="tool-card fade-in-up" data-keywords="image converter change format jpg png webp gif tiff bmp">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image converter change format jpg png webp gif tiff bmp">
                         <div class="tool-icon"><i class="fas fa-exchange-alt"></i></div>
                         <h3>Image Converter</h3>
                         <p>Convert images to various formats like JPG, PNG, WEBP.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image compressor reduce size optimize shrink">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image compressor reduce size optimize shrink">
                         <div class="tool-icon"><i class="fas fa-compress-arrows-alt"></i></div>
                         <h3>Image Compressor</h3>
                         <p>Reduce image file size without losing significant quality.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image resizer change dimensions scale crop">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image resizer change dimensions scale crop width height">
                         <div class="tool-icon"><i class="fas fa-expand-arrows-alt"></i></div>
                         <h3>Image Resizer</h3>
                         <p>Change the dimensions (width/height) of your images.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image cropper cut trim select area photo">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image cropper cut trim select area photo aspect ratio">
                         <div class="tool-icon"><i class="fas fa-crop-alt"></i></div>
                         <h3>Image Cropper</h3>
                         <p>Crop images to a specific area or aspect ratio.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image to text ocr optical character recognition extract">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image to text ocr optical character recognition extract scan">
                         <div class="tool-icon"><i class="fas fa-file-alt"></i></div>
                         <h3>Image to Text (OCR)</h3>
-                        <p>Extract editable text from images using OCR.</p>
+                        <p>Extract editable text from images using OCR technology.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image rotator flipper rotate flip mirror orientation">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image rotator flipper rotate flip mirror orientation correct">
                         <div class="tool-icon"><i class="fas fa-sync-alt"></i></div>
                         <h3>Image Rotator/Flipper</h3>
                         <p>Rotate or flip your images to the correct orientation.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="image background remover transparent erase cut out photo editor">
+                     <div class="tool-card anim-slide-in-up" data-keywords="image background remover transparent erase cut out photo editor ai">
                         <div class="tool-icon"><i class="fas fa-eraser"></i></div>
-                        <h3>Image Background Remover</h3>
-                        <p>Automatically remove the background from images.</p>
+                        <h3>Image background remover</h3>
+                        <p>Automatically remove the background from any image.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ======================= AI Tools ======================= -->
+        <!-- ======================= Ai tools ======================= -->
         <section id="ai-tools" class="tool-category">
             <div class="container">
-                <h2><i class="fas fa-robot"></i> AI Tools</h2>
+                <h2><i class="fas fa-robot"></i> Ai tools</h2>
                 <p class="category-subheading">Leverage artificial intelligence for creative and technical tasks.</p>
                 <div class="tool-grid">
-                    <div class="tool-card fade-in-up" data-keywords="chat aflu ai chatbot assistant conversation intelligent">
+                    <div class="tool-card anim-slide-in-up" data-keywords="chat aflu ai chatbot assistant conversation intelligent gpt">
                         <div class="tool-icon"><i class="fas fa-comments"></i></div>
                         <h3>Chat aflu ai</h3>
                         <p>Engage in intelligent conversations with our AI chatbot.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="text to image generator art creation dalle midjourney stable diffusion ai image">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text to image generator art creation dalle midjourney stable diffusion ai image artwork">
                         <div class="tool-icon"><i class="fas fa-paint-brush"></i></div>
                         <h3>Text to image</h3>
                         <p>Create unique images from textual descriptions using AI.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image enhancer improve quality upscale ai photo editor resolution">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image enhancer improve quality upscale ai photo editor resolution enhancement">
                         <div class="tool-icon"><i class="fas fa-magic"></i></div>
                         <h3>Image enhancer</h3>
                         <p>Automatically improve image quality and resolution with AI.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="image editing text-and-image-to-image ai edit photo manipulation inpainting outpainting">
+                    <div class="tool-card anim-slide-in-up" data-keywords="image editing text-and-image-to-image ai edit photo manipulation inpainting outpainting generative">
                         <div class="tool-icon"><i class="fas fa-edit"></i></div>
-                        <h3>Image editing (text-and-image-to-image)</h3>
-                        <p>Advanced image editing using combined text and image inputs.</p>
+                        <h3>Image editing (text-and-image)</h3>
+                        <p>Advanced image editing using combined text & image inputs.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="text to speech tts audio voice generator synthetic narration">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text to speech tts audio voice generator synthetic narration ai voiceover">
                         <div class="tool-icon"><i class="fas fa-volume-up"></i></div>
                         <h3>Text to speech</h3>
                         <p>Convert text into natural-sounding speech with AI voices.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="text to video generator animation ai movie maker script">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text to video generator animation ai movie maker script slideshow">
                         <div class="tool-icon"><i class="fas fa-film"></i></div>
                         <h3>Text to video</h3>
                         <p>Generate videos from text scripts or descriptions using AI.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="prompt generator ai idea creation writer creative inspiration">
+                    <div class="tool-card anim-slide-in-up" data-keywords="prompt generator ai idea creation writer creative inspiration content text">
                         <div class="tool-icon"><i class="fas fa-lightbulb"></i></div>
                         <h3>Prompt generator</h3>
-                        <p>Get AI-generated prompts for creative writing or art.</p>
+                        <p>Get AI-generated prompts for creative writing, art, or ideas.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="ai-powered code generator app builder web mobile developer programming coding assistant">
+                    <div class="tool-card anim-slide-in-up" data-keywords="ai-powered code generator app builder web mobile developer programming coding assistant gpt">
                         <div class="tool-icon"><i class="fas fa-code-branch"></i></div>
                         <h3>AI-powered code generator</h3>
-                        <p>Build web/mobile apps, websites 10x faster with AI.</p>
+                        <p>Build apps/websites 10x faster with AI code generation.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="tag generator youtube facebook instagram seo social media keywords hashtags">
+                    <div class="tool-card anim-slide-in-up" data-keywords="tag generator youtube facebook instagram seo social media keywords hashtags video blog">
                         <div class="tool-icon"><i class="fas fa-tags"></i></div>
                         <h3>Tag generator (Social Media)</h3>
-                        <p>Generate relevant tags for YouTube, Facebook, Instagram etc.</p>
+                        <p>Generate relevant tags for YouTube, Facebook, Instagram.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="title generator youtube facebook instagram headline content creation blog seo">
+                    <div class="tool-card anim-slide-in-up" data-keywords="title generator youtube facebook instagram headline content creation blog seo video catchy">
                         <div class="tool-icon"><i class="fas fa-heading"></i></div>
                         <h3>Title generator (Social Media)</h3>
-                        <p>Create catchy titles for YouTube, Facebook, Instagram etc.</p>
+                        <p>Create catchy titles for YouTube, Facebook, Instagram.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="copyright chakkar youtube video content id music legal check infringement">
+                    <div class="tool-card anim-slide-in-up" data-keywords="copyright chakkar youtube video content id music legal check infringement audio video">
                         <div class="tool-icon"><i class="fas fa-copyright"></i></div>
                         <h3>Copyright chakkar (YouTube)</h3>
                         <p>Check for potential copyright issues in YouTube videos.</p>
@@ -904,141 +980,141 @@
         <section id="document-tools" class="tool-category">
             <div class="container">
                 <h2><i class="fas fa-file-alt"></i> Document Tools</h2>
-                <p class="category-subheading">Manage, convert, and secure your PDF and other documents.</p>
+                <p class="category-subheading">Manage, convert, and secure your PDF and other documents efficiently.</p>
                 <div class="tool-grid">
-                    <div class="tool-card fade-in-up" data-keywords="sentence to pdf converter text to pdf txt file">
+                    <div class="tool-card anim-slide-in-up" data-keywords="sentence to pdf converter text to pdf txt file paste create">
                         <div class="tool-icon"><i class="fas fa-file-pdf"></i></div>
                         <h3>Sentence to PDF converter</h3>
                         <p>Accurately converts TXT files or pasted text to PDF formats.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pdf to word word to pdf converter doc docx editable">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pdf to word word to pdf converter doc docx editable accurate">
                         <div class="tool-icon"><i class="fas fa-file-word"></i></div>
                         <h3>PDF to Word / Word to PDF</h3>
-                        <p>Convert PDF to Word (DOC/DOCX) and vice versa easily.</p>
+                        <p>Easily convert PDF to Word (DOC/DOCX) and vice versa.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pdf to excel excel to pdf converter xls xlsx spreadsheet data">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pdf to excel excel to pdf converter xls xlsx spreadsheet data extraction">
                         <div class="tool-icon"><i class="fas fa-file-excel"></i></div>
                         <h3>PDF to Excel / Excel to PDF</h3>
                         <p>Convert PDF to Excel (XLS/XLSX) and vice versa quickly.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pdf compressor reduce size optimize shrink">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pdf compressor reduce size optimize shrink quality">
                         <div class="tool-icon"><i class="fas fa-file-archive"></i></div>
                         <h3>PDF Compressor</h3>
                         <p>Reduce PDF file size while optimizing for maximal quality.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pdf merger splitter combine separate join files organize">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pdf merger splitter combine separate join files organize pages">
                         <div class="tool-icon"><i class="fas fa-object-group"></i></div>
                         <h3>PDF Merger & Splitter</h3>
                         <p>Combine multiple PDFs or split one PDF into several files.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="document converter pdf word ppt html any format office files">
+                    <div class="tool-card anim-slide-in-up" data-keywords="document converter pdf word ppt html any format office files universal">
                         <div class="tool-icon"><i class="fas fa-retweet"></i></div>
                         <h3>Document Converter</h3>
                         <p>Convert docs to PDF, Word, PPT, HTML (40+ formats).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="pdf lock unlock protect encrypt password security remove">
+                     <div class="tool-card anim-slide-in-up" data-keywords="pdf lock unlock protect encrypt password security remove restriction">
                         <div class="tool-icon"><span class="fa-stack fa-1x"><i class="fas fa-lock fa-stack-1x"></i><i class="fas fa-unlock fa-stack-1x" style="color: var(--primary-blue-dark; margin-left: 8px; margin-top: -2px; font-size: 0.8em;"></i></span></div>
                         <h3>PDF Lock/Unlock</h3>
                         <p>Protect PDFs with passwords or remove PDF security.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="esign pdf sign electronic signature document contract digital">
+                     <div class="tool-card anim-slide-in-up" data-keywords="esign pdf sign electronic signature document contract digital form">
                         <div class="tool-icon"><i class="fas fa-signature"></i></div>
                         <h3>e-Sign PDF</h3>
                         <p>Sign PDF documents electronically or request e-signatures.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="pdf to powerpoint powerpoint to pdf ppt pptx presentation slide">
+                     <div class="tool-card anim-slide-in-up" data-keywords="pdf to powerpoint powerpoint to pdf ppt pptx presentation slide show conversion">
                         <div class="tool-icon"><i class="fas fa-file-powerpoint"></i></div>
                         <h3>PDF to PowerPoint / PPT to PDF</h3>
                         <p>Convert PDF to PowerPoint (PPT/PPTX) & vice versa.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="edit pdf annotate text image shapes modify content">
+                     <div class="tool-card anim-slide-in-up" data-keywords="edit pdf annotate text image shapes modify content draw mark up">
                         <div class="tool-icon"><i class="fas fa-pencil-alt"></i></div>
                         <h3>Edit PDF</h3>
                         <p>Add text, images, shapes, or freehand annotations to PDFs.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="pdf to jpg jpg to pdf image converter picture png">
+                     <div class="tool-card anim-slide-in-up" data-keywords="pdf to jpg jpg to pdf image converter picture png extract images">
                         <div class="tool-icon"><i class="fas fa-file-image"></i></div>
                         <h3>PDF to JPG / JPG to PDF</h3>
-                        <p>Convert PDF pages to JPG images or JPGs to PDF.</p>
+                        <p>Convert PDF pages to JPG images or JPGs to PDF format.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="watermark pdf text image stamp protect brand copyright">
+                    <div class="tool-card anim-slide-in-up" data-keywords="watermark pdf text image stamp protect brand copyright overlay">
                         <div class="tool-icon"><i class="fas fa-stamp"></i></div>
-                        <h3>Watermark PDF</h3>
+                        <h3>Watermark</h3>
                         <p>Stamp an image or text watermark over your PDF files.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="rotate pdf pages orientation turn flip document">
+                    <div class="tool-card anim-slide-in-up" data-keywords="rotate pdf pages orientation turn flip document batch adjust">
                         <div class="tool-icon"><i class="fas fa-undo"></i></div>
                         <h3>Rotate PDF</h3>
                         <p>Rotate PDF pages to the correct orientation, batch rotate.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="html to pdf converter webpage website url to document">
+                    <div class="tool-card anim-slide-in-up" data-keywords="html to pdf converter webpage website url to document save as">
                         <div class="tool-icon"><i class="fas fa-globe"></i></div>
                         <h3>HTML to PDF</h3>
-                        <p>Convert HTML webpages (by URL) to PDF documents.</p>
+                        <p>Convert HTML webpages (by URL or file) to PDF docs.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="organize pdf sort delete add pages rearrange reorder">
+                    <div class="tool-card anim-slide-in-up" data-keywords="organize pdf sort delete add pages rearrange reorder manage">
                         <div class="tool-icon"><i class="fas fa-stream"></i></div>
                         <h3>Organize PDF</h3>
                         <p>Reorder, delete, or add pages within your PDF files.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pdf to pdfa archive iso standard long term preservation format">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pdf to pdfa archive iso standard long term preservation format validate">
                         <div class="tool-icon"><i class="fas fa-archive"></i></div>
                         <h3>PDF to PDF/A</h3>
                         <p>Transform PDF to PDF/A for long-term archiving (ISO).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="repair pdf fix corrupt recover data damage tool">
+                    <div class="tool-card anim-slide-in-up" data-keywords="repair pdf fix corrupt recover data damage tool broken file">
                         <div class="tool-icon"><i class="fas fa-tools"></i></div>
                         <h3>Repair PDF</h3>
                         <p>Repair damaged or corrupt PDF files and recover data.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="page numbers pdf add numbering footer header pagination">
+                    <div class="tool-card anim-slide-in-up" data-keywords="page numbers pdf add numbering footer header pagination position">
                         <div class="tool-icon"><i class="fas fa-list-ol"></i></div>
-                        <h3>Page numbers PDF</h3>
+                        <h3>Page numbers</h3>
                         <p>Add page numbers into your PDF documents with ease.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="scan to pdf mobile document scanner ocr image">
+                    <div class="tool-card anim-slide-in-up" data-keywords="scan to pdf mobile document scanner ocr image capture">
                         <div class="tool-icon"><i class="fas fa-camera"></i></div>
                         <h3>Scan to PDF</h3>
                         <p>Capture document scans from mobile & send to PDF.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="ocr pdf searchable text recognition scan image to text">
+                    <div class="tool-card anim-slide-in-up" data-keywords="ocr pdf searchable text recognition scan image to text editable content">
                         <div class="tool-icon"><i class="fas fa-search-plus"></i></div>
                         <h3>OCR PDF</h3>
                         <p>Make scanned PDFs searchable and selectable with OCR.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="compare pdf differences versions changes track side by side">
+                    <div class="tool-card anim-slide-in-up" data-keywords="compare pdf differences versions changes track side by side document review">
                         <div class="tool-icon"><i class="fas fa-balance-scale"></i></div>
                         <h3>Compare PDF</h3>
                         <p>Show side-by-side comparison to spot PDF changes.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="redact pdf remove sensitive information censor blackout secure">
+                    <div class="tool-card anim-slide-in-up" data-keywords="redact pdf remove sensitive information censor blackout secure hide">
                         <div class="tool-icon"><i class="fas fa-user-secret"></i></div>
                         <h3>Redact PDF</h3>
                         <p>Permanently remove sensitive text/graphics from PDFs.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="crop pdf margins select area trim document resize">
+                    <div class="tool-card anim-slide-in-up" data-keywords="crop pdf margins select area trim document resize page">
                         <div class="tool-icon"><i class="fas fa-vector-square"></i></div>
                         <h3>Crop PDF</h3>
                         <p>Crop PDF margins or select specific areas to keep.</p>
@@ -1055,359 +1131,359 @@
                 <p class="category-subheading">A wide range of calculators for finance, math, health, conversions, and more.</p>
                 <div class="tool-grid">
                     <!-- Financial -->
-                    <div class="tool-card fade-in-up" data-keywords="mortgage calculator loan finance home payment estimate real estate">
+                    <div class="tool-card anim-slide-in-up" data-keywords="mortgage calculator loan finance home payment estimate real estate interest">
                         <div class="tool-icon"><i class="fas fa-home"></i></div>
                         <h3>Mortgage Calculator</h3>
-                        <p>Estimate your mortgage payments and amortization.</p>
+                        <p>Estimate mortgage payments and amortization schedule.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="loan calculator finance interest payment personal business borrow">
+                    <div class="tool-card anim-slide-in-up" data-keywords="loan calculator finance interest payment personal business borrow principal">
                         <div class="tool-icon"><i class="fas fa-money-bill-wave"></i></div>
                         <h3>Loan Calculator</h3>
                         <p>Calculate loan payments, interest, and total cost.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="auto loan calculator car finance vehicle payment estimate">
+                    <div class="tool-card anim-slide-in-up" data-keywords="auto loan calculator car finance vehicle payment estimate car price">
                         <div class="tool-icon"><i class="fas fa-car"></i></div>
                         <h3>Auto Loan Calculator</h3>
-                        <p>Estimate car loan payments and affordability.</p>
+                        <p>Estimate car loan payments and overall affordability.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="interest calculator finance rate simple compound savings investment">
+                    <div class="tool-card anim-slide-in-up" data-keywords="interest calculator finance rate simple compound savings investment loan">
                         <div class="tool-icon"><i class="fas fa-percentage"></i></div>
                         <h3>Interest Calculator</h3>
                         <p>Calculate simple or compound interest earned or owed.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="payment calculator loan installment finance period amount">
+                     <div class="tool-card anim-slide-in-up" data-keywords="payment calculator loan installment finance period amount emi">
                         <div class="tool-icon"><i class="far fa-credit-card"></i></div>
                         <h3>Payment Calculator</h3>
                         <p>Calculate periodic payment amounts for loans or leases.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="retirement calculator savings pension finance planning future">
+                     <div class="tool-card anim-slide-in-up" data-keywords="retirement calculator savings pension finance planning future nest egg">
                         <div class="tool-icon"><i class="fas fa-piggy-bank"></i></div>
                         <h3>Retirement Calculator</h3>
-                        <p>Plan your retirement savings and income goals.</p>
+                        <p>Plan retirement savings and estimate future income.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="amortization calculator loan schedule payment principle interest">
+                     <div class="tool-card anim-slide-in-up" data-keywords="amortization calculator loan schedule payment principle interest breakdown">
                         <div class="tool-icon"><i class="fas fa-table"></i></div>
                         <h3>Amortization Calculator</h3>
-                        <p>View detailed loan amortization schedules.</p>
+                        <p>View detailed loan amortization payment schedules.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="investment calculator roi return finance growth stock mutual fund">
+                     <div class="tool-card anim-slide-in-up" data-keywords="investment calculator roi return finance growth stock mutual fund future value">
                         <div class="tool-icon"><i class="fas fa-chart-line"></i></div>
                         <h3>Investment Calculator</h3>
                         <p>Estimate investment growth and returns over time.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="inflation calculator cpi finance value money purchasing power">
+                    <div class="tool-card anim-slide-in-up" data-keywords="inflation calculator cpi finance value money purchasing power price index">
                         <div class="tool-icon"><i class="fas fa-hand-holding-usd"></i></div>
                         <h3>Inflation Calculator</h3>
                         <p>Assess the impact of inflation on money's value.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="finance calculator general financial planning budget investment loan">
+                    <div class="tool-card anim-slide-in-up" data-keywords="finance calculator general financial planning budget investment loan savings">
                         <div class="tool-icon"><i class="fas fa-file-invoice-dollar"></i></div>
                         <h3>Finance Calculator</h3>
-                        <p>General purpose financial calculations and planning.</p>
+                        <p>General purpose financial calculations and planning tool.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="income tax calculator salary tax finance estimate federal state">
-                        <div class="tool-icon"><i class="fas fa-landmark"></i></div> <!-- Changed Icon -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="income tax calculator salary tax finance estimate federal state local">
+                        <div class="tool-icon"><i class="fas fa-landmark"></i></div>
                         <h3>Income Tax Calculator</h3>
-                        <p>Estimate your income tax liability for the year.</p>
+                        <p>Estimate your income tax liability for the current year.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="compound interest calculator savings investment growth finance future value">
-                        <div class="tool-icon"><i class="fas fa-calculator"></i></div> <!-- Kept generic calculator -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="compound interest calculator savings investment growth finance future value long term">
+                        <div class="tool-icon"><i class="fas fa-calculator"></i></div>
                         <h3>Compound Interest Calculator</h3>
                         <p>Calculate growth with the power of compounding interest.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="salary calculator wage income pay net gross deductions">
+                    <div class="tool-card anim-slide-in-up" data-keywords="salary calculator wage income pay net gross deductions hourly annual">
                         <div class="tool-icon"><i class="fas fa-briefcase"></i></div>
                         <h3>Salary Calculator</h3>
                         <p>Calculate net salary from gross pay after deductions.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="interest rate calculator loan apr finance effective annual percentage">
+                    <div class="tool-card anim-slide-in-up" data-keywords="interest rate calculator loan apr finance effective annual percentage rate">
                         <div class="tool-icon"><i class="fas fa-sliders-h"></i></div>
                         <h3>Interest Rate Calculator</h3>
-                        <p>Calculate effective interest rates (e.g., APR).</p>
+                        <p>Calculate effective interest rates (e.g., APR) for loans.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="sales tax calculator vat purchase tax retail shopping">
+                    <div class="tool-card anim-slide-in-up" data-keywords="sales tax calculator vat purchase tax retail shopping final price">
                         <div class="tool-icon"><i class="fas fa-shopping-cart"></i></div>
                         <h3>Sales Tax Calculator</h3>
-                        <p>Calculate sales tax on purchases and total cost.</p>
+                        <p>Calculate sales tax on purchases and the total cost.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="loan emi calculator equated monthly installment finance india">
+                    <div class="tool-card anim-slide-in-up" data-keywords="loan emi calculator equated monthly installment finance india payment">
                         <div class="tool-icon"><i class="fas fa-calendar-check"></i></div>
                         <h3>Loan EMI Calculator</h3>
-                        <p>Calculate Equated Monthly Installments for loans.</p>
+                        <p>Calculate Equated Monthly Installments (EMI) for loans.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="gst calculator tax goods services india finance business">
+                    <div class="tool-card anim-slide-in-up" data-keywords="gst calculator tax goods services india finance business invoice">
                         <div class="tool-icon"><i class="fas fa-receipt"></i></div>
                         <h3>GST Calculator</h3>
-                        <p>Calculate Goods and Services Tax (India specific or general).</p>
+                        <p>Calculate Goods and Services Tax (GST) for India.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="currency converter exchange rate money foreign travel finance forex">
+                    <div class="tool-card anim-slide-in-up" data-keywords="currency converter exchange rate money foreign travel finance forex usd eur gbp">
                         <div class="tool-icon"><span class="fa-stack fa-1x"><i class="fas fa-dollar-sign fa-stack-1x"></i><i class="fas fa-euro-sign fa-stack-1x" style="margin-left: 10px; font-size: 0.8em;"></i><i class="fas fa-yen-sign fa-stack-1x" style="margin-left: -10px; margin-top:8px; font-size: 0.7em;"></i></span></div>
                         <h3>Currency Converter</h3>
-                        <p>Convert between different world currencies.</p>
+                        <p>Convert between different world currencies in real-time.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                     <!-- Math -->
-                     <div class="tool-card fade-in-up" data-keywords="scientific calculator math functions advanced algebra trigonometry log exponent">
+                     <div class="tool-card anim-slide-in-up" data-keywords="scientific calculator math functions advanced algebra trigonometry log exponent calculus">
                         <div class="tool-icon"><i class="fas fa-square-root-alt"></i></div>
                         <h3>Scientific Calculator</h3>
-                        <p>Perform advanced mathematical calculations and functions.</p>
+                        <p>Perform advanced mathematical calculations & functions.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="fraction calculator math arithmetic add subtract multiply divide mixed">
+                    <div class="tool-card anim-slide-in-up" data-keywords="fraction calculator math arithmetic add subtract multiply divide mixed improper">
                         <div class="tool-icon"><i class="fas fa-divide"></i></div>
                         <h3>Fraction Calculator</h3>
                         <p>Perform operations with fractions (add, subtract, etc.).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="percentage calculator math discount increase change percent">
-                        <div class="tool-icon"><i class="fas fa-percent"></i></div> <!-- Re-using general percentage -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="percentage calculator math discount increase change percent of number">
+                        <div class="tool-icon"><i class="fas fa-percentage"></i></div>
                         <h3>Percentage Calculator</h3>
-                        <p>Calculate percentages, increases, discounts easily.</p>
+                        <p>Calculate percentages, increases, discounts, & more.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="random number generator rng dice math statistics picker">
+                    <div class="tool-card anim-slide-in-up" data-keywords="random number generator rng dice math statistics picker range custom">
                         <div class="tool-icon"><i class="fas fa-random"></i></div>
                         <h3>Random Number Generator</h3>
                         <p>Generate random numbers within a specified range.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="triangle calculator math geometry angles sides area perimeter">
+                    <div class="tool-card anim-slide-in-up" data-keywords="triangle calculator math geometry angles sides area perimeter trigonometry solve">
                         <div class="tool-icon"><i class="fas fa-draw-polygon"></i></div>
                         <h3>Triangle Calculator</h3>
-                        <p>Solve triangle properties (angles, sides, area).</p>
+                        <p>Solve triangle properties (angles, sides, area, etc.).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="standard deviation calculator math statistics variance data set analysis">
+                    <div class="tool-card anim-slide-in-up" data-keywords="standard deviation calculator math statistics variance data set analysis mean median">
                         <div class="tool-icon"><i class="fas fa-chart-bar"></i></div>
                         <h3>Standard Deviation Calculator</h3>
-                        <p>Calculate standard deviation of a dataset.</p>
+                        <p>Calculate standard deviation and variance of a dataset.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                     <!-- Fitness & Health -->
-                    <div class="tool-card fade-in-up" data-keywords="bmi calculator body mass index health fitness weight height chart">
+                    <div class="tool-card anim-slide-in-up" data-keywords="bmi calculator body mass index health fitness weight height chart category">
                         <div class="tool-icon"><i class="fas fa-heartbeat"></i></div>
                         <h3>BMI Calculator</h3>
-                        <p>Calculate your Body Mass Index (BMI).</p>
+                        <p>Calculate your Body Mass Index (BMI) and category.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="calorie calculator diet food fitness health nutrition intake tracker">
+                    <div class="tool-card anim-slide-in-up" data-keywords="calorie calculator diet food fitness health nutrition intake tracker tdee maintenance">
                         <div class="tool-icon"><i class="fas fa-utensils"></i></div>
                         <h3>Calorie Calculator</h3>
                         <p>Estimate daily calorie needs for weight management.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="body fat calculator health fitness percentage lean mass estimate">
-                        <div class="tool-icon"><i class="fas fa-child"></i></div> <!-- User was not specific -->
+                     <div class="tool-card anim-slide-in-up" data-keywords="body fat calculator health fitness percentage lean mass estimate navy calipers">
+                        <div class="tool-icon"><i class="fas fa-child"></i></div>
                         <h3>Body Fat Calculator</h3>
-                        <p>Estimate your body fat percentage using various methods.</p>
+                        <p>Estimate body fat percentage using various methods.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="bmr calculator basal metabolic rate health fitness metabolism calories">
+                    <div class="tool-card anim-slide-in-up" data-keywords="bmr calculator basal metabolic rate health fitness metabolism calories burned at rest">
                         <div class="tool-icon"><i class="fas fa-fire"></i></div>
                         <h3>BMR Calculator</h3>
                         <p>Calculate your Basal Metabolic Rate (BMR).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="ideal weight calculator health fitness bmi height frame chart">
+                     <div class="tool-card anim-slide-in-up" data-keywords="ideal weight calculator health fitness bmi height frame chart range">
                         <div class="tool-icon"><i class="fas fa-weight-hanging"></i></div>
                         <h3>Ideal Weight Calculator</h3>
-                        <p>Determine your ideal weight range based on height.</p>
+                        <p>Determine your ideal healthy weight range.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="pace calculator running speed distance time fitness marathon run walk">
+                     <div class="tool-card anim-slide-in-up" data-keywords="pace calculator running speed distance time fitness marathon run walk jog split">
                         <div class="tool-icon"><i class="fas fa-running"></i></div>
                         <h3>Pace Calculator</h3>
                         <p>Calculate running/walking pace, time, or distance.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pregnancy calculator due date conception health baby gestation weeks">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pregnancy calculator due date conception health baby gestation weeks trimesters">
                         <div class="tool-icon"><i class="fas fa-baby"></i></div>
                         <h3>Pregnancy Calculator</h3>
-                        <p>Estimate pregnancy milestones like due date.</p>
+                        <p>Estimate pregnancy milestones like your due date.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="pregnancy conception calculator ovulation health fertility planning baby">
+                    <div class="tool-card anim-slide-in-up" data-keywords="pregnancy conception calculator ovulation health fertility planning baby calendar">
                         <div class="tool-icon"><i class="fas fa-calendar-plus"></i></div>
-                        <h3>Pregnancy Conception Calculator</h3>
+                        <h3>Pregnancy Conception Calc.</h3>
                         <p>Estimate the date of conception for pregnancy.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="due date calculator pregnancy baby health delivery estimate gestation">
+                    <div class="tool-card anim-slide-in-up" data-keywords="due date calculator pregnancy baby health delivery estimate gestation lmp">
                         <div class="tool-icon"><i class="fas fa-baby-carriage"></i></div>
                         <h3>Due Date Calculator</h3>
-                        <p>Estimate your baby's expected due date.</p>
+                        <p>Estimate your baby's expected delivery due date.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                     <!-- Other -->
-                    <div class="tool-card fade-in-up" data-keywords="height calculator measurement feet inches cm convert compare human">
+                    <div class="tool-card anim-slide-in-up" data-keywords="height calculator measurement feet inches cm convert compare human stature">
                         <div class="tool-icon"><i class="fas fa-ruler-vertical"></i></div>
                         <h3>Height Calculator</h3>
-                        <p>Convert and compare heights in different units.</p>
+                        <p>Convert and compare heights in different units (cm, ft, in).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="length calculator measurement convert units distance meter feet inches km">
+                     <div class="tool-card anim-slide-in-up" data-keywords="length calculator measurement convert units distance meter feet inches km mile yard">
                         <div class="tool-icon"><i class="fas fa-ruler-horizontal"></i></div>
                         <h3>Length Calculator</h3>
-                        <p>Convert between various units of length.</p>
+                        <p>Convert between various units of length measurement.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="wait calculator time duration period countdown timer difference between dates">
+                    <div class="tool-card anim-slide-in-up" data-keywords="wait calculator time duration period countdown timer difference between dates hours minutes">
                         <div class="tool-icon"><i class="far fa-clock"></i></div>
                         <h3>Wait Calculator</h3>
-                        <p>Calculate duration between times or specific dates.</p>
+                        <p>Calculate duration between two times or specific dates.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="age calculator birthday date how old years months days">
+                    <div class="tool-card anim-slide-in-up" data-keywords="age calculator birthday date how old years months days exact current">
                         <div class="tool-icon"><i class="fas fa-calendar-alt"></i></div>
                         <h3>Age Calculator</h3>
                         <p>Calculate age in years, months, and days from birth date.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="date calculator days between duration add subtract from date difference">
-                        <div class="tool-icon"><i class="far fa-calendar-days"></i></div> <!-- Changed Icon -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="date calculator days between duration add subtract from date difference calendar weeks months years">
+                        <div class="tool-icon"><i class="far fa-calendar-days"></i></div>
                         <h3>Date Calculator</h3>
-                        <p>Calculate duration between two dates or add/subtract days.</p>
+                        <p>Calculate duration between dates or add/subtract time.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="time calculator duration add subtract convert hours minutes seconds">
+                     <div class="tool-card anim-slide-in-up" data-keywords="time calculator duration add subtract convert hours minutes seconds hms arithmetic">
                         <div class="tool-icon"><i class="fas fa-hourglass-half"></i></div>
                         <h3>Time Calculator</h3>
-                        <p>Perform calculations with time units (add, subtract, convert).</p>
+                        <p>Perform calculations with time units (add, subtract, etc.).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="hours calculator time tracking work shift wage pay duration">
+                    <div class="tool-card anim-slide-in-up" data-keywords="hours calculator time tracking work shift wage pay duration total timesheet">
                         <div class="tool-icon"><i class="fas fa-business-time"></i></div>
                         <h3>Hours Calculator</h3>
-                        <p>Calculate total hours worked between two times.</p>
+                        <p>Calculate total hours worked between two time points.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="temperature calculator convert celsius fahrenheit kelvin C F K">
+                     <div class="tool-card anim-slide-in-up" data-keywords="temperature calculator convert celsius fahrenheit kelvin C F K weather">
                         <div class="tool-icon"><i class="fas fa-thermometer-half"></i></div>
                         <h3>Temperature Calculator</h3>
-                        <p>Convert between Celsius, Fahrenheit, and Kelvin.</p>
+                        <p>Convert between Celsius, Fahrenheit, and Kelvin units.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="gpa calculator grade point average school college academic university">
+                    <div class="tool-card anim-slide-in-up" data-keywords="gpa calculator grade point average school college academic university weighted">
                         <div class="tool-icon"><i class="fas fa-graduation-cap"></i></div>
                         <h3>GPA Calculator</h3>
                         <p>Calculate Grade Point Average (GPA) for academics.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="grade calculator marks percentage school college academic score test exam">
-                        <div class="tool-icon"><i class="fas fa-star"></i></div> <!-- user had a regular star, changed -->
+                     <div class="tool-card anim-slide-in-up" data-keywords="grade calculator marks percentage school college academic score test exam final">
+                        <div class="tool-icon"><i class="fas fa-star"></i></div>
                         <h3>Grade Calculator</h3>
-                        <p>Calculate academic grades based on scores and weights.</p>
+                        <p>Calculate academic grades based on scores & weights.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="concrete calculator construction material volume cubic yards meters cement sand">
-                        <div class="tool-icon"><i class="fas fa-truck-pickup"></i></div> <!-- user had pickup truck, fits well -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="concrete calculator construction material volume cubic yards meters cement sand aggregate">
+                        <div class="tool-icon"><i class="fas fa-truck-pickup"></i></div>
                         <h3>Concrete Calculator</h3>
-                        <p>Estimate concrete volume needed for slabs, footings, etc.</p>
+                        <p>Estimate concrete volume for slabs, footings, etc.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="subnet calculator ip network address cidr mask wildcard host range broadcast">
+                    <div class="tool-card anim-slide-in-up" data-keywords="subnet calculator ip network address cidr mask wildcard host range broadcast classful classless">
                         <div class="tool-icon"><i class="fas fa-network-wired"></i></div>
                         <h3>Subnet Calculator</h3>
-                        <p>Calculate network subnet details (address, mask, hosts).</p>
+                        <p>Calculate network subnet details (IP, mask, hosts).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="password generator secure random string create strong complex passphrase">
+                    <div class="tool-card anim-slide-in-up" data-keywords="password generator secure random string create strong complex passphrase unique">
                         <div class="tool-icon"><i class="fas fa-key"></i></div>
                         <h3>Password Generator</h3>
-                        <p>Create strong, random, and secure passwords.</p>
+                        <p>Create strong, random, and secure passwords easily.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                     <!-- Conversion Calculators -->
-                    <div class="tool-card fade-in-up" data-keywords="conversions calculators unit currency all in one general measure metric imperial">
-                        <div class="tool-icon"><i class="fas fa-exchange-alt"></i></div> <!-- Re-using exchange icon -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="conversions calculators unit currency all in one general measure metric imperial weight length volume area speed temperature time energy power pressure data storage angle fuel consumption cooking kitchen">
+                        <div class="tool-icon"><i class="fas fa-exchange-alt"></i></div>
                         <h3>Conversions Calculators</h3>
-                        <p>Effortlessly convert units, currencies, and more.</p>
+                        <p>Effortlessly convert various units, currencies, & more.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="kg to pounds converter weight mass kilogram lb lbs">
+                    <div class="tool-card anim-slide-in-up" data-keywords="kg to pounds converter weight mass kilogram lb lbs unit conversion">
                         <div class="tool-icon"><i class="fas fa-weight"></i></div>
                         <h3>KG to Pounds Converter</h3>
-                        <p>Convert kilograms (kg) to pounds (lb).</p>
+                        <p>Convert kilograms (kg) to pounds (lb) quickly.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="stones to kg converter weight mass st kilogram">
+                     <div class="tool-card anim-slide-in-up" data-keywords="stones to kg converter weight mass st kilogram unit conversion imperial metric">
                         <div class="tool-icon"><i class="fas fa-balance-scale-left"></i></div>
                         <h3>Stones to KG Converter</h3>
                         <p>Convert stones (st) to kilograms (kg).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="ounces to pounds converter weight mass oz lb">
+                     <div class="tool-card anim-slide-in-up" data-keywords="ounces to pounds converter weight mass oz lb unit conversion imperial">
                         <div class="tool-icon"><i class="fas fa-feather-alt"></i></div>
                         <h3>Ounces to Pounds Converter</h3>
                         <p>Convert ounces (oz) to pounds (lb).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="days to hours converter time duration period calculation">
-                        <div class="tool-icon"><i class="far fa-calendar-alt"></i></div> <!-- user used calendar, fits -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="days to hours converter time duration period calculation unit">
+                        <div class="tool-icon"><i class="far fa-calendar-alt"></i></div>
                         <h3>Days to Hours Converter</h3>
-                        <p>Convert a number of days into hours.</p>
+                        <p>Convert a number of days into total hours.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="minutes to days converter time duration period calculation">
-                        <div class="tool-icon"><i class="far fa-clock"></i></div> <!-- user used clock -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="minutes to days converter time duration period calculation unit">
+                        <div class="tool-icon"><i class="far fa-clock"></i></div>
                         <h3>Minutes to Days Converter</h3>
-                        <p>Convert a number of minutes into days.</p>
+                        <p>Convert a number of minutes into total days.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="hours to seconds converter time duration period calculation">
+                    <div class="tool-card anim-slide-in-up" data-keywords="hours to seconds converter time duration period calculation unit">
                         <div class="tool-icon"><i class="fas fa-stopwatch"></i></div>
                         <h3>Hours to Seconds Converter</h3>
-                        <p>Convert a number of hours into seconds.</p>
+                        <p>Convert a number of hours into total seconds.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="feet to cm converter length measurement ft centimeter imperial metric">
+                     <div class="tool-card anim-slide-in-up" data-keywords="feet to cm converter length measurement ft centimeter imperial metric unit">
                         <div class="tool-icon"><i class="fas fa-ruler"></i></div>
                         <h3>Feet to CM Converter</h3>
                         <p>Convert feet (ft) to centimeters (cm).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="miles to km converter distance length mi kilometer imperial metric">
+                    <div class="tool-card anim-slide-in-up" data-keywords="miles to km converter distance length mi kilometer imperial metric unit">
                         <div class="tool-icon"><i class="fas fa-road"></i></div>
                         <h3>Miles to KM Converter</h3>
                         <p>Convert miles (mi) to kilometers (km).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="feet to inches converter length measurement ft in imperial">
+                    <div class="tool-card anim-slide-in-up" data-keywords="feet to inches converter length measurement ft in imperial unit">
                         <div class="tool-icon"><i class="fas fa-ruler-combined"></i></div>
                         <h3>Feet to Inches Converter</h3>
                         <p>Convert feet (ft) to inches (in).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="celsius to fahrenheit converter temperature C F weather">
-                        <div class="tool-icon"><i class="fas fa-temperature-low"></i></div> <!-- user had low temp -->
-                        <h3>Celsius to Fahrenheit Converter</h3>
+                    <div class="tool-card anim-slide-in-up" data-keywords="celsius to fahrenheit converter temperature C F weather unit science">
+                        <div class="tool-icon"><i class="fas fa-temperature-low"></i></div>
+                        <h3>Celsius to Fahrenheit Conv.</h3>
                         <p>Convert Celsius (°C) to Fahrenheit (°F).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="mm to meters converter length measurement millimeter m metric">
-                        <div class="tool-icon"><i class="fas fa-ruler-horizontal"></i></div> <!-- user used horizontal ruler -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="mm to meters converter length measurement millimeter m metric unit">
+                        <div class="tool-icon"><i class="fas fa-ruler-horizontal"></i></div>
                         <h3>MM to Meters Converter</h3>
                         <p>Convert millimeters (mm) to meters (m).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="yards to inches converter length measurement yd in imperial">
+                    <div class="tool-card anim-slide-in-up" data-keywords="yards to inches converter length measurement yd in imperial unit">
                         <div class="tool-icon"><i class="fas fa-tape"></i></div>
                         <h3>Yards to Inches Converter</h3>
                         <p>Convert yards (yd) to inches (in).</p>
@@ -1423,49 +1499,49 @@
                 <h2><i class="fas fa-font"></i> Text Tools</h2>
                 <p class="category-subheading">Format, analyze, and manipulate your text content effortlessly.</p>
                 <div class="tool-grid">
-                    <div class="tool-card fade-in-up" data-keywords="text case converter uppercase lowercase titlecase sentence case change formatting">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text case converter uppercase lowercase titlecase sentence case change formatting style">
                         <div class="tool-icon"><i class="fas fa-text-height"></i></div>
                         <h3>Text Case Converter</h3>
                         <p>Change text to uppercase, lowercase, title case, etc.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="word character counter count length statistics analysis writing">
+                    <div class="tool-card anim-slide-in-up" data-keywords="word character counter count length statistics analysis writing seo sentences paragraphs">
                         <div class="tool-icon"><i class="fas fa-sort-numeric-down"></i></div>
                         <h3>Word & Character Counter</h3>
                         <p>Count words, characters, sentences, and paragraphs.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="remove duplicate lines unique filter distinct list text cleaning">
+                    <div class="tool-card anim-slide-in-up" data-keywords="remove duplicate lines unique filter distinct list text cleaning data processing">
                         <div class="tool-icon"><i class="fas fa-stream"></i></div>
                         <h3>Remove Duplicate Lines</h3>
                         <p>Delete duplicate lines from a list or block of text.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="text sorter arrange order alphabetical numeric sort lines list cleaning">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text sorter arrange order alphabetical numeric sort lines list cleaning data">
                         <div class="tool-icon"><i class="fas fa-sort-alpha-down"></i></div>
                         <h3>Text Sorter</h3>
-                        <p>Sort lines of text alphabetically or numerically.</p>
+                        <p>Sort lines of text alphabetically or numerically (A-Z, Z-A).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="text reverser flip mirror string reverse characters words lines">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text reverser flip mirror string reverse characters words lines palindrome">
                         <div class="tool-icon"><i class="fas fa-undo-alt"></i></div>
                         <h3>Text Reverser</h3>
-                        <p>Reverse the order of characters, words, or lines in text.</p>
+                        <p>Reverse the order of characters, words, or text lines.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="text encryptor decryptor secure privacy cipher encode decode aes security">
+                    <div class="tool-card anim-slide-in-up" data-keywords="text encryptor decryptor secure privacy cipher encode decode aes security message">
                         <div class="tool-icon"><i class="fas fa-user-secret"></i></div>
                         <h3>Text Encryptor/Decryptor</h3>
-                        <p>Encrypt text for privacy or decrypt previously encrypted text.</p>
+                        <p>Encrypt text for privacy or decrypt encrypted messages.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="sentence rewriter tool ai paraphraser rephrase content writing academic">
+                    <div class="tool-card anim-slide-in-up" data-keywords="sentence rewriter tool ai paraphraser rephrase content writing academic improve clarity">
                         <div class="tool-icon"><i class="fas fa-pen-nib"></i></div>
                         <h3>Sentence Rewriter Tool</h3>
-                        <p>Improve quality of sentences with AI for creators and writers.</p>
+                        <p>Improve quality of sentences with AI for creators/writers.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="article rewriter tool ai content spinner paraphrase unique text generation">
+                    <div class="tool-card anim-slide-in-up" data-keywords="article rewriter tool ai content spinner paraphrase unique text generation blog seo">
                         <div class="tool-icon"><i class="fas fa-file-signature"></i></div>
                         <h3>Article Rewriter Tool</h3>
                         <p>Create unlimited original articles using AI content rewriting.</p>
@@ -1479,70 +1555,70 @@
         <section id="web-dev-tools" class="tool-category">
             <div class="container">
                 <h2><i class="fas fa-code"></i> Web/Developer Tools</h2>
-                <p class="category-subheading">Essential utilities for web developers and programmers.</p>
+                <p class="category-subheading">Essential utilities for web developers, programmers, and designers.</p>
                 <div class="tool-grid">
-                     <div class="tool-card fade-in-up" data-keywords="code editor ide online compiler html css javascript python php">
+                     <div class="tool-card anim-slide-in-up" data-keywords="code editor ide online compiler html css javascript python php java run test debug">
                         <div class="tool-icon"><i class="fas fa-laptop-code"></i></div>
                         <h3>Code Editors/IDEs</h3>
                         <p>Online code editors for various programming languages.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="frameworks libraries resources developer tools react vue angular nodejs">
+                     <div class="tool-card anim-slide-in-up" data-keywords="frameworks libraries resources developer tools react vue angular nodejs bootstrap jquery list">
                         <div class="tool-icon"><i class="fas fa-cubes"></i></div>
                         <h3>Frameworks & Libraries</h3>
                         <p>Curated list of useful frameworks & libraries links.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="css design tools generator utilities bootstrap tailwind">
+                     <div class="tool-card anim-slide-in-up" data-keywords="css design tools generator utilities bootstrap tailwind sass less animation grid flexbox">
                         <div class="tool-icon"><i class="fab fa-css3-alt"></i></div>
                         <h3>CSS/Design Tools</h3>
                         <p>Tools to aid in CSS development, design, and utilities.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="browser tools extensions devtools utilities chrome firefox edge">
-                        <div class="tool-icon"><i class="fab fa-chrome"></i></div> <!-- Changed from a generic one to Chrome, common -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="browser tools extensions devtools utilities chrome firefox edge safari inspector responsive">
+                        <div class="tool-icon"><i class="fab fa-chrome"></i></div>
                         <h3>Browser Tools</h3>
                         <p>Helpful browser extensions, devtools, and utilities.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="html css js minifier compress code optimize javascript performance">
+                    <div class="tool-card anim-slide-in-up" data-keywords="html css js minifier compress code optimize javascript performance minify uglify">
                         <div class="tool-icon"><i class="fas fa-file-code"></i></div>
                         <h3>HTML/CSS/JS Minifier</h3>
                         <p>Reduce file size of HTML, CSS, and JavaScript code.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="json formatter validator beautifier viewer lint pretty print">
-                        <div class="tool-icon"><i class="fas fa-sitemap"></i></div> <!-- kept user's choice, represents structure -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="json formatter validator beautifier viewer lint pretty print parse tree">
+                        <div class="tool-icon"><i class="fas fa-sitemap"></i></div>
                         <h3>JSON Formatter & Validator</h3>
                         <p>Format, validate, and beautify JSON data structures.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="base64 encoder decoder encode decode string image file security">
+                    <div class="tool-card anim-slide-in-up" data-keywords="base64 encoder decoder encode decode string image file security binary data">
                         <div class="tool-icon"><i class="fas fa-shield-alt"></i></div>
                         <h3>Base64 Encoder/Decoder</h3>
-                        <p>Encode data to Base64 format or decode from it.</p>
+                        <p>Encode data to Base64 format or decode Base64 strings.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="url encoder decoder encode decode percent escape query string parameter">
+                    <div class="tool-card anim-slide-in-up" data-keywords="url encoder decoder encode decode percent escape query string parameter special characters">
                         <div class="tool-icon"><i class="fas fa-link"></i></div>
                         <h3>URL Encoder/Decoder</h3>
                         <p>Encode or decode URLs for safe transmission in web.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="url shortener tiny link shrink bitly custom short domain">
+                     <div class="tool-card anim-slide-in-up" data-keywords="url shortener tiny link shrink bitly custom short domain analytics track">
                         <div class="tool-icon"><i class="fas fa-cut"></i></div>
                         <h3>URL Shortener</h3>
                         <p>Create short, shareable, and trackable links for long URLs.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="color picker converter hex rgb hsl hsv cmyk eyedropper design">
-                        <div class="tool-icon"><i class="fas fa-eye-dropper"></i></div> <!-- User had eyedropper -->
+                     <div class="tool-card anim-slide-in-up" data-keywords="color picker converter hex rgb hsl hsv cmyk eyedropper design web ui">
+                        <div class="tool-icon"><i class="fas fa-eye-dropper"></i></div>
                         <h3>Color Picker & Converter</h3>
                         <p>Pick colors, convert HEX, RGB, HSL, HSV, CMYK values.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="regex tester regular expression checker pattern match javascript python php">
-                        <div class="tool-icon"><i class="fas fa-search-dollar"></i></div> <!-- Changed to search-dollar, common for "find/match" pattern -->
+                     <div class="tool-card anim-slide-in-up" data-keywords="regex tester regular expression checker pattern match javascript python php java search validate">
+                        <div class="tool-icon"><i class="fas fa-search-dollar"></i></div>
                         <h3>Regex Tester</h3>
                         <p>Test and debug regular expressions online interactively.</p>
                         <a href="#" class="tool-button">Use Tool</a>
@@ -1557,40 +1633,40 @@
                 <h2><i class="fas fa-palette"></i> Color Tools</h2>
                 <p class="category-subheading">Find, convert, and generate colors for your design projects.</p>
                 <div class="tool-grid">
-                     <div class="tool-card fade-in-up" data-keywords="color picker from image sampler spectrum hex rgb hsl hsv cmyk eyedropper png jpeg webp">
+                     <div class="tool-card anim-slide-in-up" data-keywords="color picker from image sampler spectrum hex rgb hsl hsv cmyk eyedropper png jpeg webp upload select">
                         <div class="tool-icon"><span class="fa-stack fa-1x"><i class="fas fa-image fa-stack-1x"></i><i class="fas fa-eye-dropper fa-stack-1x" style="color: var(--primary-blue-dark); font-size: 0.6em; margin-left: 8px; margin-top: 6px;"></i></span></div>
                         <h3>Color Picker from Image</h3>
                         <p>Pick colors from an image, sampler, or spectrum easily.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="hex to rgb converter color code conversion web design html css">
+                     <div class="tool-card anim-slide-in-up" data-keywords="hex to rgb converter color code conversion web design html css values">
                         <div class="tool-icon"><i class="fas fa-exchange-alt"></i></div>
                         <h3>HEX to RGB Converter</h3>
                         <p>Convert HEX color codes to RGB values and vice versa.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="gradient generator css color blend background design linear radial">
+                     <div class="tool-card anim-slide-in-up" data-keywords="gradient generator css color blend background design linear radial conic smooth">
                         <div class="tool-icon"><i class="fas fa-fill-drip"></i></div>
                         <h3>Gradient Generator</h3>
                         <p>Create beautiful CSS color gradients for web and design.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="contrast checker accessibility wcag color ratio aa aaa web design">
+                     <div class="tool-card anim-slide-in-up" data-keywords="contrast checker accessibility wcag color ratio aa aaa web design ui ux">
                         <div class="tool-icon"><i class="fas fa-adjust"></i></div>
                         <h3>Contrast Checker</h3>
                         <p>Check color contrast ratios for WCAG accessibility.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="palette generator color scheme combinations design harmonious analogous complementary">
+                     <div class="tool-card anim-slide-in-up" data-keywords="palette generator color scheme combinations design harmonious analogous complementary triad tetrad random">
                         <div class="tool-icon"><i class="fas fa-swatchbook"></i></div>
                         <h3>Palette Generator</h3>
                         <p>Generate harmonious color palettes for your projects.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                     <div class="tool-card fade-in-up" data-keywords="color blindness simulator accessibility vision test design deuteranopia protanopia tritanopia">
-                        <div class="tool-icon"><i class="fas fa-eye-slash"></i></div> <!-- Changed icon for better representation -->
+                     <div class="tool-card anim-slide-in-up" data-keywords="color blindness simulator accessibility vision test design deuteranopia protanopia tritanopia achromatopsia">
+                        <div class="tool-icon"><i class="fas fa-eye-slash"></i></div>
                         <h3>Color Blindness Simulator</h3>
-                        <p>Simulate how colors appear with various color vision deficiencies.</p>
+                        <p>Simulate how colors appear with color vision deficiencies.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                 </div>
@@ -1600,25 +1676,25 @@
         <!-- ======================= SEO & Marketing Tools ======================= -->
         <section id="seo-marketing-tools" class="tool-category">
             <div class="container">
-                <h2><i class="fas fa-chart-pie"></i> SEO & Marketing Tools</h2> <!-- Changed Icon -->
+                <h2><i class="fas fa-chart-pie"></i> SEO & Marketing Tools</h2>
                 <p class="category-subheading">Utilities to help optimize your online presence and content strategy.</p>
                 <div class="tool-grid">
-                    <div class="tool-card fade-in-up" data-keywords="keyword density checker seo content analysis on-page optimization frequency">
-                        <div class="tool-icon"><i class="fas fa-search-location"></i></div> <!-- Changed icon -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="keyword density checker seo content analysis on-page optimization frequency tf-idf text">
+                        <div class="tool-icon"><i class="fas fa-search-location"></i></div>
                         <h3>Keyword Density Checker</h3>
-                        <p>Analyze keyword density and frequency in your text content.</p>
+                        <p>Analyze keyword density and frequency in your content.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="meta tag analyzer seo website audit on-page title description keywords html">
+                    <div class="tool-card anim-slide-in-up" data-keywords="meta tag analyzer seo website audit on-page title description keywords html check preview">
                         <div class="tool-icon"><i class="fas fa-tags"></i></div>
                         <h3>Meta Tag Analyzer</h3>
-                        <p>Inspect meta tags (title, description) of any webpage for SEO.</p>
+                        <p>Inspect meta tags (title, description) of any webpage.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="word counter seo content length marketing copy text analysis blog post article">
+                    <div class="tool-card anim-slide-in-up" data-keywords="word counter seo content length marketing copy text analysis blog post article character sentence paragraph">
                         <div class="tool-icon"><i class="fas fa-file-word"></i></div>
-                        <h3>Word Counter (Marketing)</h3>
-                        <p>Quickly count words in your marketing copy or articles.</p>
+                        <h3>Word Counter</h3>
+                        <p>Quickly count words, characters, & sentences in text.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
                 </div>
@@ -1628,40 +1704,40 @@
         <!-- ======================= Utility Tools ======================= -->
         <section id="utility-tools" class="tool-category">
             <div class="container">
-                <h2><i class="fas fa-cogs"></i> Utility Tools</h2> <!-- Changed icon to cogs for general utilities -->
+                <h2><i class="fas fa-cogs"></i> Utility Tools</h2>
                 <p class="category-subheading">Miscellaneous handy tools for various everyday tasks and quick solutions.</p>
                 <div class="tool-grid">
-                    <div class="tool-card fade-in-up" data-keywords="qr code generator scanner create scan reader link text wifi contact">
+                    <div class="tool-card anim-slide-in-up" data-keywords="qr code generator scanner create scan reader link text wifi contact vcard custom design">
                         <div class="tool-icon"><i class="fas fa-qrcode"></i></div>
                         <h3>QR Code Generator & Scanner</h3>
                         <p>Create custom QR codes and scan existing ones easily.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="barcode generator create product ean upc code128 isbn retail inventory">
+                    <div class="tool-card anim-slide-in-up" data-keywords="barcode generator create product ean upc code128 isbn retail inventory commercial">
                         <div class="tool-icon"><i class="fas fa-barcode"></i></div>
                         <h3>Barcode Generator</h3>
                         <p>Generate various types of barcodes for products or assets.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="uuid generator universally unique identifier guid create random id unique">
+                    <div class="tool-card anim-slide-in-up" data-keywords="uuid generator universally unique identifier guid create random id unique v1 v4 v5">
                         <div class="tool-icon"><i class="fas fa-fingerprint"></i></div>
                         <h3>UUID Generator</h3>
                         <p>Generate universally unique identifiers (UUIDs/GUIDs).</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="unit converter length weight volume temperature area speed time pressure energy">
+                    <div class="tool-card anim-slide-in-up" data-keywords="unit converter length weight volume temperature area speed time pressure energy power data storage angle fuel consumption cooking kitchen all-in-one">
                         <div class="tool-icon"><i class="fas fa-balance-scale-right"></i></div>
                         <h3>Unit Converter</h3>
                         <p>Convert various units of measurement across categories.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="time zone converter world clock international global meeting schedule travel">
-                        <div class="tool-icon"><i class="fas fa-globe-americas"></i></div> <!-- Changed to globe -->
+                    <div class="tool-card anim-slide-in-up" data-keywords="time zone converter world clock international global meeting schedule travel current time">
+                        <div class="tool-icon"><i class="fas fa-globe-americas"></i></div>
                         <h3>Time Zone Converter</h3>
-                        <p>Convert times between different cities and time zones worldwide.</p>
+                        <p>Convert times between cities & time zones worldwide.</p>
                         <a href="#" class="tool-button">Use Tool</a>
                     </div>
-                    <div class="tool-card fade-in-up" data-keywords="random number password generator secure string create dice lotto picker">
+                    <div class="tool-card anim-slide-in-up" data-keywords="random number password generator secure string create dice lotto picker custom length options">
                         <div class="tool-icon"><i class="fas fa-dice-d6"></i></div>
                         <h3>Random Number/Password Gen.</h3>
                         <p>Generate random numbers or secure, complex passwords.</p>
@@ -1685,8 +1761,8 @@
                 <h4>Contact & Connect</h4>
                 <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
                 <div class="social-media">
-                    <a href="https://www.instagram.com/aflah.tp?igsh=MTBjMXFzYWNuMmFseQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile"><i class="fab fa-instagram"></i></a>
-                    <a href="https://t.me/PremiumDealEveryDay" target="_blank" rel="noopener noreferrer" aria-label="Telegram Channel Link" class="telegram-link"><i class="fab fa-telegram-plane"></i> Join Telegram</a>
+                    <a href="https://www.instagram.com/aflah.tp?igsh=MTBjMXFzYWNuMmFseQ==" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/PremiumDealEveryDay" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Join our Telegram channel for premium deals"><i class="fab fa-telegram-plane"></i> Join Telegram Channel</a>
                 </div>
                 <p class="telegram-desc">Premium Deal Every Day: Real-time alerts for Amazon, Flipkart & Paytm loot deals, price errors, and daily steals. Track limited-stock discounts on electronics, fashion, home essentials, and more. Never miss a bargain!</p>
 
@@ -1709,24 +1785,37 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© <span id="currentYear"></span> a2z tools. All Rights Reserved.</p>
+            <p>&copy; <span id="currentYear"></span> a2z tools. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const navToggle = document.querySelector('.nav-toggle');
-            const mainNav = document.querySelector('.main-nav');
+            const navToggle = document.getElementById('navToggle');
+            const mainNav = document.getElementById('mainNav');
+            const navOverlay = document.querySelector('.nav-overlay'); // Get the overlay
 
-            if (navToggle && mainNav) {
+            // --- Mobile Navigation ---
+            if (navToggle && mainNav && navOverlay) {
                 navToggle.addEventListener('click', () => {
                     const isExpanded = mainNav.classList.toggle('active');
                     navToggle.classList.toggle('active');
                     navToggle.setAttribute('aria-expanded', isExpanded);
+                    navOverlay.classList.toggle('active', isExpanded); // Toggle overlay with nav
                     document.body.style.overflow = isExpanded ? 'hidden' : '';
+                });
+
+                // Close nav when overlay is clicked
+                navOverlay.addEventListener('click', () => {
+                    mainNav.classList.remove('active');
+                    navToggle.classList.remove('active');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                    navOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 });
             }
 
+            // --- Smooth Scroll & Close Mobile Nav ---
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -1743,22 +1832,24 @@
                              behavior: "smooth"
                         });
 
+                        // Close mobile nav if active
                         if (mainNav?.classList.contains('active')) {
                             mainNav.classList.remove('active');
                             navToggle.classList.remove('active');
                             navToggle.setAttribute('aria-expanded', 'false');
+                            navOverlay.classList.remove('active');
                             document.body.style.overflow = '';
                         }
                     }
                 });
             });
 
+            // --- Live Search Functionality ---
             const searchInput = document.getElementById('toolSearchInput');
             const toolCards = document.querySelectorAll('.tool-card');
             const toolCategories = document.querySelectorAll('.tool-category');
             const noResultsContainer = document.getElementById('no-results-message-container');
             let noResultsMessageElement = null;
-
 
             function performSearch() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
@@ -1770,23 +1861,31 @@
                     const keywords = card.dataset.keywords?.toLowerCase() || '';
                     
                     const isMatch = searchTerm === '' || toolName.includes(searchTerm) || toolDescription.includes(searchTerm) || keywords.includes(searchTerm);
-                    card.classList.toggle('hidden', !isMatch);
-                    card.style.display = isMatch ? '' : 'none';
-                    if (isMatch) hasVisibleResults = true;
+                    
+                    // More efficient show/hide
+                    if (isMatch) {
+                        card.style.display = '';
+                        card.classList.remove('hidden'); // For any CSS relying on .hidden
+                         hasVisibleResults = true;
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.add('hidden');
+                    }
                 });
 
                 toolCategories.forEach(category => {
-                    const visibleCardsInCategory = category.querySelectorAll('.tool-card:not(.hidden)');
+                    const visibleCardsInCategory = category.querySelectorAll('.tool-card:not([style*="display: none"])'); // Check actual visibility
                     category.style.display = (searchTerm === '' || visibleCardsInCategory.length > 0) ? '' : 'none';
                 });
 
+                // Manage "No Results" message
                 if (!hasVisibleResults && searchTerm !== '') {
                     if (!noResultsMessageElement) {
                         noResultsMessageElement = document.createElement('p');
                         noResultsMessageElement.id = 'no-results-message';
-                        noResultsMessageElement.textContent = 'No tools found matching your search. Try different keywords.';
                         noResultsContainer.appendChild(noResultsMessageElement);
                     }
+                    noResultsMessageElement.textContent = `No tools found for "${searchInput.value}". Try different keywords.`;
                     noResultsMessageElement.style.display = 'block';
                 } else if (noResultsMessageElement) {
                     noResultsMessageElement.style.display = 'none';
@@ -1799,23 +1898,25 @@
             
             const searchForm = document.getElementById('toolSearchForm');
             if(searchForm){
-                searchForm.addEventListener('submit', (e) => e.preventDefault());
+                searchForm.addEventListener('submit', (e) => e.preventDefault()); // Prevent page reload on Enter
             }
 
+            // --- Footer: Current Year ---
             const currentYearSpan = document.getElementById('currentYear');
             if (currentYearSpan) {
                 currentYearSpan.textContent = new Date().getFullYear();
             }
 
-            const animatedElements = document.querySelectorAll('.fade-in-up');
+            // --- Intersection Observer for Animations ---
+            const animatedElements = document.querySelectorAll('.anim-slide-in-up');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); 
+                        observer.unobserve(entry.target); // Unobserve after animation for performance
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
 
             animatedElements.forEach(el => observer.observe(el));
         });
