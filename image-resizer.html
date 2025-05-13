@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer</title>
+    <style>
+        :root {
+            --primary-blue: #007bff; /* Bright Blue */
+            --primary-blue-darker: #0056b3;
+            --light-blue: #e0f2ff;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #ced4da;
+            --dark-gray: #495057;
+            --text-color: #333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--white);
+            padding: 20px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5em;
+        }
+
+        .resizer-tool section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--light-blue);
+            border-radius: var(--border-radius);
+        }
+
+        .upload-button,
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            gap: 8px; /* Space between icon and text */
+        }
+
+        .upload-button:hover,
+        .action-button:hover {
+            background-color: var(--primary-blue-darker);
+        }
+
+        .action-button:disabled {
+            background-color: var(--medium-gray);
+            cursor: not-allowed;
+        }
+
+        .upload-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-name-display {
+            font-style: italic;
+            color: var(--dark-gray);
+        }
+
+        .controls-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .controls-section input[type="number"] {
+            width: calc(100% - 22px); /* Full width minus padding and border */
+            padding: 10px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            font-size: 1em;
+            margin-bottom: 10px;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+
+        .dimension-inputs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .dimension-inputs > div {
+            flex: 1; /* Each input takes equal space */
+        }
+
+        .options {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .options input[type="checkbox"] {
+            accent-color: var(--primary-blue);
+            width: 18px;
+            height: 18px;
+        }
+
+        .preview-section h2 {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+        }
+
+        .image-previews {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .preview-box {
+            flex: 1;
+            min-width: 200px; /* Minimum width for preview boxes */
+            text-align: center;
+            padding: 15px;
+            border: 2px dashed var(--primary-blue);
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+        }
+
+        .preview-box h3 {
+            margin-top: 0;
+            color: var(--dark-gray);
+        }
+
+        #originalPreview, #resizedCanvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        #resizedCanvas { /* Initially hide canvas until drawn */
+            display: block; /* Ensure it takes space */
+        }
+
+        .preview-box p {
+            font-size: 0.9em;
+            color: var(--dark-gray);
+        }
+
+        .download-section {
+            text-align: center;
+        }
+
+        .download-button {
+            background-color: #28a745; /* Green for download */
+        }
+        .download-button:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+            font-size: 0.9em;
+            color: var(--dark-gray);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            .upload-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .dimension-inputs {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .controls-section input[type="number"] {
+                width: 100%; /* Full width on smaller screens */
+            }
+            .image-previews {
+                flex-direction: column;
+            }
+            .preview-box {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            .upload-button,
+            .action-button {
+                width: 100%;
+                font-size: 0.9em;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Image Resizer</h1>
+            <p>Upload an image and specify new dimensions to resize it.</p>
+        </header>
+
+        <main class="resizer-tool">
+            <section class="upload-section">
+                <label for="imageUpload" class="upload-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Choose Image
+                </label>
+                <input type="file" id="imageUpload" accept="image/*" hidden>
+                <span id="fileName" class="file-name-display">No file chosen</span>
+            </section>
+
+            <section class="controls-section">
+                <div class="dimension-inputs">
+                    <div>
+                        <label for="widthInput">Width (px):</label>
+                        <input type="number" id="widthInput" placeholder="e.g., 800">
+                    </div>
+                    <div>
+                        <label for="heightInput">Height (px):</label>
+                        <input type="number" id="heightInput" placeholder="e.g., 600">
+                    </div>
+                </div>
+                <div class="options">
+                    <input type="checkbox" id="aspectRatioCheckbox" checked>
+                    <label for="aspectRatioCheckbox">Maintain Aspect Ratio</label>
+                </div>
+                <button id="resizeButton" class="action-button" disabled>Resize Image</button>
+            </section>
+
+            <section class="preview-section">
+                <h2>Preview</h2>
+                <div class="image-previews">
+                    <div class="preview-box original-preview-box">
+                        <h3>Original</h3>
+                        <img id="originalPreview" src="#" alt="Original Image Preview" style="display:none;">
+                        <p id="originalDimensions"></p>
+                    </div>
+                    <div class="preview-box resized-preview-box">
+                        <h3>Resized</h3>
+                        <canvas id="resizedCanvas"></canvas>
+                        <p id="resizedDimensions"></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="download-section">
+                <a id="downloadLink" class="action-button download-button" style="display:none;">
+                    <svg xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download Resized Image
+                </a>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2023 Your Multi-Tool Website</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const imageUpload = document.getElementById('imageUpload');
+            const fileNameDisplay = document.getElementById('fileName');
+            const widthInput = document.getElementById('widthInput');
+            const heightInput = document.getElementById('heightInput');
+            const aspectRatioCheckbox = document.getElementById('aspectRatioCheckbox');
+            const resizeButton = document.getElementById('resizeButton');
+            const originalPreview = document.getElementById('originalPreview');
+            const originalDimensionsDisplay = document.getElementById('originalDimensions');
+            const resizedCanvas = document.getElementById('resizedCanvas');
+            const resizedDimensionsDisplay = document.getElementById('resizedDimensions');
+            const downloadLink = document.getElementById('downloadLink');
+
+            let originalImage = null;
+            let originalWidth = 0;
+            let originalHeight = 0;
+            let originalAspectRatio = 1;
+            let originalFileName = 'resized_image.png'; // Default base name
+            let originalFileType = 'image/png'; // Default file type
+
+            imageUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    originalFileName = file.name; // Store full original name to extract parts later
+                    originalFileType = file.type; // Store original file type
+                    fileNameDisplay.textContent = file.name;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        originalPreview.src = e.target.result;
+                        originalPreview.style.display = 'block';
+
+                        originalImage = new Image();
+                        originalImage.onload = () => {
+                            originalWidth = originalImage.width;
+                            originalHeight = originalImage.height;
+                            originalAspectRatio = originalWidth / originalHeight;
+
+                            originalDimensionsDisplay.textContent = `Original: ${originalWidth} x ${originalHeight}px`;
+                            widthInput.value = originalWidth;
+                            heightInput.value = originalHeight;
+                            resizeButton.disabled = false;
+                            downloadLink.style.display = 'none'; // Hide download link on new image
+                            const ctx = resizedCanvas.getContext('2d');
+                            if (resizedCanvas.width > 0 && resizedCanvas.height > 0) {
+                                ctx.clearRect(0, 0, resizedCanvas.width, resizedCanvas.height); // Clear previous
+                            }
+                            resizedDimensionsDisplay.textContent = '';
+                        };
+                        originalImage.src = e.target.result; // This is the data URL
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    fileNameDisplay.textContent = 'No file chosen';
+                    originalPreview.style.display = 'none';
+                    originalDimensionsDisplay.textContent = '';
+                    resizeButton.disabled = true;
+                    originalImage = null;
+                }
+            });
+
+            widthInput.addEventListener('input', () => {
+                if (aspectRatioCheckbox.checked && originalImage && originalAspectRatio > 0) {
+                    const newWidth = parseInt(widthInput.value);
+                    if (!isNaN(newWidth) && newWidth > 0) {
+                        heightInput.value = Math.round(newWidth / originalAspectRatio);
+                    } else if (widthInput.value === '') { // Clear height if width is cleared
+                        heightInput.value = '';
+                    }
+                }
+            });
+
+            heightInput.addEventListener('input', () => {
+                if (aspectRatioCheckbox.checked && originalImage && originalAspectRatio > 0) {
+                    const newHeight = parseInt(heightInput.value);
+                    if (!isNaN(newHeight) && newHeight > 0) {
+                        widthInput.value = Math.round(newHeight * originalAspectRatio);
+                    } else if (heightInput.value === '') { // Clear width if height is cleared
+                        widthInput.value = '';
+                    }
+                }
+            });
+
+            aspectRatioCheckbox.addEventListener('change', () => {
+                if (aspectRatioCheckbox.checked && originalImage && originalAspectRatio > 0) {
+                    const currentWidth = parseInt(widthInput.value);
+                    if (!isNaN(currentWidth) && currentWidth > 0) {
+                        heightInput.value = Math.round(currentWidth / originalAspectRatio);
+                    } else {
+                        const currentHeight = parseInt(heightInput.value);
+                        if (!isNaN(currentHeight) && currentHeight > 0) {
+                            widthInput.value = Math.round(currentHeight * originalAspectRatio);
+                        } else { // If both are empty or invalid, and aspect ratio is checked, do nothing or reset to original
+                            // Or you could reset to original dimensions if desired when checkbox is re-checked
+                            // widthInput.value = originalWidth;
+                            // heightInput.value = originalHeight;
+                        }
+                    }
+                }
+            });
+
+
+            resizeButton.addEventListener('click', () => {
+                if (!originalImage) {
+                    alert('Please upload an image first.');
+                    return;
+                }
+
+                let newWidth = parseInt(widthInput.value);
+                let newHeight = parseInt(heightInput.value);
+
+                if (isNaN(newWidth) || newWidth <= 0) newWidth = originalWidth;
+                if (isNaN(newHeight) || newHeight <= 0) newHeight = originalHeight;
+                
+                // If aspect ratio is maintained, re-calculate one if the other was invalid
+                if (aspectRatioCheckbox.checked && originalAspectRatio > 0) {
+                    if (widthInput.value && (!heightInput.value || parseInt(heightInput.value) <=0)) {
+                        newHeight = Math.round(newWidth / originalAspectRatio);
+                    } else if (heightInput.value && (!widthInput.value || parseInt(widthInput.value) <=0)) {
+                        newWidth = Math.round(newHeight * originalAspectRatio);
+                    } else if (isNaN(parseInt(widthInput.value)) || parseInt(widthInput.value) <=0 || isNaN(parseInt(heightInput.value)) || parseInt(heightInput.value) <=0) {
+                        // If both are invalid with aspect ratio, use original
+                        newWidth = originalWidth;
+                        newHeight = originalHeight;
+                    }
+                }
+                
+                widthInput.value = newWidth; // Update inputs with final values
+                heightInput.value = newHeight;
+
+
+                if (newWidth <= 0 || newHeight <= 0) {
+                     alert('Please enter valid width and height, or ensure an image is loaded to use original dimensions.');
+                     return;
+                }
+
+
+                resizedCanvas.width = newWidth;
+                resizedCanvas.height = newHeight;
+                const ctx = resizedCanvas.getContext('2d');
+
+                // For JPGs, fill with white background as they don't support transparency
+                // For PNGs or other types that might support transparency, clearRect is fine
+                if (originalFileType === 'image/jpeg' || originalFileType === 'image/jpg') {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, newWidth, newHeight);
+                } else {
+                    ctx.clearRect(0, 0, newWidth, newHeight);
+                }
+
+                ctx.drawImage(originalImage, 0, 0, newWidth, newHeight);
+
+                resizedDimensionsDisplay.textContent = `Resized: ${newWidth} x ${newHeight}px`;
+
+                let downloadFileName = 'resized_image';
+                const dotIndex = originalFileName.lastIndexOf('.');
+                if (dotIndex !== -1) {
+                    downloadFileName = originalFileName.substring(0, dotIndex) + '_resized';
+                }
+
+                let downloadFileType = originalFileType;
+                let fileExtension = '.png'; // Default
+
+                if (originalFileType === 'image/jpeg' || originalFileType === 'image/jpg') {
+                    downloadFileType = 'image/jpeg';
+                    fileExtension = '.jpg';
+                } else if (originalFileType === 'image/png') {
+                    downloadFileType = 'image/png';
+                    fileExtension = '.png';
+                } else if (originalFileType === 'image/webp') {
+                    downloadFileType = 'image/webp';
+                    fileExtension = '.webp';
+                } else {
+                    // For other types (like GIF, SVG that canvas can't directly output as animated/vector)
+                    // canvas.toDataURL will output PNG by default, or JPEG if specified.
+                    // We'll stick to PNG for these cases to preserve potential transparency from original.
+                    downloadFileType = 'image/png';
+                    fileExtension = '.png';
+                }
+                
+                // For JPEG, quality can be specified (0.0 to 1.0)
+                const dataUrl = (downloadFileType === 'image/jpeg')
+                                ? resizedCanvas.toDataURL(downloadFileType, 0.9) // 0.9 quality for JPEG
+                                : resizedCanvas.toDataURL(downloadFileType);
+
+                downloadLink.href = dataUrl;
+                downloadLink.download = downloadFileName + fileExtension;
+                downloadLink.style.display = 'inline-flex';
+            });
+        });
+    </script>
+</body>
+</html>
