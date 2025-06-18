@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Background Remover</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        header h1 {
+            margin: 0 0 0.5rem 0;
+        }
+
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        section {
+            background-color: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h2, h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            text-align: center;
+        }
+
+        .button:hover, .button:focus {
+            background-color: #0056b3;
+        }
+
+        .button:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+        }
+
+        #fileInput {
+            display: none; /* Hide default input, we use a label */
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            background-color: #fdfdfd;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--primary-color);
+            background-color: #e9f5ff;
+        }
+
+        .file-info {
+            font-style: italic;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+
+        .image-preview-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap; /* For responsiveness */
+        }
+
+        .image-box {
+            flex: 1;
+            min-width: 250px; /* Ensure images don't get too small */
+            text-align: center;
+            position: relative; /* For loader positioning */
+        }
+
+        .image-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            min-height: 150px; /* Placeholder visibility */
+            background-color: #f0f0f0;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid var(--primary-color); /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-top: -25px; /* Adjust if image is small */
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        #statusMessage {
+            margin-top: 1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .image-preview-container {
+                flex-direction: column;
+            }
+            .image-box {
+                margin-bottom: 1rem;
+            }
+            .button {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            #downloadButton { /* Ensure download button stays in flow */
+                 margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Modern Background Remover</h1>
+        <p>Upload an image and remove its background, right in your browser!</p>
+    </header>
+
+    <main>
+        <section class="upload-section">
+            <h2>1. Upload Your Image</h2>
+            <div class="drop-zone" id="dropZone">
+                <p>Drag & Drop your image here, or</p>
+                <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp">
+                <label for="fileInput" class="button">Choose File</label>
+            </div>
+            <p class="file-info" id="fileInfo">No file selected.</p>
+        </section>
+
+        <section class="processing-section">
+            <div class="image-preview-container">
+                <div class="image-box">
+                    <h3>Original Image</h3>
+                    <img id="originalImage" src="assets/placeholder.png" alt="Original Image Preview">
+                </div>
+                <div class="image-box">
+                    <h3>Processed Image</h3>
+                    <img id="processedImage" src="assets/placeholder.png" alt="Processed Image Preview">
+                    <div class="loader" id="loader" style="display: none;"></div>
+                </div>
+            </div>
+            <button id="removeBgButton" class="button" disabled>Remove Background</button>
+            <a id="downloadButton" class="button" href="#" download="image_no_bg.png" style="display: none;">Download Image</a>
+            <p id="statusMessage"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Powered by <a href="https://img.ly/solutions/background-removal-js/" target="_blank">IMG.LY Background Removal</a>. Hosted on GitHub Pages.</p>
+    </footer>
+
+    <script type="module">
+        // Import the library dynamically. This ensures the UI is interactive
+        // even before the potentially large library is fully loaded.
+        let removeBackground;
+        import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.0/dist/browser.esm.js')
+            .then((module) => {
+                removeBackground = module.removeBackground;
+                console.log("IMG.LY Background Removal library loaded.");
+                // You could enable some UI elements here if they were initially disabled
+            })
+            .catch(err => {
+                console.error("Failed to load IMG.LY Background Removal library:", err);
+                if (statusMessage) { // Check if statusMessage exists before trying to update it
+                    statusMessage.textContent = "Error: Could not load background removal library. Try refreshing.";
+                    statusMessage.style.color = "var(--danger-color)";
+                }
+            });
+
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const originalImage = document.getElementById('originalImage');
+        const processedImage = document.getElementById('processedImage');
+        const removeBgButton = document.getElementById('removeBgButton');
+        const downloadButton = document.getElementById('downloadButton');
+        const loader = document.getElementById('loader');
+        const statusMessage = document.getElementById('statusMessage');
+
+        let currentFile = null;
+        const placeholderSrc = 'assets/placeholder.png'; // Make sure you have this or update path
+
+        // --- File Input and Drag & Drop ---
+        if (dropZone) {
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                if(statusMessage) {
+                    statusMessage.textContent = 'Please upload an image file (PNG, JPG, WEBP).';
+                    statusMessage.style.color = 'var(--danger-color)';
+                }
+                return;
+            }
+
+            currentFile = file;
+            if (fileInfo) fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            if (statusMessage) statusMessage.textContent = ''; // Clear previous messages
+            if (downloadButton) downloadButton.style.display = 'none'; // Hide download button for new image
+            if (processedImage) processedImage.src = placeholderSrc; // Reset processed image
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                if (originalImage) originalImage.src = e.target.result;
+                if (removeBgButton) removeBgButton.disabled = false;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        // --- Background Removal Logic ---
+        if (removeBgButton) {
+            removeBgButton.addEventListener('click', async () => {
+                if (!currentFile) {
+                    if (statusMessage) {
+                        statusMessage.textContent = 'Please select an image first.';
+                        statusMessage.style.color = 'var(--danger-color)';
+                    }
+                    return;
+                }
+                if (typeof removeBackground !== 'function') {
+                     if (statusMessage) {
+                        statusMessage.textContent = 'Background removal library is still loading or failed to load. Please wait or refresh.';
+                        statusMessage.style.color = 'var(--danger-color)';
+                     }
+                    console.error("removeBackground function not available.");
+                    return;
+                }
+
+                if (loader) loader.style.display = 'block';
+                if (processedImage) processedImage.style.opacity = '0.5'; // Visual feedback during processing
+                if (removeBgButton) removeBgButton.disabled = true;
+                if (downloadButton) downloadButton.style.display = 'none';
+                if (statusMessage) {
+                    statusMessage.textContent = 'Processing... This might take a moment.';
+                    statusMessage.style.color = 'var(--secondary-color)';
+                }
+
+                try {
+                    const config = {
+                        // publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.0/dist/assets/',
+                        progress: (key, current, total) => {
+                            console.log(`Downloading ${key}: ${current} of ${total}`);
+                            if (statusMessage) statusMessage.textContent = `Loading model data: ${key} (${Math.round(current/total*100)}%)...`;
+                        }
+                    };
+
+                    const blob = await removeBackground(currentFile, config);
+                    const url = URL.createObjectURL(blob);
+
+                    if (processedImage) processedImage.src = url;
+                    if (downloadButton) {
+                        downloadButton.href = url;
+                        downloadButton.download = `${currentFile.name.split('.')[0]}_no_bg.png`;
+                        downloadButton.style.display = 'inline-block';
+                    }
+                    if (statusMessage) {
+                        statusMessage.textContent = 'Background removed successfully!';
+                        statusMessage.style.color = 'var(--success-color)';
+                    }
+
+                } catch (error) {
+                    console.error('Error removing background:', error);
+                     if (statusMessage) {
+                        statusMessage.textContent = `Error: ${error.message || 'Could not process the image.'}`;
+                        statusMessage.style.color = 'var(--danger-color)';
+                    }
+                    if (processedImage) processedImage.src = placeholderSrc; // Reset on error
+                } finally {
+                    if (loader) loader.style.display = 'none';
+                    if (processedImage) processedImage.style.opacity = '1';
+                    if (removeBgButton) removeBgButton.disabled = false; // Re-enable for another try or new image
+                }
+            });
+        }
+
+        // Initialize
+        function init() {
+            // Check if elements exist before setting src, especially important
+            // as script now runs as soon as parsed.
+            if (originalImage) originalImage.src = placeholderSrc;
+            if (processedImage) processedImage.src = placeholderSrc;
+        }
+        // Wait for the DOM to be fully loaded before running init,
+        // or check if elements exist within init and other functions.
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init(); // DOMContentLoaded has already fired
+        }
+
+    </script>
+</body>
+</html>
