@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelli-Text OCR | Advanced Image to Text Conversion</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Feather Icons for a clean look -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #111827; /* Gray-900 */
+            color: #d1d5db; /* Gray-300 */
+        }
+
+        /* Custom glassmorphism effect for the main container */
+        .glass-card {
+            background: rgba(31, 41, 55, 0.6); /* Gray-800 with opacity */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom styles for the file input drag-and-drop area */
+        .drag-area {
+            border: 2px dashed #4b5563; /* Gray-600 */
+            transition: all 0.3s ease;
+        }
+
+        .drag-area.active {
+            border-color: #3b82f6; /* Blue-500 */
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Custom scrollbar for the textarea */
+        #output-text::-webkit-scrollbar {
+            width: 8px;
+        }
+        #output-text::-webkit-scrollbar-track {
+            background: #1f2937; /* Gray-800 */
+        }
+        #output-text::-webkit-scrollbar-thumb {
+            background-color: #4b5563; /* Gray-600 */
+            border-radius: 10px;
+            border: 2px solid #1f2937; /* Gray-800 */
+        }
+        #output-text::-webkit-scrollbar-thumb:hover {
+            background-color: #6b7280; /* Gray-500 */
+        }
+
+        /* Custom button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Blue-700 */
+        }
+        .btn-primary:disabled {
+            background-color: #4b5563; /* Gray-600 */
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background-color: #4b5563; /* Gray-600 */
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #6b7280; /* Gray-500 */
+        }
+        .btn-secondary:disabled {
+            background-color: #374151; /* Gray-700 */
+            color: #9ca3af; /* Gray-400 */
+            cursor: not-allowed;
+        }
+        
+        /* Loading animation */
+        .loader-dots div {
+            animation: loader-dots 1.4s infinite ease-in-out both;
+        }
+        .loader-dots .dot-1 { animation-delay: -0.32s; }
+        .loader-dots .dot-2 { animation-delay: -0.16s; }
+        @keyframes loader-dots {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden">
+        <!-- Background decorative gradients -->
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+
+        <div class="w-full max-w-6xl mx-auto z-10">
+            <!-- Header Section -->
+            <header class="text-center mb-10">
+                <h1 class="text-4xl sm:text-5xl font-bold text-white">Intelli-Text OCR</h1>
+                <p class="mt-3 text-lg text-gray-300">Instantly extract and edit text from any image with cutting-edge AI.</p>
+            </header>
+
+            <main class="glass-card rounded-2xl shadow-2xl p-6 md:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <!-- Left Side: Image Upload and Controls -->
+                    <div class="flex flex-col space-y-6">
+                        <div>
+                            <label for="language-select" class="block text-lg font-semibold mb-2 text-gray-200">1. Select Language (Optional)</label>
+                            <select id="language-select" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Auto-detect</option>
+                                <option value="English">English</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="French">French</option>
+                                <option value="German">German</option>
+                                <option value="Italian">Italian</option>
+                                <option value="Portuguese">Portuguese</option>
+                                <option value="Chinese">Chinese</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Korean">Korean</option>
+                                <option value="Russian">Russian</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Arabic">Arabic</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-lg font-semibold mb-2 text-gray-200">2. Upload Image</h2>
+                            <div id="drag-area" class="drag-area w-full h-60 rounded-xl flex flex-col items-center justify-center text-center p-4 cursor-pointer">
+                                <div id="upload-prompt">
+                                    <i data-feather="upload-cloud" class="w-16 h-16 text-gray-400 mb-4"></i>
+                                    <p class="text-gray-400">Drag & drop your image here, or <span class="font-semibold text-blue-400">browse files</span></p>
+                                    <p class="text-sm text-gray-500 mt-1">Maximum size: 10MB</p>
+                                </div>
+                                <div id="image-preview-container" class="hidden w-full h-full">
+                                    <img id="image-preview" src="#" alt="Image Preview" class="w-full h-full rounded-lg object-contain">
+                                </div>
+                            </div>
+                            <input type="file" id="file-input" class="hidden" accept="image/png, image/jpeg, image/webp">
+                        </div>
+
+                        <div id="file-info" class="hidden text-sm text-gray-400"></div>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button id="extract-btn" class="btn btn-primary w-full" disabled>
+                                <i data-feather="cpu"></i>
+                                <span>Extract Text</span>
+                            </button>
+                             <button id="clear-btn" class="btn btn-secondary w-full">
+                                <i data-feather="x-circle"></i>
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Extracted Text -->
+                    <div class="flex flex-col">
+                        <h2 class="text-lg font-semibold mb-2 text-gray-200">3. Extracted Text</h2>
+                        <div class="relative flex-grow h-full min-h-[350px]">
+                            <!-- Loading/Initial State Overlay -->
+                            <div id="output-placeholder" class="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center rounded-lg z-10 p-4">
+                                <div id="loader" class="text-center hidden">
+                                    <div class="loader-dots inline-flex items-center">
+                                        <div class="w-4 h-4 bg-blue-500 rounded-full dot-1"></div>
+                                        <div class="w-4 h-4 bg-blue-500 rounded-full mx-2 dot-2"></div>
+                                        <div class="w-4 h-4 bg-blue-500 rounded-full dot-3"></div>
+                                    </div>
+                                    <p class="mt-4 text-lg font-semibold text-white">Analyzing Image...</p>
+                                    <p class="text-gray-400">This may take a few moments.</p>
+                                </div>
+                                <div id="initial-text" class="text-center">
+                                    <i data-feather="file-text" class="w-16 h-16 text-gray-500 mx-auto"></i>
+                                    <p class="mt-4 text-lg text-gray-400">Your extracted text will appear here.</p>
+                                </div>
+                            </div>
+                            
+                            <textarea id="output-text" class="w-full h-full p-4 bg-gray-900 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition resize-none text-gray-200" readonly></textarea>
+                        </div>
+                        <button id="copy-btn" class="btn btn-secondary mt-4 w-full" disabled>
+                            <i data-feather="copy"></i>
+                            <span>Copy to Clipboard</span>
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="text-center mt-8">
+                <p class="text-gray-500">Powered by Gemini AI. Hosted on GitHub.</p>
+            </footer>
+            
+            <!-- Custom Message Box (Toast) -->
+            <div id="toast" class="fixed top-5 right-5 flex items-center gap-4 bg-red-600 text-white py-3 px-5 rounded-lg shadow-2xl hidden transition-all duration-300 transform translate-x-full">
+                <i id="toast-icon" data-feather="alert-circle"></i>
+                <p id="toast-message"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Feather Icons Initialization ---
+        feather.replace();
+
+        // --- DOM Element References ---
+        const ui = {
+            dragArea: document.getElementById('drag-area'),
+            fileInput: document.getElementById('file-input'),
+            uploadPrompt: document.getElementById('upload-prompt'),
+            imagePreviewContainer: document.getElementById('image-preview-container'),
+            imagePreview: document.getElementById('image-preview'),
+            fileInfo: document.getElementById('file-info'),
+            languageSelect: document.getElementById('language-select'),
+            extractBtn: document.getElementById('extract-btn'),
+            clearBtn: document.getElementById('clear-btn'),
+            copyBtn: document.getElementById('copy-btn'),
+            outputText: document.getElementById('output-text'),
+            outputPlaceholder: document.getElementById('output-placeholder'),
+            loader: document.getElementById('loader'),
+            initialText: document.getElementById('initial-text'),
+            toast: document.getElementById('toast'),
+            toastIcon: document.getElementById('toast-icon'),
+            toastMessage: document.getElementById('toast-message'),
+        };
+
+        let uploadedFile = null;
+
+        // --- Event Listeners ---
+        const setupEventListeners = () => {
+            ui.dragArea.addEventListener('dragover', handleDragOver);
+            ui.dragArea.addEventListener('dragleave', handleDragLeave);
+            ui.dragArea.addEventListener('drop', handleDrop);
+            ui.dragArea.addEventListener('click', () => ui.fileInput.click());
+            ui.fileInput.addEventListener('change', handleFileSelect);
+            ui.extractBtn.addEventListener('click', handleExtract);
+            ui.clearBtn.addEventListener('click', resetInterface);
+            ui.copyBtn.addEventListener('click', handleCopy);
+        };
+
+        // --- UI Update Functions ---
+        const showToast = (message, type = 'error') => {
+            ui.toastMessage.textContent = message;
+            const icon = type === 'success' ? 'check-circle' : 'alert-circle';
+            const bgColor = type === 'success' ? 'bg-green-600' : 'bg-red-600';
+            
+            ui.toastIcon.setAttribute('data-feather', icon);
+            feather.replace({ class: 'w-6 h-6' });
+
+            ui.toast.classList.remove('bg-red-600', 'bg-green-600', 'hidden', 'translate-x-full');
+            ui.toast.classList.add(bgColor, 'translate-x-0');
+
+            setTimeout(() => {
+                ui.toast.classList.replace('translate-x-0', 'translate-x-full');
+            }, 3000);
+        };
+
+        const updateUIForFile = (file) => {
+            uploadedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                ui.imagePreview.src = e.target.result;
+                ui.uploadPrompt.classList.add('hidden');
+                ui.imagePreviewContainer.classList.remove('hidden');
+                ui.imagePreviewContainer.classList.add('fade-in');
+            };
+            reader.readAsDataURL(file);
+
+            ui.fileInfo.innerHTML = `<span class="font-semibold">File:</span> ${file.name} <span class="font-semibold ml-2">Size:</span> ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+            ui.fileInfo.classList.remove('hidden');
+            ui.extractBtn.disabled = false;
+            resetOutput();
+        };
+
+        const resetOutput = () => {
+            ui.outputText.value = '';
+            ui.outputText.setAttribute('readonly', true);
+            ui.copyBtn.disabled = true;
+            ui.outputPlaceholder.classList.remove('hidden');
+            ui.loader.classList.add('hidden');
+            ui.initialText.classList.remove('hidden');
+        };
+
+        const resetInterface = () => {
+            uploadedFile = null;
+            ui.fileInput.value = ''; // Clear file input
+            ui.uploadPrompt.classList.remove('hidden');
+            ui.imagePreviewContainer.classList.add('hidden');
+            ui.fileInfo.classList.add('hidden');
+            ui.extractBtn.disabled = true;
+            resetOutput();
+            showToast('Interface cleared.', 'success');
+        };
+        
+        const setProcessingState = (isProcessing) => {
+            ui.extractBtn.disabled = isProcessing;
+            ui.clearBtn.disabled = isProcessing;
+            ui.languageSelect.disabled = isProcessing;
+            
+            if (isProcessing) {
+                ui.initialText.classList.add('hidden');
+                ui.loader.classList.remove('hidden');
+                ui.outputPlaceholder.classList.remove('hidden');
+            } else {
+                ui.loader.classList.add('hidden');
+                ui.outputPlaceholder.classList.add('hidden');
+            }
+        };
+
+        // --- Event Handlers ---
+        function handleDragOver(event) {
+            event.preventDefault();
+            ui.dragArea.classList.add('active');
+        }
+
+        function handleDragLeave() {
+            ui.dragArea.classList.remove('active');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            ui.dragArea.classList.remove('active');
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                validateAndHandleFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                validateAndHandleFile(files[0]);
+            }
+        }
+        
+        function validateAndHandleFile(file) {
+            const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select a valid image file.');
+                return;
+            }
+            if (file.size > MAX_SIZE) {
+                showToast('File is too large. Maximum size is 10MB.');
+                return;
+            }
+            updateUIForFile(file);
+        }
+
+        async function handleExtract() {
+            if (!uploadedFile) {
+                showToast('Please upload an image first.');
+                return;
+            }
+            setProcessingState(true);
+
+            try {
+                const base64ImageData = await toBase64(uploadedFile);
+                const language = ui.languageSelect.value;
+                let prompt = "Extract all text from this image. Be precise and preserve the original formatting (like line breaks) as much as possible.";
+                if (language) {
+                    prompt += ` The text in the image is in ${language}.`;
+                }
+
+                const payload = {
+                    contents: [{
+                        parts: [
+                            { text: prompt },
+                            { inlineData: { mimeType: uploadedFile.type, data: base64ImageData } }
+                        ]
+                    }]
+                };
+
+                const apiKey = "AIzaSyBeiU6MBrGX8n0JHC8JXgFI_aM6v33jSs4"; // API Key updated here
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                // Read the response body as JSON once. This will throw an error if the response is not valid JSON.
+                const result = await response.json();
+
+                // Check if the response was not successful.
+                if (!response.ok) {
+                    // Use the error message from the API response if available.
+                    const errorMessage = result.error?.message || `API request failed with status ${response.status}`;
+                    throw new Error(errorMessage);
+                }
+                
+                // Handle the successful response.
+                if (result.candidates && result.candidates[0]?.content?.parts[0]?.text) {
+                    const extractedText = result.candidates[0].content.parts[0].text;
+                    ui.outputText.value = extractedText.trim();
+                    ui.outputText.removeAttribute('readonly');
+                    ui.copyBtn.disabled = false;
+                    ui.outputPlaceholder.classList.add('hidden');
+                } else {
+                    throw new Error('Could not extract text. The model returned an empty or malformed response.');
+                }
+
+            } catch (error) {
+                console.error('Error during OCR process:', error);
+                showToast(error.message || 'An error occurred. Please try again.');
+                ui.initialText.classList.remove('hidden');
+            } finally {
+                setProcessingState(false);
+            }
+        }
+
+        function handleCopy() {
+            if (ui.outputText.value) {
+                navigator.clipboard.writeText(ui.outputText.value).then(() => {
+                    showToast('Text copied to clipboard!', 'success');
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    showToast('Failed to copy text.');
+                });
+            }
+        }
+
+        // --- Utility Functions ---
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // --- Initial Setup ---
+        document.addEventListener('DOMContentLoaded', setupEventListeners);
+    </script>
+</body>
+</html>
