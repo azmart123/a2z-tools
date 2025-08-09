@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Rotator & Flipper</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom transition for smoother UI changes */
+        .transition-all-fast {
+            transition: all 0.3s ease-in-out;
+        }
+        /* Style for the file input to hide it visually but keep it accessible */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Image Rotator & Flipper</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Rotate or flip your images to the correct orientation with ease.</p>
+        </header>
+
+        <!-- Main Application Area -->
+        <main id="app-container">
+            
+            <!-- Image Upload Area -->
+            <div id="upload-box" class="transition-all-fast">
+                <label for="image-upload" class="relative block w-full h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-center cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 bg-gray-50 dark:bg-gray-700/50 transition-colors">
+                    <div class="flex flex-col items-center justify-center h-full">
+                        <svg class="w-12 h-12 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        </svg>
+                        <p class="mt-4 text-lg font-semibold text-gray-700 dark:text-gray-300">Click to upload an image</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">PNG, JPG, GIF, or WEBP</p>
+                    </div>
+                </label>
+                <input type="file" id="image-upload" class="sr-only" accept="image/png, image/jpeg, image/gif, image/webp">
+            </div>
+
+            <!-- Image Editor Area (Initially Hidden) -->
+            <div id="editor-box" class="hidden transition-all-fast">
+                <!-- Canvas for Image Display -->
+                <div class="mb-6 w-full max-w-2xl mx-auto bg-gray-200 dark:bg-black rounded-lg overflow-hidden shadow-inner">
+                    <canvas id="canvas"></canvas>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <!-- Rotate Left -->
+                    <button id="rotate-left" class="control-btn bg-gray-200 dark:bg-gray-700 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
+                        Rotate Left
+                    </button>
+                    <!-- Rotate Right -->
+                    <button id="rotate-right" class="control-btn bg-gray-200 dark:bg-gray-700 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" /></svg>
+                        Rotate Right
+                    </button>
+                    <!-- Flip Horizontal -->
+                    <button id="flip-horizontal" class="control-btn bg-gray-200 dark:bg-gray-700 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12H3m9 9V3M3 12l4-4m-4 4l4 4m14-4l-4-4m4 4l-4 4" /></svg>
+                        Flip Horizontal
+                    </button>
+                    <!-- Flip Vertical -->
+                    <button id="flip-vertical" class="control-btn bg-gray-200 dark:bg-gray-700 hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21V3m9 9H3m18 0h-9M12 3l-4 4m4-4l4 4m-4 14l-4-4m4 4l4 4" /></svg>
+                        Flip Vertical
+                    </button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button id="download-btn" class="action-btn w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white">
+                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                        Download Image
+                    </button>
+                    <button id="reset-btn" class="action-btn w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white">
+                        <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-11.664 0l4.992-4.992m-4.993 0l-3.181 3.183a8.25 8.25 0 000 11.664l3.181 3.183" /></svg>
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get references to all necessary DOM elements
+            const uploadBox = document.getElementById('upload-box');
+            const editorBox = document.getElementById('editor-box');
+            const imageUpload = document.getElementById('image-upload');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const rotateLeftBtn = document.getElementById('rotate-left');
+            const rotateRightBtn = document.getElementById('rotate-right');
+            const flipHorizontalBtn = document.getElementById('flip-horizontal');
+            const flipVerticalBtn = document.getElementById('flip-vertical');
+            const downloadBtn = document.getElementById('download-btn');
+            const resetBtn = document.getElementById('reset-btn');
+
+            // State variables for image transformations
+            let image = null;
+            let rotation = 0; // in degrees
+            let scaleX = 1; // 1 for normal, -1 for flipped
+            let scaleY = 1; // 1 for normal, -1 for flipped
+            let originalFileName = 'transformed-image.png';
+
+            // --- Event Listeners ---
+
+            // Listen for file selection
+            imageUpload.addEventListener('change', handleImageUpload);
+
+            // Listen for control button clicks
+            rotateLeftBtn.addEventListener('click', () => applyRotation(-90));
+            rotateRightBtn.addEventListener('click', () => applyRotation(90));
+            flipHorizontalBtn.addEventListener('click', applyFlipHorizontal);
+            flipVerticalBtn.addEventListener('click', applyFlipVertical);
+            downloadBtn.addEventListener('click', downloadImage);
+            resetBtn.addEventListener('click', resetApplication);
+
+            // --- Core Functions ---
+
+            /**
+             * Handles the file upload event. Reads the selected file
+             * and initializes the editor.
+             * @param {Event} e - The file input change event.
+             */
+            function handleImageUpload(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                originalFileName = file.name;
+                const reader = new FileReader();
+
+                reader.onload = (event) => {
+                    image = new Image();
+                    image.onload = () => {
+                        // Initialize the editor once the image is loaded
+                        setupEditor();
+                        drawImageWithTransformations();
+                    };
+                    image.onerror = () => {
+                        alert("The selected file could not be loaded as an image. Please try another file.");
+                        resetApplication();
+                    };
+                    image.src = event.target.result;
+                };
+                
+                reader.onerror = () => {
+                     alert("There was an error reading the file.");
+                     resetApplication();
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            /**
+             * Sets up the editor view, hiding the upload box.
+             */
+            function setupEditor() {
+                uploadBox.classList.add('hidden');
+                editorBox.classList.remove('hidden');
+            }
+
+            /**
+             * The main drawing function. It clears the canvas and redraws the image
+             * with the current rotation and flip transformations.
+             */
+            function drawImageWithTransformations() {
+                if (!image) return;
+                
+                // Determine canvas dimensions based on rotation
+                const isSideways = (Math.abs(rotation) / 90) % 2 === 1;
+                const canvasWidth = isSideways ? image.height : image.width;
+                const canvasHeight = isSideways ? image.width : image.height;
+
+                canvas.width = canvasWidth;
+                canvas.height = canvasHeight;
+
+                // Clear the canvas before drawing
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Save the current context state
+                ctx.save();
+                
+                // Move the canvas origin to the center for rotation
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                
+                // Apply transformations
+                ctx.rotate(rotation * Math.PI / 180); // Convert degrees to radians
+                ctx.scale(scaleX, scaleY);
+                
+                // Draw the image centered on the new origin
+                ctx.drawImage(image, -image.width / 2, -image.height / 2);
+                
+                // Restore the context to its original state
+                ctx.restore();
+            }
+
+            /**
+             * Applies rotation to the image.
+             * @param {number} angle - The angle to rotate by (e.g., 90 or -90).
+             */
+            function applyRotation(angle) {
+                rotation = (rotation + angle) % 360;
+                drawImageWithTransformations();
+            }
+
+            /**
+             * Flips the image horizontally.
+             */
+            function applyFlipHorizontal() {
+                scaleX *= -1; // Invert the horizontal scale
+                drawImageWithTransformations();
+            }
+
+            /**
+             * Flips the image vertically.
+             */
+            function applyFlipVertical() {
+                scaleY *= -1; // Invert the vertical scale
+                drawImageWithTransformations();
+            }
+
+            /**
+             * Triggers the download of the canvas content as a PNG image.
+             */
+            function downloadImage() {
+                const link = document.createElement('a');
+                // Create a filename based on the original, e.g., "my-photo-transformed.png"
+                const baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+                const extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+                link.download = `${baseName}-transformed.png`;
+                
+                // Get the image data from the canvas
+                link.href = canvas.toDataURL('image/png');
+                
+                // Programmatically click the link to start the download
+                link.click();
+            }
+
+            /**
+             * Resets the entire application to its initial state.
+             */
+            function resetApplication() {
+                // Reset state variables
+                image = null;
+                rotation = 0;
+                scaleX = 1;
+                scaleY = 1;
+                
+                // Reset the file input value to allow re-uploading the same file
+                imageUpload.value = '';
+
+                // Switch back to the upload view
+                editorBox.classList.add('hidden');
+                uploadBox.classList.remove('hidden');
+            }
+            
+            // Utility classes for button styling
+            const controlBtnClasses = ['w-full', 'flex', 'items-center', 'justify-center', 'p-3', 'font-semibold', 'rounded-lg', 'transition-all-fast', 'focus:outline-none', 'focus:ring-2', 'focus:ring-offset-2', 'focus:ring-offset-white', 'dark:focus:ring-offset-gray-800', 'focus:ring-blue-500'];
+            const actionBtnClasses = ['flex', 'items-center', 'justify-center', 'px-6', 'py-3', 'font-bold', 'rounded-lg', 'transition-colors', 'focus:outline-none', 'focus:ring-2', 'focus:ring-offset-2', 'focus:ring-offset-white', 'dark:focus:ring-offset-gray-800'];
+
+            document.querySelectorAll('.control-btn').forEach(btn => btn.classList.add(...controlBtnClasses));
+            document.querySelectorAll('.action-btn').forEach(btn => btn.classList.add(...actionBtnClasses));
+        });
+    </script>
+
+</body>
+</html>
