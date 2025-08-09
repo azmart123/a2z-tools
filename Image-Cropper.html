@@ -1,624 +1,414 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Image Cropper</title>
+    <title>Advanced Image Cropper</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Cropper.js CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
     <style>
-        :root {
-            --primary-color: #007bff;
-            --primary-hover: #0056b3;
-            --secondary-color: #6c757d;
-            --secondary-hover: #545b62;
-            --success-color: #28a745;
-            --success-hover: #1e7e34;
-            --danger-color: #dc3545;
-            --light-bg: #f8f9fa;
-            --dark-text: #343a40;
-            --light-text: #ffffff;
-            --border-color: #dee2e6;
-            --border-radius: 0.375rem; /* 6px */
-            --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            --font-family-sans-serif: 'Poppins', sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: var(--font-family-sans-serif);
-            background-color: var(--light-bg);
-            color: var(--dark-text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
         }
-
-        .main-container {
-            background-color: var(--light-text);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 1200px; /* Increased max-width for better layout */
+        /* Make the cropperjs background transparent to respect dark mode */
+        .cropper-bg {
+            background-image: none;
         }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
+        /* Style the cropper's selection area */
+        .cropper-view-box,
+        .cropper-face {
+            border-radius: 0.375rem; /* rounded-md */
         }
-
-        header h1 {
-            color: var(--primary-color);
-            font-weight: 600;
+        /* Container for the image to be cropped */
+        #image-container {
+            max-height: 75vh;
         }
-        header p {
-            color: var(--secondary-color);
-            font-size: 1.1em;
-        }
-
-        #uploader-section {
-            text-align: center;
-        }
-
-        #drop-zone {
-            border: 3px dashed var(--border-color);
-            border-radius: var(--border-radius);
-            padding: 60px 30px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-            background-color: #fdfdfd;
-        }
-
-        #drop-zone.dragover {
-            background-color: #e9f5ff;
-            border-color: var(--primary-hover);
-        }
-
-        #drop-zone p {
-            margin: 0;
-            font-size: 1.2em;
-            color: var(--secondary-color);
-        }
-        #drop-zone .upload-icon {
-            font-size: 3em;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-
-        #editor-section {
-            display: none; /* Initially hidden */
-            flex-direction: column;
-            gap: 30px;
-        }
-        @media (min-width: 992px) { /* Larger screens */
-            #editor-section {
-                flex-direction: row;
-            }
-        }
-
-
-        #cropper-wrapper {
-            flex: 2; /* Takes more space */
-            background-color: #f0f0f0; /* Placeholder bg for image area */
-            border-radius: var(--border-radius);
-            overflow: hidden; /* Important for Cropper.js */
-            min-height: 300px; /* Ensure it has some height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #cropper-wrapper img {
+        /* Hide the original image element */
+        #imageToCrop {
             display: block;
             max-width: 100%;
         }
-
-        #controls-panel {
-            flex: 1; /* Takes less space */
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        /* Custom file input button styling */
+        .custom-file-button input[type="file"] {
+            display: none;
         }
-
-        .control-group {
-            background-color: var(--light-bg);
-            padding: 15px;
-            border-radius: var(--border-radius);
-            border: 1px solid var(--border-color);
+        /* Drag-over effect for the drop zone */
+        .drag-over {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: rgba(59, 130, 246, 0.1);
         }
-        .control-group h3 {
-            font-size: 1.1em;
-            font-weight: 500;
-            margin-bottom: 15px;
-            color: var(--dark-text);
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+        /* Preview image styling */
+        #preview-pane .preview-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%; /* Default to 1:1 aspect ratio */
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.375rem;
         }
-
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+        #preview-pane img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 0.95em;
-            font-weight: 500;
-            transition: background-color 0.2s ease, box-shadow 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none; /* For download link */
-            color: var(--light-text); /* Default for colored buttons */
-        }
-        .btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        .btn-primary { background-color: var(--primary-color); }
-        .btn-primary:hover { background-color: var(--primary-hover); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
-        .btn-secondary { background-color: var(--secondary-color); color: var(--light-text); }
-        .btn-secondary:hover { background-color: var(--secondary-hover); }
-        
-        .btn-success { background-color: var(--success-color); }
-        .btn-success:hover { background-color: var(--success-hover); }
-        
-        .btn-danger { background-color: var(--danger-color); }
-        .btn-danger:hover { background-color: #c82333; }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-        .btn-outline:hover {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-        }
-        .btn-outline.active {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-        }
-
-
-        .btn:disabled {
-            background-color: #adb5bd; /* Greyed out */
-            color: #6c757d;
-            cursor: not-allowed;
-            box-shadow: none;
-            border-color: #adb5bd;
-        }
-        .btn:disabled svg { fill: #6c757d; }
-
-
-        .custom-ar-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .custom-ar-group input[type="number"] {
-            width: 60px;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            text-align: center;
-            font-family: var(--font-family-sans-serif);
-        }
-        .custom-ar-group span { font-size: 1.2em; color: var(--secondary-color); }
-
-        #crop-result-display {
-            margin-top: 20px;
-        }
-        #crop-result-display h3 {
-             margin-bottom: 10px;
-        }
-        #crop-result-display img {
-            max-width: 100%;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            margin-bottom: 15px;
-        }
-
-        #file-input { display: none; }
-
-        footer {
-            margin-top: 40px;
-            font-size: 0.9em;
-            color: var(--secondary-color);
-            text-align: center;
-        }
-
-        /* SVG Icons used in buttons */
-        .icon-rotate-left { transform: scaleX(-1); } /* Simple flip for rotate left from right icon */
-        .icon-aspect-ratio, .icon-rotate, .icon-crop, .icon-download, .icon-reset, .icon-upload {
-             /* SVGs will be inlined in HTML for simplicity */
+        /* Tooltip styling */
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 5px;
+            background-color: #1f2937; /* gray-800 */
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
         }
     </style>
 </head>
-<body>
-    <!-- SVG Icons Definition -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="icon-upload-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="17 8 12 3 7 8"></polyline>
-            <line x1="12" y1="3" x2="12" y2="15"></line>
-        </symbol>
-        <symbol id="icon-aspect-ratio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 3H3v18h18V3zM9 12H3M12 9V3M15 12h6M12 15v6"></path><rect x="9" y="9" width="6" height="6"></rect>
-        </symbol>
-        <symbol id="icon-rotate-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-        </symbol>
-        <symbol id="icon-crop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"></path><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"></path>
-        </symbol>
-        <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
-        </symbol>
-        <symbol id="icon-reset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-        </symbol>
-    </svg>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-200 antialiased transition-colors duration-300">
 
-    <div class="main-container">
-        <header>
-            <h1>Modern Image Cropper</h1>
-            <p>Easily crop, resize, and rotate your images online.</p>
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">Advanced Cropper</h1>
+                <p class="text-md text-gray-600 dark:text-gray-400 mt-1">Upload, crop, and export your images with precision.</p>
+            </div>
+            <!-- Dark Mode Toggle -->
+            <button id="theme-toggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                <svg id="theme-toggle-dark-icon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 16.364a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM13.536 16.364a1 1 0 001.414 1.414l.707-.707a1 1 0 00-1.414-1.414l-.707.707z"></path></svg>
+            </button>
         </header>
 
-        <section id="uploader-section">
-            <div id="drop-zone">
-                <div class="upload-icon">
-                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-upload-cloud"></use></svg>
-                </div>
-                <p><strong>Drag & Drop</strong> image here, or <strong>click to select file</strong></p>
-            </div>
-            <input type="file" id="file-input" accept="image/*">
-            <button class="btn btn-primary" id="trigger-file-input" style="display: none;">
-                <svg><use href="#icon-upload-cloud"></use></svg>
-                Select Image Manually
-            </button> <!-- Fallback if drop-zone is clicked but not file input -->
-        </section>
-
-        <section id="editor-section">
-            <div id="cropper-wrapper">
-                <img id="image-to-crop" src="#" alt="Image to crop">
-            </div>
-
-            <div id="controls-panel">
-                <div class="control-group">
-                    <h3>
-                        <svg><use href="#icon-aspect-ratio"></use></svg>
-                        Aspect Ratio
-                    </h3>
-                    <div class="btn-group" id="aspect-ratio-buttons">
-                        <button class="btn btn-outline active" data-ratio="NaN">Free</button>
-                        <button class="btn btn-outline" data-ratio="1">1:1</button>
-                        <button class="btn btn-outline" data-ratio="0.75">3:4</button> <!-- 3/4 -->
-                        <button class="btn btn-outline" data-ratio="1.33333333">4:3</button> <!-- 4/3 -->
-                        <button class="btn btn-outline" data-ratio="0.5625">9:16</button> <!-- 9/16 -->
-                        <button class="btn btn-outline" data-ratio="1.77777777">16:9</button> <!-- 16/9 -->
-                    </div>
-                    <div class="custom-ar-group">
-                        <input type="number" id="custom-ar-w" placeholder="W" min="1">
-                        <span>:</span>
-                        <input type="number" id="custom-ar-h" placeholder="H" min="1">
-                        <button class="btn btn-secondary" id="btn-ar-custom">Set</button>
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Left Column: Controls & Upload -->
+            <div class="lg:col-span-4 xl:col-span-3 space-y-6">
+                <!-- Upload Area -->
+                <div id="upload-area" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Upload Image</h2>
+                    <div id="drop-zone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors">
+                        <div class="custom-file-button">
+                            <input type="file" id="fileInput" accept="image/*">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span class="font-semibold text-blue-600 dark:text-blue-400">Click to upload</span> or drag and drop
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                            <p id="fileName" class="text-sm text-green-600 dark:text-green-400 mt-2 truncate"></p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <h3>
-                        <svg><use href="#icon-rotate-right"></use></svg>
-                        Rotation
-                    </h3>
-                    <div class="btn-group">
-                        <button class="btn btn-secondary" id="btn-rotate-left">
-                            <svg class="icon-rotate-left"><use href="#icon-rotate-right"></use></svg> Rotate Left
-                        </button>
-                        <button class="btn btn-secondary" id="btn-rotate-right">
-                            <svg><use href="#icon-rotate-right"></use></svg> Rotate Right
-                        </button>
+                <!-- Controls Area -->
+                <div id="controls-area" class="hidden space-y-6">
+                    <!-- Aspect Ratio -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-3">Aspect Ratio</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button data-aspect-ratio="1.7777777777777777" class="aspect-ratio-btn p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-colors">16:9</button>
+                            <button data-aspect-ratio="1.3333333333333333" class="aspect-ratio-btn p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-colors">4:3</button>
+                            <button data-aspect-ratio="1" class="aspect-ratio-btn p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-colors">1:1</button>
+                            <button data-aspect-ratio="0.6666666666666666" class="aspect-ratio-btn p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-colors">2:3</button>
+                            <button data-aspect-ratio="NaN" class="aspect-ratio-btn p-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-colors col-span-2">Free</button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="control-group">
-                    <h3>Actions</h3>
-                    <div class="btn-group" style="flex-direction: column;">
-                         <button class="btn btn-success" id="btn-crop">
-                            <svg><use href="#icon-crop"></use></svg> Crop Image
-                        </button>
-                        <button class="btn btn-danger" id="btn-reset">
-                            <svg><use href="#icon-reset"></use></svg> Reset / New Image
-                        </button>
+                    <!-- Actions -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-3">Actions</h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="zoomIn" class="action-btn" data-tooltip="Zoom In"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" /></svg></button>
+                            <button id="zoomOut" class="action-btn" data-tooltip="Zoom Out"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" /></svg></button>
+                            <button id="rotateLeft" class="action-btn" data-tooltip="Rotate Left"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L8 9l9-5 -5 2z" transform="rotate(-90 12 12)" /></svg></button>
+                            <button id="rotateRight" class="action-btn" data-tooltip="Rotate Right"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L8 9l9-5 -5 2z" transform="rotate(90 12 12)"/></svg></button>
+                            <button id="flipHorizontal" class="action-btn" data-tooltip="Flip Horizontal"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M8 21l8-18"/></svg></button>
+                            <button id="flipVertical" class="action-btn" data-tooltip="Flip Vertical"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M21 8l-18 8"/></svg></button>
+                        </div>
                     </div>
-                </div>
-                
-                <div id="crop-result-display" class="control-group" style="display: none;">
-                    <h3>Preview</h3>
-                    <img id="cropped-image-preview" src="#" alt="Cropped Image">
-                    <a class="btn btn-primary" id="download-link" href="#" download="cropped_image.png">
-                        <svg><use href="#icon-download"></use></svg> Download Image
-                    </a>
+                    
+                    <!-- Download Options -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                        <h3 class="text-lg font-semibold mb-3">Export</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="formatSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Format</label>
+                                <select id="formatSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                    <option value="image/png">PNG</option>
+                                    <option value="image/jpeg">JPEG</option>
+                                    <option value="image/webp">WEBP</option>
+                                </select>
+                            </div>
+                            <div id="quality-control" class="hidden">
+                                <label for="qualitySlider" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality: <span id="qualityValue">0.92</span></label>
+                                <input id="qualitySlider" type="range" min="0.1" max="1" step="0.01" value="0.92" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                            </div>
+                            <button id="cropAndDownload" class="w-full inline-flex justify-center items-center px-4 py-2.5 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-900 focus:ring-green-500 transition-colors">
+                                <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                                Crop & Download
+                            </button>
+                            <button id="resetButton" class="w-full inline-flex justify-center items-center px-4 py-2.5 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-900 focus:ring-red-500 transition-colors">
+                                <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0011.664 0l3.181-3.183m-4.991-2.696a8.25 8.25 0 00-11.664 0l-3.181 3.183" /></svg>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
 
+            <!-- Right Column: Image Display & Preview -->
+            <div class="lg:col-span-8 xl:col-span-9 space-y-6">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex justify-center items-center min-h-[400px]">
+                    <div id="image-container" class="w-full h-full hidden">
+                        <img id="imageToCrop" alt="Image to crop">
+                    </div>
+                     <div id="placeholder" class="w-full h-full flex flex-col justify-center items-center text-center text-gray-500 dark:text-gray-400">
+                        <svg class="h-24 w-24 mb-4 text-gray-400 dark:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+                        <h3 class="text-xl font-medium">Image Preview Area</h3>
+                        <p class="text-sm">Upload an image to begin cropping</p>
+                    </div>
+                </div>
+                <!-- Preview Pane -->
+                <div id="preview-pane" class="hidden bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                     <h3 class="text-lg font-semibold mb-3">Preview</h3>
+                     <div class="preview-container bg-gray-100 dark:bg-gray-700"></div>
+                </div>
+            </div>
+        </main>
     </div>
-    <footer>
-        Powered by HTML, CSS, JavaScript & Cropper.js. UI Enhanced.
-    </footer>
 
-    <!-- Cropper.js JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <!-- Cropper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <!-- Main Application Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const uploaderSection = document.getElementById('uploader-section');
-            const editorSection = document.getElementById('editor-section');
+            // --- DOM Elements ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const fileInput = document.getElementById('fileInput');
+            const fileNameEl = document.getElementById('fileName');
+            const imageToCrop = document.getElementById('imageToCrop');
+            const imageContainer = document.getElementById('image-container');
+            const placeholder = document.getElementById('placeholder');
+            const controlsArea = document.getElementById('controls-area');
+            const uploadArea = document.getElementById('upload-area');
             const dropZone = document.getElementById('drop-zone');
-            const fileInput = document.getElementById('file-input');
-            const triggerFileInputButton = document.getElementById('trigger-file-input');
-            const imageToCropElement = document.getElementById('image-to-crop');
+            const previewPane = document.getElementById('preview-pane');
+            const previewContainer = previewPane.querySelector('.preview-container');
+            const formatSelect = document.getElementById('formatSelect');
+            const qualityControl = document.getElementById('quality-control');
+            const qualitySlider = document.getElementById('qualitySlider');
+            const qualityValue = document.getElementById('qualityValue');
             
-            const cropperWrapper = document.getElementById('cropper-wrapper');
-            const controlsPanel = document.getElementById('controls-panel');
-
-            const aspectRatioButtonsContainer = document.getElementById('aspect-ratio-buttons');
-            const customArW = document.getElementById('custom-ar-w');
-            const customArH = document.getElementById('custom-ar-h');
-            const btnArCustom = document.getElementById('btn-ar-custom');
-            
-            const btnRotateLeft = document.getElementById('btn-rotate-left');
-            const btnRotateRight = document.getElementById('btn-rotate-right');
-            const btnCrop = document.getElementById('btn-crop');
-            const btnReset = document.getElementById('btn-reset');
-
-            const cropResultDisplay = document.getElementById('crop-result-display');
-            const croppedImagePreview = document.getElementById('cropped-image-preview');
-            const downloadLink = document.getElementById('download-link');
-
             let cropper = null;
-            let currentFileName = 'cropped_image.png';
-            let originalImageSrc = null; // To store the original uploaded image for reset
+            let originalFileName = '';
+            let scaleX = 1;
+            let scaleY = 1;
 
-            // --- UI State Management ---
-            function showUploader() {
-                uploaderSection.style.display = 'block';
-                editorSection.style.display = 'none';
-                cropResultDisplay.style.display = 'none';
-                if (cropper) {
-                    cropper.destroy();
-                    cropper = null;
-                }
-                imageToCropElement.src = '#'; // Clear image
-                originalImageSrc = null;
-                fileInput.value = ''; // Reset file input
-                disableEditorControls(true);
+            // --- Theme Toggle ---
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                lightIcon.classList.remove('hidden');
+                document.documentElement.classList.add('dark');
+            } else {
+                darkIcon.classList.remove('hidden');
+                document.documentElement.classList.remove('dark');
             }
 
-            function showEditor() {
-                uploaderSection.style.display = 'none';
-                editorSection.style.display = 'flex'; // Use flex for the two-column layout
-                cropResultDisplay.style.display = 'none';
-                disableEditorControls(false);
-            }
-
-            function disableEditorControls(disable) {
-                const controls = controlsPanel.querySelectorAll('button, input');
-                controls.forEach(control => control.disabled = disable);
-                // Special handling for download link which is an <a> tag
-                if (disable) {
-                    downloadLink.classList.add('btn-disabled'); // Custom disabled style for link
-                    downloadLink.removeAttribute('href'); // Prevent click
+            themeToggle.addEventListener('click', () => {
+                lightIcon.classList.toggle('hidden');
+                darkIcon.classList.toggle('hidden');
+                if (localStorage.getItem('color-theme')) {
+                    if (localStorage.getItem('color-theme') === 'light') {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    }
                 } else {
-                    downloadLink.classList.remove('btn-disabled');
-                    // href will be set on crop
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                    }
                 }
-            }
+            });
             
             // --- File Handling ---
             dropZone.addEventListener('click', () => fileInput.click());
-            triggerFileInputButton.addEventListener('click', () => fileInput.click());
-
             dropZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                dropZone.classList.add('dragover');
+                dropZone.classList.add('drag-over');
             });
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('dragover');
-            });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
             dropZone.addEventListener('drop', (e) => {
                 e.preventDefault();
-                dropZone.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFile(files[0]);
+                dropZone.classList.remove('drag-over');
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFile(fileInput.files[0]);
                 }
             });
             fileInput.addEventListener('change', (e) => {
-                const files = e.target.files;
-                if (files.length > 0) {
-                    handleFile(files[0]);
+                if (e.target.files.length) {
+                    handleFile(e.target.files[0]);
                 }
             });
 
             function handleFile(file) {
                 if (!file.type.startsWith('image/')) {
-                    alert('Please upload an image file.');
+                    alert('Please select an image file.');
                     return;
                 }
-
-                currentFileName = 'cropped_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_'); // Sanitize filename
-                if (!currentFileName.match(/\.(png|jpg|jpeg|webp)$/i)) {
-                    currentFileName += '.png'; 
-                }
-
+                originalFileName = file.name;
+                fileNameEl.textContent = originalFileName;
+                
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    originalImageSrc = e.target.result;
-                    imageToCropElement.src = originalImageSrc;
-                    showEditor();
+                    imageToCrop.src = e.target.result;
+                    placeholder.classList.add('hidden');
+                    imageContainer.classList.remove('hidden');
                     
                     if (cropper) {
                         cropper.destroy();
                     }
-                    initializeCropper();
+
+                    cropper = new Cropper(imageToCrop, {
+                        preview: previewContainer,
+                        viewMode: 1,
+                        background: false,
+                        responsive: true,
+                        restore: false,
+                        checkOrientation: true,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: true,
+                        scalable: true,
+                    });
+
+                    controlsArea.classList.remove('hidden');
+                    previewPane.classList.remove('hidden');
                 };
                 reader.readAsDataURL(file);
             }
 
-            // --- Cropper Initialization ---
-            function initializeCropper() {
-                if (!originalImageSrc) return;
-                imageToCropElement.src = originalImageSrc; // Ensure using original for re-init
-                if(cropper) cropper.destroy();
-
-                cropper = new Cropper(imageToCropElement, {
-                    aspectRatio: NaN,
-                    viewMode: 1,
-                    dragMode: 'move',
-                    autoCropArea: 0.85,
-                    movable: true,
-                    scalable: true,
-                    zoomable: true,
-                    rotatable: true,
-                    responsive: true,
-                    checkCrossOrigin: false, // Important if dealing with external images, but for uploads it's fine
-                    ready: function () {
-                        // Ensure controls are enabled once cropper is ready
-                        disableEditorControls(false);
-                         // Set default aspect ratio button active
-                        setActiveAspectRatioButton(aspectRatioButtonsContainer.querySelector('button[data-ratio="NaN"]'));
+            // --- Cropper Controls ---
+            document.querySelectorAll('.aspect-ratio-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (cropper) {
+                        const ratio = parseFloat(btn.dataset.aspectRatio);
+                        cropper.setAspectRatio(ratio);
+                        // Adjust preview container aspect ratio
+                        if (!isNaN(ratio)) {
+                            previewContainer.style.paddingBottom = `${(1 / ratio) * 100}%`;
+                        } else {
+                             previewContainer.style.paddingBottom = '100%'; // Default for free
+                        }
                     }
                 });
-                // Reset custom AR inputs
-                customArW.value = '';
-                customArH.value = '';
-                cropResultDisplay.style.display = 'none';
-            }
+            });
+
+            document.getElementById('zoomIn').addEventListener('click', () => cropper && cropper.zoom(0.1));
+            document.getElementById('zoomOut').addEventListener('click', () => cropper && cropper.zoom(-0.1));
+            document.getElementById('rotateLeft').addEventListener('click', () => cropper && cropper.rotate(-90));
+            document.getElementById('rotateRight').addEventListener('click', () => cropper && cropper.rotate(90));
             
-            // --- Aspect Ratio Controls ---
-            aspectRatioButtonsContainer.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON' && cropper) {
-                    const ratio = parseFloat(e.target.dataset.ratio);
-                    cropper.setAspectRatio(ratio);
-                    setActiveAspectRatioButton(e.target);
+            document.getElementById('flipHorizontal').addEventListener('click', () => {
+                if(cropper) {
+                    scaleX = -scaleX;
+                    cropper.scaleX(scaleX);
+                }
+            });
+            document.getElementById('flipVertical').addEventListener('click', () => {
+                if(cropper) {
+                    scaleY = -scaleY;
+                    cropper.scaleY(scaleY);
                 }
             });
 
-            function setActiveAspectRatioButton(activeButton) {
-                aspectRatioButtonsContainer.querySelectorAll('button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                if (activeButton) {
-                    activeButton.classList.add('active');
-                }
-                 // Clear custom inputs when a preset is clicked
-                customArW.value = '';
-                customArH.value = '';
-            }
-
-            btnArCustom.addEventListener('click', () => {
-                const w = parseFloat(customArW.value);
-                const h = parseFloat(customArH.value);
-                if (cropper && w > 0 && h > 0) {
-                    cropper.setAspectRatio(w / h);
-                    setActiveAspectRatioButton(null); // Remove active from presets
+            // --- Export Controls ---
+            formatSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'image/jpeg' || e.target.value === 'image/webp') {
+                    qualityControl.classList.remove('hidden');
                 } else {
-                    alert("Please enter valid positive numbers for custom width and height.");
+                    qualityControl.classList.add('hidden');
                 }
             });
-            [customArW, customArH].forEach(input => {
-                input.addEventListener('input', () => {
-                     if (cropper) setActiveAspectRatioButton(null); // Deselect presets when typing in custom
-                });
+
+            qualitySlider.addEventListener('input', (e) => {
+                qualityValue.textContent = e.target.value;
             });
 
-
-            // --- Rotation Controls ---
-            btnRotateLeft.addEventListener('click', () => {
-                if (cropper) cropper.rotate(-90);
-            });
-            btnRotateRight.addEventListener('click', () => {
-                if (cropper) cropper.rotate(90);
-            });
-
-            // --- Crop & Download ---
-            btnCrop.addEventListener('click', () => {
+            document.getElementById('cropAndDownload').addEventListener('click', () => {
                 if (!cropper) return;
+                
+                const format = formatSelect.value;
+                const quality = parseFloat(qualitySlider.value);
+                const fileExtension = format.split('/')[1];
 
-                const canvas = cropper.getCroppedCanvas({
-                    fillColor: '#fff',
+                cropper.getCroppedCanvas({
+                    maxWidth: 4096,
+                    maxHeight: 4096,
                     imageSmoothingEnabled: true,
                     imageSmoothingQuality: 'high',
-                });
-
-                if (!canvas) {
-                    alert('Could not crop the image.');
-                    return;
-                }
-                
-                const mimeType = currentFileName.endsWith('.png') ? 'image/png' : 
-                                 currentFileName.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
-                const quality = mimeType === 'image/jpeg' ? 0.92 : undefined;
-
-                canvas.toBlob((blob) => {
-                    if (!blob) {
-                         alert('Could not generate blob.');
-                         return;
-                    }
+                }).toBlob((blob) => {
                     const url = URL.createObjectURL(blob);
-                    croppedImagePreview.src = url;
-                    downloadLink.href = url;
-                    downloadLink.download = currentFileName;
-                    
-                    cropResultDisplay.style.display = 'block';
-                    downloadLink.classList.remove('btn-disabled'); // Enable download
-                    
-                    // Scroll to preview
-                    cropResultDisplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                }, mimeType, quality);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `cropped-${originalFileName.replace(/\.[^/.]+$/, "")}.${fileExtension}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }, format, quality);
             });
 
-            // --- Reset/New Image ---
-            btnReset.addEventListener('click', () => {
-                if (confirm("Do you want to reset the current image or upload a new one? \nOK = Reset Current, Cancel = Upload New")) {
-                    if (originalImageSrc) {
-                        initializeCropper(); // Re-initialize with the same image
-                    } else {
-                        showUploader(); // No image was loaded, go to uploader
-                    }
-                } else {
-                    showUploader(); // User chose to upload a new image
+            // --- Reset ---
+            document.getElementById('resetButton').addEventListener('click', () => {
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
                 }
+                fileInput.value = '';
+                fileNameEl.textContent = '';
+                imageToCrop.src = '';
+                scaleX = 1;
+                scaleY = 1;
+                imageContainer.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+                controlsArea.classList.add('hidden');
+                previewPane.classList.add('hidden');
+                previewContainer.style.paddingBottom = '100%';
             });
-
-            // Initialize
-            showUploader();
+            
+            // --- Helper class for action buttons ---
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.classList.add('relative', 'flex', 'items-center', 'justify-center', 'p-3', 'bg-gray-200', 'dark:bg-gray-700', 'rounded-md', 'hover:bg-blue-500', 'hover:text-white', 'dark:hover:bg-blue-500', 'transition-colors');
+            });
         });
     </script>
 </body>
