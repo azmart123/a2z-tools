@@ -3,464 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Image Converter</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <title>Ultra Image Compressor</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --background: #f8fafc;
-            --surface: rgba(255, 255, 255, 0.9);
-            --text: #0f172a;
-            --border: rgba(203, 213, 225, 0.3);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            --background-dark: #0f172a;
-            --surface-dark: rgba(30, 41, 59, 0.9);
-            --text-dark: #f8fafc;
-            --border-dark: rgba(71, 85, 105, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        }
-
+        /* Custom styles to complement Tailwind */
         body {
-            background: linear-gradient(45deg, #e0e7ff, #f0fdfa);
-            min-height: 100vh;
-            padding: 2rem;
-            color: var(--text);
-            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
         }
-
-        body.dark {
-            background: linear-gradient(45deg, #1e1b4b, #0c4a6e);
-            color: var(--text-dark);
+        /* Style for the file input button to hide the default ugly one */
+        input[type="file"] {
+            display: none;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--surface);
-            backdrop-filter: blur(20px);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
+        /* Custom transition for smoother UI changes */
+        .transition-all {
+            transition: all 0.3s ease-in-out;
         }
-
-        body.dark .container {
-            background: var(--surface-dark);
-            border-color: var(--border-dark);
+        /* A subtle glow effect for interactive elements */
+        .glow-effect {
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0), 0 0 10px rgba(59, 130, 246, 0);
         }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--primary), #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .upload-card {
-            position: relative;
-            border: 2px dashed var(--border);
-            border-radius: 1rem;
-            padding: 3rem 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-        }
-
-        .upload-card:hover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
-        }
-
-        .upload-card.dragover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
-            transform: scale(1.02);
-        }
-
-        .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .preview-card {
-            position: relative;
-            border-radius: 1rem;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: transform 0.3s ease;
-            background: var(--surface);
-        }
-
-        .preview-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .preview-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: #f1f5f9;
-        }
-
-        .card-footer {
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .controls {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.75rem;
-            background: var(--primary);
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        button:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        select, input[type="range"] {
-            padding: 0.75rem;
-            border-radius: 0.75rem;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        .setting-group {
-            background: rgba(99, 102, 241, 0.05);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin: 1rem 0;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: rgba(99, 102, 241, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .dark-toggle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-            }
-            
-            .preview-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            button {
-                width: 100%;
-                justify-content: center;
-            }
+        .glow-effect:hover, .glow-effect:focus-within {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 5px rgba(59, 130, 246, 0.3);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Image Converter Pro</h1>
-            <div class="toolbar">
-                <div class="dark-toggle" onclick="toggleDarkMode()">
-                    <i class="fas fa-moon"></i>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <!-- Header Section -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">Ultra Image Compressor</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 mt-2">Compress JPEG, PNG, and WEBP images with optimal quality.</p>
+        </header>
+
+        <main class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Left Side: Upload and Preview -->
+                <div id="upload-container" class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center transition-all glow-effect">
+                    <div id="upload-prompt">
+                        <!-- === UPDATED MODERN SVG ICON === -->
+                        <svg class="mx-auto h-16 w-16 text-gray-400" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.44 8.8999C20.04 9.2099 21.51 11.0599 21.51 15.1099V15.2399C21.51 19.7099 19.72 21.4999 15.25 21.4999H8.73998C4.26998 21.4999 2.47998 19.7099 2.47998 15.2399V15.1099C2.47998 11.0899 3.92998 9.2399 7.46998 8.9099" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 15.0001V3.62012" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.35 5.85L12 2.5L8.65002 5.85" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+
+                        <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                            <span class="font-semibold text-blue-600 dark:text-blue-400">Drag & drop</span> an image here
+                        </p>
+                        <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">or</p>
+                        <label for="file-upload" class="mt-4 inline-block cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-all">
+                            Select an Image
+                        </label>
+                        <input id="file-upload" name="file-upload" type="file" accept="image/jpeg, image/png, image/webp">
+                        <p id="error-message" class="text-red-500 mt-4 text-sm font-medium hidden"></p>
+                    </div>
+                    <div id="image-preview-container" class="hidden w-full">
+                        <img id="image-preview" src="#" alt="Image Preview" class="max-h-80 w-auto rounded-lg mx-auto shadow-md"/>
+                        <button id="change-image-btn" class="mt-4 inline-block rounded-md bg-gray-600 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700 transition-all">Change Image</button>
+                    </div>
+                </div>
+
+                <!-- Right Side: Controls and Results -->
+                <div id="controls-container" class="flex flex-col justify-center space-y-6 opacity-50 pointer-events-none">
+                    <!-- Quality Slider -->
+                    <div>
+                        <label for="quality-slider" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Compression Quality: <span id="quality-value" class="font-bold text-blue-600 dark:text-blue-400">80%</span></label>
+                        <input id="quality-slider" type="range" min="1" max="100" value="80" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer mt-2">
+                    </div>
+                    
+                    <!-- File Information -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600 dark:text-gray-400">Original Size:</span>
+                            <span id="original-size" class="font-medium text-gray-900 dark:text-white">-</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600 dark:text-gray-400">Compressed Size:</span>
+                            <span id="compressed-size" class="font-medium text-gray-900 dark:text-white">-</span>
+                        </div>
+                        <div class="flex justify-between text-lg">
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Reduction:</span>
+                            <span id="reduction-percent" class="font-bold text-green-600 dark:text-green-400">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Download Button -->
+                    <a id="download-btn" href="#" download="compressed-image.jpg" class="w-full text-center rounded-lg bg-green-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition-all glow-effect">
+                        Download Compressed Image
+                    </a>
                 </div>
             </div>
-        </div>
-
-        <div class="upload-card" id="drop-zone">
-            <input type="file" id="file-input" hidden accept="image/*" multiple>
-            <div class="upload-content">
-                <i class="fas fa-cloud-arrow-up fa-3x" style="color: var(--primary); margin-bottom: 1rem;"></i>
-                <h3>Drag & Drop Files</h3>
-                <p>or click to browse (multiple supported)</p>
-            </div>
-        </div>
-
-        <div class="preview-grid" id="preview-grid"></div>
-
-        <div class="setting-group">
-            <h3>Conversion Settings</h3>
-            <div class="controls">
-                <select id="format-select">
-                    <option value="jpeg">JPEG</option>
-                    <option value="png">PNG</option>
-                    <option value="webp">WEBP</option>
-                </select>
-                <div style="flex-grow: 1;">
-                    <label>Quality: <span id="quality-value">90%</span></label>
-                    <input type="range" id="quality" min="1" max="100" value="90">
-                </div>
-                <button onclick="startConversion()">
-                    <i class="fas fa-magic"></i>
-                    Convert All
-                </button>
-            </div>
-        </div>
-
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress" style="width: 0%"></div>
-        </div>
-
-        <div class="controls" style="justify-content: flex-end;">
-            <button id="download-all" style="display: none;" onclick="downloadZip()">
-                <i class="fas fa-file-archive"></i>
-                Download All as ZIP
-            </button>
-        </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-8">
+            <p class="text-sm text-gray-500 dark:text-gray-400">Built for easy hosting on GitHub Pages.</p>
+        </footer>
     </div>
 
     <script>
-        let files = [];
-        let conversions = [];
-        let isDark = localStorage.getItem('darkMode') === 'true';
-        const zip = new JSZip();
-
-        // Dark Mode Toggle
-        function toggleDarkMode() {
-            isDark = !isDark;
-            document.body.classList.toggle('dark', isDark);
-            localStorage.setItem('darkMode', isDark);
-        }
-        if (isDark) document.body.classList.add('dark');
-
-        // Drag & Drop Handlers
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-
-        dropZone.addEventListener('click', () => fileInput.click());
+        // --- DOM Element Selection ---
+        const uploadContainer = document.getElementById('upload-container');
+        const uploadPrompt = document.getElementById('upload-prompt');
+        const fileInput = document.getElementById('file-upload');
+        const errorMessage = document.getElementById('error-message');
         
-        ['dragenter', 'dragover'].forEach(event => {
-            dropZone.addEventListener(event, (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-        });
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const changeImageBtn = document.getElementById('change-image-btn');
+        
+        const controlsContainer = document.getElementById('controls-container');
+        const qualitySlider = document.getElementById('quality-slider');
+        const qualityValue = document.getElementById('quality-value');
+        
+        const originalSizeEl = document.getElementById('original-size');
+        const compressedSizeEl = document.getElementById('compressed-size');
+        const reductionPercentEl = document.getElementById('reduction-percent');
+        const downloadBtn = document.getElementById('download-btn');
 
-        ['dragleave', 'drop'].forEach(event => {
-            dropZone.addEventListener(event, (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('dragover');
-            });
-        });
+        let originalImageFile = null;
+        let originalImageURL = null;
 
-        dropZone.addEventListener('drop', handleFileDrop);
+        // --- Functions ---
 
-        // File Handling
-        async function handleFileDrop(e) {
-            const dt = e.dataTransfer;
-            await handleFiles(dt.files);
+        /**
+         * Formats bytes into a human-readable string (KB, MB).
+         * @param {number} bytes - The size in bytes.
+         * @returns {string} - The formatted size string.
+         */
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+        /**
+         * Resets the UI to its initial state.
+         */
+        function resetUI() {
+            fileInput.value = ''; // Clear file input
+            originalImageFile = null;
+            originalImageURL = null;
 
-        async function handleFiles(newFiles) {
-            files = [...files, ...Array.from(newFiles)];
-            await createPreviews();
-            updateProgress(0);
-            document.getElementById('download-all').style.display = 'none';
-        }
-
-        // Preview Generation
-        async function createPreviews() {
-            const grid = document.getElementById('preview-grid');
-            grid.innerHTML = '';
+            uploadPrompt.classList.remove('hidden');
+            imagePreviewContainer.classList.add('hidden');
+            controlsContainer.classList.add('opacity-50', 'pointer-events-none');
             
-            for (const file of files) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const card = document.createElement('div');
-                    card.className = 'preview-card fade-in';
-                    card.innerHTML = `
-                        <img class="preview-image" src="${e.target.result}" alt="Preview">
-                        <div class="card-footer">
-                            <span>${file.name}</span>
-                            <button onclick="removeFile('${file.name}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                };
-                reader.readAsDataURL(file);
-            }
+            originalSizeEl.textContent = '-';
+            compressedSizeEl.textContent = '-';
+            reductionPercentEl.textContent = '-';
+            errorMessage.classList.add('hidden');
+            downloadBtn.removeAttribute('href');
         }
 
-        // Conversion Logic
-        async function startConversion() {
-            try {
-                if (files.length === 0) return alert('Please upload files first!');
-                
-                conversions = [];
-                const format = document.getElementById('format-select').value;
-                const quality = document.getElementById('quality').value / 100;
-                
-                for (let i = 0; i < files.length; i++) {
-                    await convertFile(files[i], format, quality, i);
-                    updateProgress((i + 1) / files.length * 100);
-                }
-                
-                document.getElementById('download-all').style.display = 'inline-flex';
-            } catch (error) {
-                console.error('Conversion error:', error);
-                alert(`Conversion failed: ${error.message}`);
+        /**
+         * Handles the file selection process.
+         * @param {File} file - The selected image file.
+         */
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                errorMessage.textContent = 'Please select a valid image file (JPEG, PNG, WEBP).';
+                errorMessage.classList.remove('hidden');
+                return;
             }
+
+            errorMessage.classList.add('hidden');
+            originalImageFile = file;
+
+            // Display original size
+            originalSizeEl.textContent = formatBytes(originalImageFile.size);
+
+            // Create a URL for the original image to display in the preview
+            originalImageURL = URL.createObjectURL(originalImageFile);
+            imagePreview.src = originalImageURL;
+
+            // Update UI to show preview and enable controls
+            uploadPrompt.classList.add('hidden');
+            imagePreviewContainer.classList.remove('hidden');
+            controlsContainer.classList.remove('opacity-50', 'pointer-events-none');
+
+            // Trigger compression with the default quality
+            compressImage();
         }
 
-        async function convertFile(file, format, quality, index) {
-            return new Promise((resolve, reject) => {
+        /**
+         * Compresses the image based on the current quality slider value.
+         */
+        function compressImage() {
+            if (!originalImageFile) return;
+
+            const quality = parseInt(qualitySlider.value) / 100;
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
                 const img = new Image();
-                img.crossOrigin = 'anonymous';
-                
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
                     const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
 
-                    EXIF.getData(img, function() {
-                        try {
-                            const orientation = EXIF.getTag(this, 'Orientation') || 1;
-                            [canvas.width, canvas.height] = adjustDimensions(img, orientation);
-                            applyOrientation(ctx, img, orientation);
-                            
-                            canvas.toBlob(blob => {
-                                if (!blob) {
-                                    reject(new Error('Conversion failed'));
-                                    return;
-                                }
-                                
-                                const convertedFile = new File([blob], 
-                                    `${file.name.replace(/\.[^/.]+$/, "")}.${format}`, 
-                                    { type: `image/${format}` }
-                                );
-                                
-                                conversions.push(convertedFile);
-                                zip.file(convertedFile.name, blob);
-                                URL.revokeObjectURL(img.src);
-                                resolve();
-                            }, `image/${format}`, quality);
-                        } catch (error) {
-                            reject(error);
-                        }
-                    });
+                    // Get the compressed image data URL (converts to JPEG)
+                    // The 'image/jpeg' type is crucial for quality-based compression.
+                    const compressedDataURL = canvas.toDataURL('image/jpeg', quality);
+
+                    // Update download link
+                    downloadBtn.href = compressedDataURL;
+                    
+                    // To calculate the compressed size, we need to convert the data URL to a Blob
+                    fetch(compressedDataURL)
+                        .then(res => res.blob())
+                        .then(blob => {
+                            const compressedSize = blob.size;
+                            compressedSizeEl.textContent = formatBytes(compressedSize);
+
+                            // Calculate and display the reduction percentage
+                            const reduction = 100 - (compressedSize / originalImageFile.size) * 100;
+                            reductionPercentEl.textContent = `${reduction.toFixed(1)}%`;
+                        });
                 };
+                img.src = event.target.result;
+            };
 
-                img.onerror = function(error) {
-                    reject(new Error('Failed to load image'));
-                };
-
-                img.src = URL.createObjectURL(file);
-            });
+            reader.readAsDataURL(originalImageFile);
         }
 
-        // Orientation Helpers
-        function adjustDimensions(img, orientation) {
-            return [5,6,7,8].includes(orientation) 
-                ? [img.height, img.width] 
-                : [img.width, img.height];
-        }
+        // --- Event Listeners ---
 
-        function applyOrientation(ctx, img, orientation) {
-            ctx.save();
-            
-            switch(orientation) {
-                case 2: ctx.transform(-1, 0, 0, 1, img.width, 0); break;
-                case 3: ctx.transform(-1, 0, 0, -1, img.width, img.height); break;
-                case 4: ctx.transform(1, 0, 0, -1, 0, img.height); break;
-                case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-                case 6: ctx.transform(0, 1, -1, 0, img.height, 0); break;
-                case 7: ctx.transform(0, -1, -1, 0, img.height, img.width); break;
-                case 8: ctx.transform(0, -1, 1, 0, 0, img.width); break;
-                default: ctx.transform(1, 0, 0, 1, 0, 0);
-            }
-
-            ctx.drawImage(img, 0, 0);
-            ctx.restore();
-        }
-
-        // Progress Updates
-        function updateProgress(percent) {
-            document.getElementById('progress').style.width = `${percent}%`;
-        }
-
-        // File Management
-        function removeFile(fileName) {
-            files = files.filter(f => f.name !== fileName);
-            createPreviews();
-        }
-
-        // ZIP Download
-        async function downloadZip() {
-            const zipName = `converted-images-${Date.now()}.zip`;
-            const content = await zip.generateAsync({ type: 'blob' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = zipName;
-            link.click();
-        }
-
-        // Quality Display
-        document.getElementById('quality').addEventListener('input', (e) => {
-            document.getElementById('quality-value').textContent = `${e.target.value}%`;
+        // Handle file selection via the button
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
         });
+
+        // Handle drag and drop
+        uploadContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadContainer.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        });
+
+        uploadContainer.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadContainer.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+        });
+
+        uploadContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadContainer.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+
+        // Handle quality slider changes
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = `${qualitySlider.value}%`;
+        });
+        // Use 'change' to avoid compressing on every tiny slider move for better performance
+        qualitySlider.addEventListener('change', compressImage);
+
+        // Handle "Change Image" button click
+        changeImageBtn.addEventListener('click', resetUI);
+
+        // Clean up the object URL when the user leaves the page to prevent memory leaks
+        window.addEventListener('beforeunload', () => {
+            if (originalImageURL) {
+                URL.revokeObjectURL(originalImageURL);
+            }
+        });
+
     </script>
 </body>
 </html>
