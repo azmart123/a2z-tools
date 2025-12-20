@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pro AI Sharpen Tool</title>
+<!-- Load MediaPipe -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
+<style>
+    :root {
+        --bg: #0f172a;
+        --surface: #1e293b;
+        --primary: #3b82f6;
+        --text: #f8fafc;
+        --slider-track: #334155;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', sans-serif; }
+
+    body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Top Navigation */
+    .nav {
+        padding: 15px 20px;
+        background: rgba(15, 23, 42, 0.9);
+        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        z-index: 20;
+    }
+    .brand { font-weight: 700; letter-spacing: 0.5px; }
+    .new-btn {
+        background: rgba(255,255,255,0.1); border: none; color: white;
+        padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+    }
+
+    /* Workspace */
+    .workspace {
+        flex: 1;
+        position: relative;
+        background-image: linear-gradient(45deg, #18181b 25%, transparent 25%), linear-gradient(-45deg, #18181b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #18181b 75%), linear-gradient(-45deg, transparent 75%, #18181b 75%);
+        background-size: 20px 20px;
+        background-color: #000;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    canvas {
+        max-width: 95%; max-height: 85%;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    /* Floating Controls */
+    .controls {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        background: var(--surface);
+        padding: 25px 20px 30px;
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+        z-index: 30;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .controls.active { transform: translateY(0); }
+
+    .slider-group { margin-bottom: 20px; }
+    .label-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: #94a3b8; font-weight: 600; }
+    
+    input[type=range] {
+        width: 100%; height: 6px; background: var(--slider-track); border-radius: 3px; -webkit-appearance: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary); border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .action-btn {
+        width: 100%; background: var(--primary); color: white; border: none;
+        padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); cursor: pointer;
+    }
+
+    /* Upload Screen */
+    .upload-screen {
+        position: absolute; inset: 0; background: var(--bg);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 40;
+    }
+    .upload-circle {
+        width: 90px; height: 90px; border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 40px; margin-bottom: 20px; box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+        cursor: pointer; transition: transform 0.2s;
+    }
+    .upload-circle:active { transform: scale(0.95); }
+
+    /* Loader */
+    .loader {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background: rgba(0,0,0,0.8); padding: 15px 25px; border-radius: 30px;
+        display: none; align-items: center; gap: 10px; z-index: 50; pointer-events: none;
+    }
+    .spinner { width: 18px; height: 18px; border: 2px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 1s infinite linear; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+</style>
+</head>
+<body>
+
+<div class="nav">
+    <div class="brand">AI Cutout <span style="font-weight:400; opacity:0.6; font-size:0.8em">PRO</span></div>
+    <button class="new-btn" onclick="location.reload()">New</button>
+</div>
+
+<div class="workspace">
+    <div class="loader" id="loader"><div class="spinner"></div> Processing...</div>
+    <canvas id="outputCanvas"></canvas>
+
+    <div class="upload-screen" id="uploadScreen">
+        <div class="upload-circle" onclick="document.getElementById('fileIn').click()">✨</div>
+        <h3 style="margin:0">Add Photo</h3>
+        <p style="color:#64748b; margin-top:5px">Works best with people</p>
+    </div>
+</div>
+
+<div class="controls" id="controls">
+    <div class="slider-group">
+        <div class="label-row">
+            <span>Edge Sharpness</span>
+            <span id="sharpVal">High</span>
+        </div>
+        <!-- Default value 0.6 means 60% confidence cutoff -->
+        <input type="range" id="sharpness" min="1" max="95" value="60">
+    </div>
+
+    <button class="action-btn" id="downloadBtn">Download HD Image</button>
+</div>
+
+<input type="file" id="fileIn" hidden accept="image/*">
+
+<script>
+    const ui = {
+        fileIn: document.getElementById('fileIn'),
+        uploadScreen: document.getElementById('uploadScreen'),
+        canvas: document.getElementById('outputCanvas'),
+        ctx: document.getElementById('outputCanvas').getContext('2d'),
+        loader: document.getElementById('loader'),
+        controls: document.getElementById('controls'),
+        sharpness: document.getElementById('sharpness'),
+        sharpVal: document.getElementById('sharpVal'),
+        downloadBtn: document.getElementById('downloadBtn')
+    };
+
+    let ai = {
+        model: null,
+        img: null,
+        lastResult: null // Store last result to re-render without re-processing AI
+    };
+
+    // 1. Initialize AI
+    async function loadAI() {
+        const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+        }});
+        selfieSegmentation.setOptions({ modelSelection: 1 }); // 1 = Landscape (Better Quality)
+        selfieSegmentation.onResults(onAIResults);
+        ai.model = selfieSegmentation;
+    }
+    loadAI();
+
+    // 2. Upload
+    ui.fileIn.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+
+        ui.loader.style.display = 'flex';
+        
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = async () => {
+            ai.img = img;
+            // Set canvas size
+            ui.canvas.width = img.width;
+            ui.canvas.height = img.height;
+            
+            if(!ai.model) await loadAI();
+            await ai.model.send({image: img});
+        };
+    });
+
+    // 3. AI Processing Result
+    function onAIResults(results) {
+        ai.lastResult = results; // Save for slider adjustments
+        renderResult();
+        
+        // Show UI
+        ui.loader.style.display = 'none';
+        ui.uploadScreen.style.display = 'none';
+        ui.controls.classList.add('active');
+    }
+
+    // 4. Rendering Logic (Where sharpness happens)
+    function renderResult() {
+        if(!ai.lastResult) return;
+
+        const w = ui.canvas.width;
+        const h = ui.canvas.height;
+        const cutoff = parseInt(ui.sharpness.value) / 100; // 0.0 to 0.95
+
+        // A. Draw the Raw Mask from AI
+        ui.ctx.save();
+        ui.ctx.clearRect(0, 0, w, h);
+        ui.ctx.drawImage(ai.lastResult.segmentationMask, 0, 0, w, h);
+        
+        // B. Sharpening (Pixel Manipulation)
+        // We get the alpha data and force it to be 0 or 255 based on cutoff
+        const imageData = ui.ctx.getImageData(0, 0, w, h);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            // Check mask intensity (Usually in Red channel or Alpha)
+            // MediaPipe puts mask in R,G,B channels. 0=Background, 255=Person
+            const maskValue = data[i]; 
+            
+            // If the AI is "kind of sure" (e.g., 100), but below our cutoff, kill it.
+            // If it's above our cutoff, make it fully solid.
+            if (maskValue > (cutoff * 255)) {
+                data[i + 3] = 255; // Full Opacity
+            } else {
+                data[i + 3] = 0;   // Transparent
+            }
+        }
+        
+        ui.ctx.putImageData(imageData, 0, 0);
+        
+        // C. Composite the Original Image
+        ui.ctx.globalCompositeOperation = 'source-in';
+        ui.ctx.drawImage(ai.img, 0, 0, w, h);
+        ui.ctx.restore();
+    }
+
+    // 5. Slider Logic
+    ui.sharpness.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value);
+        if(val < 30) ui.sharpVal.innerText = "Soft";
+        else if(val < 70) ui.sharpVal.innerText = "Sharp";
+        else ui.sharpVal.innerText = "Ultra Cut";
+        
+        renderResult(); // Re-render instantly using saved result
+    });
+
+    // 6. Download
+    ui.downloadBtn.addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.download = 'sharpened-cutout.png';
+        a.href = ui.canvas.toDataURL();
+        a.click();
+    });
+
+</script>
+</body>
+</html>
