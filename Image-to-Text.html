@@ -6,7 +6,7 @@
     <title>OptiText Pro | Intelligent OCR</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tesseract.js -->
+    <!-- Tesseract.js v5 -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -58,21 +58,12 @@
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.3);
         }
-
-        /* Animations */
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.2); opacity: 0; }
-        }
-        .animate-ring {
-            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen flex flex-col overflow-hidden selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col lg:h-screen lg:overflow-hidden selection:bg-brand-500 selection:text-white">
 
     <!-- Navbar -->
-    <nav class="glass fixed w-full z-50 h-16 flex items-center justify-between px-6 transition-all duration-300">
+    <nav class="glass fixed w-full z-50 h-16 flex items-center justify-between px-6 transition-all duration-300 top-0">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-700 rounded-lg flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,16 +75,16 @@
         <div class="flex items-center gap-4">
             <div class="hidden md:flex items-center gap-2 text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                Engine Ready
+                v5.0 Ready
             </div>
         </div>
     </nav>
 
     <!-- Main Workspace -->
-    <main class="flex-1 flex flex-col lg:flex-row mt-16 h-[calc(100vh-4rem)]">
+    <main class="flex-1 flex flex-col lg:flex-row mt-16 lg:h-[calc(100vh-4rem)]">
         
         <!-- Left Panel: Input -->
-        <section class="w-full lg:w-5/12 p-6 flex flex-col gap-6 border-b lg:border-b-0 lg:border-r border-slate-200 bg-white/50 overflow-y-auto custom-scroll relative">
+        <section class="w-full lg:w-5/12 p-6 flex flex-col gap-6 border-b lg:border-b-0 lg:border-r border-slate-200 bg-white/50 lg:overflow-y-auto custom-scroll relative">
             
             <div class="flex items-center justify-between">
                 <div>
@@ -103,7 +94,7 @@
             </div>
 
             <!-- Drop Zone -->
-            <div id="drop-zone" class="group relative flex-1 min-h-[350px] border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50/50 hover:bg-brand-50 hover:border-brand-400 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
+            <div id="drop-zone" class="group relative flex-none h-[300px] lg:min-h-[350px] border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50/50 hover:bg-brand-50 hover:border-brand-400 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer overflow-hidden">
                 <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/png, image/jpeg, image/webp">
                 
                 <!-- Placeholder State -->
@@ -130,12 +121,15 @@
 
             <!-- Controls -->
             <div class="flex flex-col gap-3">
-                <!-- Progress Bar -->
-                <div id="progress-area" class="h-10 opacity-0 transition-opacity duration-300 flex items-center gap-3 bg-white border border-slate-100 rounded-lg px-4 shadow-sm">
-                    <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <!-- Status/Progress Bar -->
+                <div id="progress-area" class="opacity-0 transition-opacity duration-300 flex flex-col gap-2 bg-white border border-slate-100 rounded-lg p-3 shadow-sm">
+                    <div class="flex justify-between items-center text-xs font-medium text-slate-500">
+                        <span id="status-text">Initializing...</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="h-2 bg-slate-100 rounded-full overflow-hidden w-full">
                         <div id="progress-bar" class="h-full bg-brand-500 rounded-full w-0 transition-all duration-300"></div>
                     </div>
-                    <span id="progress-text" class="text-xs font-mono text-slate-500 w-12 text-right">0%</span>
                 </div>
 
                 <button id="convert-btn" class="w-full py-3.5 px-6 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 group" disabled>
@@ -152,7 +146,7 @@
         </section>
 
         <!-- Right Panel: Output -->
-        <section class="flex-1 bg-slate-100/50 p-6 flex flex-col h-full relative">
+        <section class="flex-1 w-full bg-slate-100/50 p-6 flex flex-col min-h-[500px] lg:h-full relative">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-bold text-slate-900">Result</h2>
                 <div class="flex gap-2">
@@ -188,12 +182,10 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed top-20 right-6 translate-x-full opacity-0 transition-all duration-500 z-50">
         <div class="bg-slate-800 text-white px-4 py-3 rounded-lg shadow-xl shadow-slate-500/20 flex items-center gap-3">
-            <div class="bg-green-500/20 p-1 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                </svg>
+            <div id="toast-icon" class="bg-green-500/20 p-1 rounded-full">
+                <!-- Icon injected by JS -->
             </div>
-            <span id="toast-msg" class="text-sm font-medium">Text copied to clipboard</span>
+            <span id="toast-msg" class="text-sm font-medium">Notification</span>
         </div>
     </div>
 
@@ -212,37 +204,28 @@
             progressArea: document.getElementById('progress-area'),
             progressBar: document.getElementById('progress-bar'),
             progressText: document.getElementById('progress-text'),
+            statusText: document.getElementById('status-text'),
             output: document.getElementById('output-text'),
             copyBtn: document.getElementById('copy-btn'),
             downloadBtn: document.getElementById('download-btn'),
             charCount: document.getElementById('char-count'),
             wordCount: document.getElementById('word-count'),
             toast: document.getElementById('toast'),
-            toastMsg: document.getElementById('toast-msg')
+            toastMsg: document.getElementById('toast-msg'),
+            toastIcon: document.getElementById('toast-icon')
         };
 
         let currentFile = null;
 
-        // --- Drag & Drop Interaction ---
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            els.dropZone.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            });
+        // --- Drag & Drop ---
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+            els.dropZone.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); });
         });
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            els.dropZone.addEventListener(eventName, () => {
-                els.dropZone.classList.add('border-brand-500', 'bg-brand-50');
-                els.dropZone.classList.remove('border-slate-300');
-            });
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            els.dropZone.addEventListener(eventName, () => {
-                els.dropZone.classList.remove('border-brand-500', 'bg-brand-50');
-                els.dropZone.classList.add('border-slate-300');
-            });
+        ['dragenter', 'dragover'].forEach(() => els.dropZone.classList.add('border-brand-500', 'bg-brand-50'));
+        ['dragleave', 'drop'].forEach(() => {
+            els.dropZone.classList.remove('border-brand-500', 'bg-brand-50');
+            els.dropZone.classList.add('border-slate-300');
         });
 
         els.dropZone.addEventListener('drop', (e) => handleFile(e.dataTransfer.files[0]));
@@ -250,10 +233,9 @@
 
         function handleFile(file) {
             if (!file || !file.type.match('image.*')) {
-                showToast('Please upload a valid image file', 'error');
+                showToast('Please upload a valid image (JPG/PNG)', 'error');
                 return;
             }
-
             currentFile = file;
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -261,14 +243,11 @@
                 els.placeholder.classList.add('hidden');
                 els.previewWrapper.classList.remove('hidden');
                 els.convertBtn.disabled = false;
-                els.convertBtn.classList.add('ring-2', 'ring-offset-2', 'ring-brand-500'); // Focus hint
-                setTimeout(() => els.convertBtn.classList.remove('ring-2', 'ring-offset-2', 'ring-brand-500'), 1000);
             };
             reader.readAsDataURL(file);
         }
 
         els.clearBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Stop label click
             e.stopPropagation();
             resetUI();
         });
@@ -290,57 +269,83 @@
         els.convertBtn.addEventListener('click', async () => {
             if (!currentFile) return;
 
-            // Loading State
+            // Start UI
             els.convertBtn.disabled = true;
             els.spinner.classList.remove('hidden');
-            els.btnText.textContent = 'Processing...';
+            els.btnText.textContent = 'Starting Engine...';
             els.progressArea.classList.remove('opacity-0');
+            els.statusText.textContent = 'Initializing...';
+            els.progressBar.style.width = '0%';
             els.output.value = '';
-            toggleActionButtons(false);
+            
+            // Timeout safety
+            const timeoutId = setTimeout(() => {
+                if (els.spinner.classList.contains('hidden')) return; // Already done
+                showToast('Operation timed out. Check network.', 'error');
+                resetProcessingUI();
+            }, 45000); // 45 seconds timeout
 
             try {
-                // Tesseract v5 Syntax (Fixed)
+                // Initialize Worker
                 const worker = await Tesseract.createWorker('eng', 1, {
                     logger: m => {
+                        // Detailed Status Updates
                         if (m.status === 'recognizing text') {
+                            els.statusText.textContent = 'Reading Text...';
                             const pct = Math.round(m.progress * 100);
                             els.progressBar.style.width = `${pct}%`;
                             els.progressText.innerText = `${pct}%`;
+                        } else {
+                            // Clean up status strings: "loading tesseract core" -> "Loading Tesseract Core"
+                            const cleanStatus = m.status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                            els.statusText.textContent = cleanStatus;
+                            if(m.status.includes('downloading')) {
+                                els.progressText.innerText = '...';
+                            }
                         }
                     }
                 });
 
+                els.btnText.textContent = 'Analyzing...';
                 const { data: { text } } = await worker.recognize(currentFile);
+                
                 await worker.terminate();
+                clearTimeout(timeoutId);
 
-                // Success State
-                els.output.value = text.trim();
-                updateStats();
-                toggleActionButtons(true);
-                showToast('Text extracted successfully!');
+                // Result
+                if (!text || text.trim().length === 0) {
+                    showToast('No text found in image', 'error');
+                } else {
+                    els.output.value = text.trim();
+                    updateStats();
+                    toggleActionButtons(true);
+                    showToast('Text extracted successfully!');
+                }
 
             } catch (err) {
                 console.error(err);
-                showToast('Failed to process image', 'error');
+                clearTimeout(timeoutId);
+                showToast('Extraction failed. Try a clearer image.', 'error');
             } finally {
-                // Reset Button
-                els.convertBtn.disabled = false;
-                els.spinner.classList.add('hidden');
-                els.btnText.textContent = 'Extract Text';
-                
-                // Hide progress bar slowly
-                setTimeout(() => {
-                    els.progressArea.classList.add('opacity-0');
-                    setTimeout(() => {
-                        els.progressBar.style.width = '0%';
-                        els.progressText.innerText = '0%';
-                    }, 300);
-                }, 2000);
+                resetProcessingUI();
             }
         });
 
-        // --- Utilities & Listeners ---
+        function resetProcessingUI() {
+            els.convertBtn.disabled = false;
+            els.spinner.classList.add('hidden');
+            els.btnText.textContent = 'Extract Text';
+            // Delay hiding progress
+            setTimeout(() => {
+                els.progressArea.classList.add('opacity-0');
+                setTimeout(() => {
+                    els.progressBar.style.width = '0%';
+                    els.progressText.innerText = '0%';
+                }, 300);
+            }, 3000);
+        }
 
+        // --- Utilities ---
         els.output.addEventListener('input', updateStats);
 
         function updateStats() {
@@ -368,18 +373,21 @@
             a.download = 'optitext-result.txt';
             a.click();
             URL.revokeObjectURL(url);
-            showToast('Download started');
         });
 
         function showToast(msg, type = 'success') {
             els.toastMsg.textContent = msg;
-            // Reset transforms
-            els.toast.classList.remove('translate-x-full', 'opacity-0');
             
-            // Auto hide
-            setTimeout(() => {
-                els.toast.classList.add('translate-x-full', 'opacity-0');
-            }, 3000);
+            if (type === 'error') {
+                els.toastIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>`;
+                els.toastIcon.className = "bg-red-500/20 p-1 rounded-full";
+            } else {
+                els.toastIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>`;
+                els.toastIcon.className = "bg-green-500/20 p-1 rounded-full";
+            }
+
+            els.toast.classList.remove('translate-x-full', 'opacity-0');
+            setTimeout(() => els.toast.classList.add('translate-x-full', 'opacity-0'), 4000);
         }
     </script>
 </body>
