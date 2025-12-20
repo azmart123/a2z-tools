@@ -3,337 +3,463 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Easy Background Remover</title>
+<title>Pro Multi-Color Remover</title>
 <style>
     :root {
-        --bg: #111827;
-        --panel: #1f2937;
-        --primary: #6366f1;
-        --text: #f3f4f6;
-        --border: #374151;
+        --bg-main: #0f172a;
+        --bg-panel: #1e293b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #334155;
+        --danger: #ef4444;
     }
 
+    * { box-sizing: border-box; outline: none; }
+    
     body {
         margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: var(--bg);
-        color: var(--text);
+        font-family: 'Segoe UI', Inter, sans-serif;
+        background: var(--bg-main);
+        color: var(--text-main);
         height: 100vh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
     }
 
-    /* Top Bar */
+    /* Header */
     header {
         height: 60px;
-        background: var(--panel);
+        background: var(--bg-panel);
         border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
-        padding: 0 20px;
+        padding: 0 24px;
         justify-content: space-between;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        z-index: 20;
     }
 
-    .logo { font-weight: bold; font-size: 1.2rem; color: #fff; }
-    
-    /* Main Area */
-    .container {
+    .brand { font-weight: 700; font-size: 1.25rem; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Layout */
+    .app-layout {
         display: flex;
         flex: 1;
         height: calc(100vh - 60px);
     }
 
     /* Sidebar */
-    .sidebar {
-        width: 300px;
-        background: var(--panel);
+    aside {
+        width: 320px;
+        background: var(--bg-panel);
         border-right: 1px solid var(--border);
-        padding: 20px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        padding: 20px;
+        gap: 24px;
+        overflow-y: auto;
         z-index: 10;
     }
 
-    /* Canvas Area */
-    .workspace {
+    .control-section { display: flex; flex-direction: column; gap: 10px; }
+    .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600; }
+
+    /* Color Chips */
+    .color-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-height: 40px;
+        background: rgba(0,0,0,0.2);
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px dashed var(--border);
+    }
+    
+    .color-chip {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid white;
+        cursor: pointer;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        transition: transform 0.2s;
+    }
+    .color-chip:hover { transform: scale(1.1); }
+    .color-chip::after {
+        content: '×';
+        position: absolute;
+        top: -4px; right: -4px;
+        background: var(--danger);
+        color: white;
+        width: 14px; height: 14px;
+        border-radius: 50%;
+        font-size: 10px;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .color-chip:hover::after { opacity: 1; }
+
+    /* Sliders */
+    input[type=range] {
+        width: 100%;
+        height: 6px;
+        background: var(--bg-main);
+        border-radius: 3px;
+        appearance: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px; height: 18px;
+        background: var(--primary);
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+    /* Buttons */
+    .btn {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+    .btn-outline:hover { border-color: var(--text-main); color: var(--text-main); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Workspace */
+    main {
         flex: 1;
-        background-color: #000;
+        position: relative;
+        background-color: #111;
         background-image: 
             linear-gradient(45deg, #222 25%, transparent 25%), 
             linear-gradient(-45deg, #222 25%, transparent 25%), 
             linear-gradient(45deg, transparent 75%, #222 75%), 
             linear-gradient(-45deg, transparent 75%, #222 75%);
         background-size: 20px 20px;
-        position: relative;
-        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
     }
 
     canvas {
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        max-width: 95%;
+        max-height: 95%;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         cursor: crosshair;
-        max-width: 100%;
-        max-height: 100%;
+        transition: transform 0.1s;
     }
 
-    /* Controls */
-    .control-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #9ca3af; }
-    
-    input[type="range"] {
-        width: 100%;
-        accent-color: var(--primary);
-    }
-
-    .btn {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-        width: 100%;
-    }
-    .btn:hover { opacity: 0.9; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); margin-top: 10px; }
-
-    .color-box {
-        height: 40px;
-        border-radius: 6px;
-        border: 2px solid white;
-        cursor: pointer;
-        background: white;
-    }
-
-    /* Loading */
-    .loader {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0,0,0,0.8);
-        padding: 20px;
-        border-radius: 10px;
-        display: none;
-        z-index: 100;
-    }
-    .loader.active { display: block; }
-    
     /* Upload Screen */
-    .upload-screen {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: var(--bg);
+    .empty-state {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        background: rgba(15, 23, 42, 0.95);
         z-index: 50;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
     }
-    .upload-box {
+    .upload-zone {
         border: 2px dashed var(--border);
-        padding: 50px;
-        border-radius: 20px;
+        padding: 60px;
+        border-radius: 16px;
         text-align: center;
+        transition: 0.3s;
         cursor: pointer;
     }
-    .upload-box:hover { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+    .upload-zone:hover { border-color: var(--primary); background: rgba(59, 130, 246, 0.1); }
 
+    /* Loader */
+    .loader {
+        position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+        background: #000; color: #fff; padding: 10px 20px; border-radius: 30px;
+        font-size: 0.85rem; display: none; align-items: center; gap: 10px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .loader.active { display: flex; }
+    .spinner { width: 14px; height: 14px; border: 2px solid #555; border-top-color: #fff; border-radius: 50%; animation: s 1s infinite linear; }
+    @keyframes s { to { transform: rotate(360deg); } }
+
+    /* Hint */
+    .hint-bubble {
+        background: rgba(59, 130, 246, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        padding: 12px; border-radius: 8px; font-size: 0.85rem; line-height: 1.4;
+        color: #bfdbfe;
+    }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">AutoRemove</div>
-    <button class="btn" style="width: auto;" id="downloadBtn" disabled>Download Image</button>
+    <div class="brand">MultiColor <span style="font-weight:400; opacity:0.7">Remover</span></div>
+    <button id="downloadBtn" class="btn btn-primary" disabled>Download PNG</button>
 </header>
 
-<div class="container">
-    <div class="sidebar">
-        <div class="control-group">
-            <label>Selected Color (Click image to change)</label>
-            <div class="color-box" id="colorPreview"></div>
+<div class="app-layout">
+    <aside>
+        <div class="control-section">
+            <span class="section-label">Active Colors</span>
+            <div class="color-list" id="colorList">
+                <span style="font-size:0.8rem; color:var(--text-muted); width:100%; text-align:center; padding:10px;">Click image to add colors</span>
+            </div>
+            <div class="hint-bubble">
+                💡 <b>Tip:</b> Click on different parts of the background (shadows, lights) to remove them all.
+            </div>
         </div>
 
-        <div class="control-group">
-            <label>Tolerance (Power): <span id="tolVal">15</span>%</label>
-            <input type="range" id="tolerance" min="1" max="100" value="15">
+        <hr style="border:0; border-top:1px solid var(--border)">
+
+        <div class="control-section">
+            <div style="display:flex; justify-content:space-between;">
+                <span class="section-label">Tolerance</span>
+                <span class="section-label" id="tolVal">15%</span>
+            </div>
+            <input type="range" id="tolerance" min="1" max="50" value="15">
         </div>
 
-        <div class="control-group">
-            <label>Edge Smoothing</label>
+        <div class="control-section">
+            <div style="display:flex; justify-content:space-between;">
+                <span class="section-label">Edge Softness</span>
+                <span class="section-label" id="smoothVal">2px</span>
+            </div>
             <input type="range" id="smoothing" min="0" max="10" value="2">
         </div>
 
         <div style="margin-top:auto">
-            <button class="btn btn-outline" onclick="location.reload()">Start Over</button>
+            <button class="btn btn-outline" style="width:100%" onclick="location.reload()">Upload New Image</button>
         </div>
-    </div>
+    </aside>
 
-    <div class="workspace">
-        <div class="upload-screen" id="uploadScreen">
-            <div class="upload-box" onclick="document.getElementById('fileIn').click()">
-                <h2>📁 Upload Image</h2>
-                <p style="color: #9ca3af">Click here to select a photo</p>
+    <main>
+        <div class="empty-state" id="emptyState">
+            <div class="upload-zone" onclick="document.getElementById('fileIn').click()">
+                <div style="font-size:3rem; margin-bottom:15px">🖼️</div>
+                <h3 style="margin:0 0 10px 0">Upload Image</h3>
+                <p style="color:var(--text-muted); margin:0">Click to browse</p>
             </div>
         </div>
-        
         <canvas id="canvas"></canvas>
-        <div class="loader" id="loader">Processing...</div>
-    </div>
+        <div class="loader" id="loader"><div class="spinner"></div> Processing...</div>
+    </main>
 </div>
 
 <input type="file" id="fileIn" hidden accept="image/*">
 
 <script>
-    const fileIn = document.getElementById('fileIn');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    const toleranceInput = document.getElementById('tolerance');
-    const smoothingInput = document.getElementById('smoothing');
-    const colorPreview = document.getElementById('colorPreview');
-    const loader = document.getElementById('loader');
-    
-    let originalData = null; // Stores the original pixels
-    let targetColor = { r: 255, g: 255, b: 255 }; // Color to remove
+    // --- Configuration ---
+    const dom = {
+        fileIn: document.getElementById('fileIn'),
+        emptyState: document.getElementById('emptyState'),
+        canvas: document.getElementById('canvas'),
+        ctx: document.getElementById('canvas').getContext('2d', { willReadFrequently: true }),
+        loader: document.getElementById('loader'),
+        colorList: document.getElementById('colorList'),
+        tolerance: document.getElementById('tolerance'),
+        smoothing: document.getElementById('smoothing'),
+        downloadBtn: document.getElementById('downloadBtn'),
+        tolVal: document.getElementById('tolVal'),
+        smoothVal: document.getElementById('smoothVal')
+    };
 
-    // 1. Upload Logic
-    fileIn.addEventListener('change', (e) => {
+    let state = {
+        originalData: null, // Immutable copy of original pixels
+        width: 0,
+        height: 0,
+        selectedColors: [], // Array of {r,g,b}
+    };
+
+    // --- Upload ---
+    dom.fileIn.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if(!file) return;
-        
-        const img = new Image();
-        img.onload = () => {
-            // Set canvas size
-            let w = img.width;
-            let h = img.height;
-            
-            // Limit size for speed (Optional, helps if image is 4K+)
-            if(w > 2000) { h = Math.round(h * (2000/w)); w = 2000; }
-            
-            canvas.width = w;
-            canvas.height = h;
-            ctx.drawImage(img, 0, 0, w, h);
-            
-            // Save original pixels
-            originalData = ctx.getImageData(0, 0, w, h);
-            
-            // Hide upload screen
-            document.getElementById('uploadScreen').style.display = 'none';
-            document.getElementById('downloadBtn').disabled = false;
-            
-            // Auto detect background
-            autoDetectBackground();
+
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const img = new Image();
+            img.onload = () => {
+                // Resize if too huge (Max 2500px)
+                let w = img.width;
+                let h = img.height;
+                const maxDim = 2500;
+                if(w > maxDim || h > maxDim) {
+                    const ratio = Math.min(maxDim/w, maxDim/h);
+                    w = Math.round(w*ratio);
+                    h = Math.round(h*ratio);
+                }
+
+                dom.canvas.width = state.width = w;
+                dom.canvas.height = state.height = h;
+                dom.ctx.drawImage(img, 0, 0, w, h);
+                
+                state.originalData = dom.ctx.getImageData(0, 0, w, h);
+                dom.emptyState.style.display = 'none';
+                dom.downloadBtn.disabled = false;
+                
+                // Auto-pick first color (Top Left)
+                pickColor(0, 0);
+            };
+            img.src = evt.target.result;
         };
-        img.src = URL.createObjectURL(file);
+        reader.readAsDataURL(file);
     });
 
-    // 2. Main Removal Function (No AI, Pure Math)
-    function removeBackground() {
-        if (!originalData) return;
-        
-        loader.classList.add('active'); // Show loading
+    // --- Logic ---
+    function processImage() {
+        if(!state.originalData) return;
 
-        // Give UI time to show loader
+        dom.loader.classList.add('active');
+
+        // Use timeout to allow UI to update loader
         setTimeout(() => {
-            const w = canvas.width;
-            const h = canvas.height;
-            const tolerance = parseInt(toleranceInput.value);
-            const smoothing = parseInt(smoothingInput.value);
+            const w = state.width;
+            const h = state.height;
+            const tolerance = parseInt(dom.tolerance.value);
+            const smoothing = parseInt(dom.smoothing.value);
             
-            // Get fresh copy of original pixels
-            const newData = new ImageData(
-                new Uint8ClampedArray(originalData.data),
+            // Create fresh buffer from original
+            const outputImage = new ImageData(
+                new Uint8ClampedArray(state.originalData.data),
                 w, h
             );
-            const data = newData.data;
+            const data = outputImage.data;
+            const colors = state.selectedColors;
 
-            // Math setup
-            const tr = targetColor.r;
-            const tg = targetColor.g;
-            const tb = targetColor.b;
-            const threshold = (tolerance / 100) * 442; // Max color distance
+            // Pre-calculate squared thresholds
+            // Tolerance (0-100) mapped to color distance (0-442)
+            const threshold = (tolerance / 100) * 442; 
             const thresholdSq = threshold * threshold;
             const smoothSq = (threshold + smoothing * 10) ** 2;
 
+            // Iterate all pixels
             for (let i = 0; i < data.length; i += 4) {
                 const r = data[i];
                 const g = data[i+1];
                 const b = data[i+2];
 
-                // Calculate color difference
-                const distSq = (r-tr)**2 + (g-tg)**2 + (b-tb)**2;
+                // Find the closest distance to ANY selected color
+                let minDistSq = Infinity;
 
-                if (distSq < thresholdSq) {
-                    data[i+3] = 0; // Transparent
-                } else if (distSq < smoothSq) {
-                    // Smooth edge
-                    const factor = (distSq - thresholdSq) / (smoothSq - thresholdSq);
-                    data[i+3] = factor * 255;
+                for (let c = 0; c < colors.length; c++) {
+                    const tr = colors[c].r;
+                    const tg = colors[c].g;
+                    const tb = colors[c].b;
+                    const distSq = (r-tr)**2 + (g-tg)**2 + (b-tb)**2;
+                    if(distSq < minDistSq) minDistSq = distSq;
+                }
+
+                // Apply Transparency based on closest match
+                if (minDistSq < thresholdSq) {
+                    data[i+3] = 0; // Fully transparent
+                } else if (minDistSq < smoothSq) {
+                    // Smooth Edge
+                    const alpha = (minDistSq - thresholdSq) / (smoothSq - thresholdSq);
+                    data[i+3] = Math.floor(alpha * 255);
                 }
             }
 
-            ctx.putImageData(newData, 0, 0);
-            loader.classList.remove('active');
-        }, 50);
+            dom.ctx.putImageData(outputImage, 0, 0);
+            dom.loader.classList.remove('active');
+        }, 30);
     }
 
-    // 3. Auto Detect Background (Corners)
-    function autoDetectBackground() {
-        const data = originalData.data;
-        const w = canvas.width;
-        // Check top-left pixel
-        targetColor = { r: data[0], g: data[1], b: data[2] };
-        updateColorUI();
-        removeBackground();
-    }
-
-    // 4. Click to pick color
-    canvas.addEventListener('click', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        // Calculate correct position considering resize/fit
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
+    // --- Interaction ---
+    dom.canvas.addEventListener('mousedown', (e) => {
+        const rect = dom.canvas.getBoundingClientRect();
+        const scaleX = dom.canvas.width / rect.width;
+        const scaleY = dom.canvas.height / rect.height;
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
         
-        const i = (y * canvas.width + x) * 4;
-        
-        // Pick from ORIGINAL data
-        if(originalData) {
-            targetColor = {
-                r: originalData.data[i],
-                g: originalData.data[i+1],
-                b: originalData.data[i+2]
-            };
-            updateColorUI();
-            removeBackground();
-        }
+        pickColor(x, y);
     });
 
-    function updateColorUI() {
-        colorPreview.style.background = `rgb(${targetColor.r},${targetColor.g},${targetColor.b})`;
+    function pickColor(x, y) {
+        if(!state.originalData) return;
+        const index = (y * state.width + x) * 4;
+        const data = state.originalData.data;
+        
+        const newColor = {
+            r: data[index],
+            g: data[index+1],
+            b: data[index+2]
+        };
+
+        // Check if color already roughly exists to avoid duplicates
+        const isDuplicate = state.selectedColors.some(c => 
+            Math.abs(c.r - newColor.r) < 10 && 
+            Math.abs(c.g - newColor.g) < 10 && 
+            Math.abs(c.b - newColor.b) < 10
+        );
+
+        if(!isDuplicate) {
+            state.selectedColors.push(newColor);
+            updateColorListUI();
+            processImage();
+        }
     }
 
-    // Event Listeners
-    toleranceInput.addEventListener('input', (e) => {
-        document.getElementById('tolVal').innerText = e.target.value;
-    });
-    toleranceInput.addEventListener('change', removeBackground); // Process on release
-    smoothingInput.addEventListener('change', removeBackground);
+    function removeColor(index) {
+        state.selectedColors.splice(index, 1);
+        updateColorListUI();
+        if(state.selectedColors.length === 0) {
+            // Restore original image if no colors selected
+            dom.ctx.putImageData(state.originalData, 0, 0);
+        } else {
+            processImage();
+        }
+    }
 
-    document.getElementById('downloadBtn').addEventListener('click', () => {
+    // --- UI Updates ---
+    function updateColorListUI() {
+        dom.colorList.innerHTML = '';
+        
+        if(state.selectedColors.length === 0) {
+            dom.colorList.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted); width:100%; text-align:center; padding:10px;">No colors selected</span>';
+            return;
+        }
+
+        state.selectedColors.forEach((c, idx) => {
+            const chip = document.createElement('div');
+            chip.className = 'color-chip';
+            chip.style.backgroundColor = `rgb(${c.r}, ${c.g}, ${c.b})`;
+            chip.title = `Remove Color ${idx+1}`;
+            chip.onclick = (e) => {
+                e.stopPropagation(); // Prevent canvas click
+                removeColor(idx);
+            };
+            dom.colorList.appendChild(chip);
+        });
+    }
+
+    // --- Events ---
+    dom.tolerance.addEventListener('input', (e) => dom.tolVal.innerText = e.target.value + '%');
+    dom.tolerance.addEventListener('change', processImage);
+    
+    dom.smoothing.addEventListener('input', (e) => dom.smoothVal.innerText = e.target.value + 'px');
+    dom.smoothing.addEventListener('change', processImage);
+
+    dom.downloadBtn.addEventListener('click', () => {
         const link = document.createElement('a');
-        link.download = 'removed_bg.png';
-        link.href = canvas.toDataURL();
+        link.download = 'multi-remove-bg.png';
+        link.href = dom.canvas.toDataURL();
         link.click();
     });
 
 </script>
-
 </body>
 </html>
