@@ -3,319 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Converter - a2z tools</title>
-    <!-- Favicon (replace with your actual favicon.ico in the same directory or update path) -->
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
-    <!-- Google Fonts -->
+    <title>Image Converter - Tools Wonder</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="../style.css">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --primary-blue-dark: #0056b3;
+            --light-blue-bg: #e7f3ff;
+            --text-dark: #212529;
+            --text-light: #6c757d;
+            --bg-white: #ffffff;
+            --border-color: #dee2e6;
+            --border-radius: 8px;
+            --font-primary: 'Roboto', sans-serif;
+            --font-headings: 'Montserrat', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-dark);
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+
+        .site-header { background-color: var(--bg-white); padding: 15px 0; border-bottom: 1px solid var(--border-color); text-align: center; }
+        .site-header a { text-decoration: none; font-family: var(--font-headings); font-size: 1.9rem; font-weight: 700; color: var(--text-dark); }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 20px; background: var(--bg-white); border-radius: var(--border-radius); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        
+        h2 { font-family: var(--font-headings); text-align: center; color: var(--text-dark); margin-bottom: 10px; }
+        .desc { text-align: center; color: var(--text-light); margin-bottom: 30px; }
+
+        /* Modern Drag & Drop Zone */
+        .upload-zone {
+            border: 2px dashed var(--primary-blue);
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            text-align: center;
+            background-color: var(--light-blue-bg);
+            cursor: pointer;
+            transition: 0.3s ease;
+            position: relative;
+        }
+        .upload-zone:hover { background-color: #d1e7ff; }
+        .upload-zone i { font-size: 3rem; color: var(--primary-blue); margin-bottom: 15px; }
+        .upload-zone p { font-size: 1.1rem; font-weight: 500; margin: 0; }
+        .upload-zone input[type="file"] {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;
+        }
+
+        /* Preview Area */
+        .preview-area { display: none; text-align: center; margin-top: 30px; }
+        .preview-area img { max-width: 100%; max-height: 300px; border-radius: var(--border-radius); border: 1px solid var(--border-color); margin-bottom: 20px; }
+
+        /* Controls */
+        .controls { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
+        .control-group { display: flex; flex-direction: column; text-align: left; }
+        .control-group label { font-weight: 500; margin-bottom: 5px; }
+        select, input[type="range"] { padding: 10px; border: 1px solid var(--border-color); border-radius: 5px; font-size: 1rem; }
+        
+        .tool-button {
+            background-color: var(--primary-blue); color: var(--bg-white); border: none;
+            padding: 12px 24px; border-radius: var(--border-radius); font-weight: 500;
+            cursor: pointer; font-size: 1rem; transition: 0.3s; margin-top: 10px; text-transform: uppercase;
+        }
+        .tool-button:hover { background-color: var(--primary-blue-dark); transform: translateY(-2px); }
+
+        .back-link { display: block; text-align: center; margin-top: 20px; color: var(--primary-blue); text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+
+    </style>
 </head>
 <body>
 
-    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
-    <!-- ======================= Top Header ======================= -->
     <header class="site-header">
-        <div class="container header-container">
-            <div class="logo">
-                <a href="../index.html">Tools Wonder</a>
-            </div>
-            <nav class="main-nav" id="mainNav">
-                <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../index.html#tools-section-start">Tools</a></li>
-                    <li><a href="../index.html#contact-footer">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="header-contact">
-                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
-                    <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
-                </a>
-            </div>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                <i class="fas fa-moon"></i>
-            </button>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
-                <span class="hamburger"></span>
-            </button>
-        </div>
+        <a href="index.html">Tools Wonder</a>
     </header>
 
-    <!-- ======================= Tool Content ======================= -->
-    <main>
-        <section class="tool-category">
-            <div class="container">
-                <h2><i class="fas fa-exchange-alt"></i> Image Converter</h2>
-                <p class="category-subheading">Convert your images between different formats (JPG, PNG, WEBP) with ease. Upload an image and select your desired output format.</p>
-                <div class="tool-interface">
-                    <!-- Upload Area -->
-                    <div class="upload-area" id="uploadArea">
-                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <h3>Drag & Drop Your Image Here</h3>
-                        <p>or <span class="upload-link" id="uploadLink">browse files</span></p>
-                        <p>Supports JPG, PNG, WEBP up to 10MB</p>
-                    </div>
+    <div class="container">
+        <h2><i class="fas fa-exchange-alt"></i> Image Converter</h2>
+        <p class="desc">Convert your images to JPG, PNG, or WEBP instantly. Everything happens securely in your browser!</p>
 
-                    <!-- Converter Workspace -->
-                    <div class="converter-workspace" id="converterWorkspace" style="display: none;">
-                        <!-- Preview Section -->
-                        <div class="preview-section">
-                            <h3>Image Preview</h3>
-                            <img id="originalImage" class="image-preview" alt="Original Image" style="display: none;">
-                            <div id="imageInfo" class="image-info">
-                                <span id="originalFormat">Format: -</span> | <span id="originalSize">Size: -</span>
-                            </div>
-                        </div>
+        <div class="upload-zone" id="dropZone">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drag & Drop your image here</p>
+            <span style="color: var(--text-light); font-size: 0.9rem;">or click to browse files</span>
+            <input type="file" id="imageInput" accept="image/png, image/jpeg, image/webp, image/gif">
+        </div>
 
-                        <!-- Controls Panel -->
-                        <div class="controls-panel">
-                            <h3>Conversion Settings</h3>
-                            
-                            <div class="control-group">
-                                <label for="formatSelect">Output Format</label>
-                                <select id="formatSelect">
-                                    <option value="image/jpeg">JPG</option>
-                                    <option value="image/png">PNG</option>
-                                    <option value="image/webp">WEBP</option>
-                                </select>
-                            </div>
-
-                            <div class="control-group" id="qualityGroup">
-                                <label for="qualitySlider">Quality: <span id="qualityValue">90%</span></label>
-                                <input type="range" id="qualitySlider" min="10" max="100" value="90">
-                                <div class="range-hints">
-                                    <small>Low</small>
-                                    <small>High</small>
-                                </div>
-                            </div>
-
-                            <button id="convertBtn" class="convert-button">
-                                <i class="fas fa-exchange-alt"></i> Convert Image
-                            </button>
-
-                            <button id="downloadBtn" class="convert-button" style="display: none; margin-top: 10px;">
-                                <i class="fas fa-download"></i> Download Converted Image
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Loading and Error Messages -->
-                    <div class="loading" id="loading" style="display: none;">
-                        <i class="fas fa-spinner fa-spin"></i> Converting image...
-                    </div>
-                    
-                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+        <div class="preview-area" id="previewArea">
+            <img id="imagePreview" src="" alt="Preview">
+            
+            <div class="controls">
+                <div class="control-group">
+                    <label>Convert To:</label>
+                    <select id="formatSelect">
+                        <option value="image/jpeg">JPG / JPEG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp">WEBP</option>
+                    </select>
                 </div>
-            </div>
-        </section>
-    </main>
+                
+                <div class="control-group" id="qualityGroup">
+                    <label>Quality: <span id="qualityValue">90%</span></label>
+                    <input type="range" id="qualityInput" min="0.1" max="1" step="0.1" value="0.9">
+                </div>
 
-    <!-- ======================= Footer ======================= -->
-    <footer id="contact-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Tools Wonder</h3>
-                    <p>Your ultimate collection of online tools for productivity and creativity.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="../index.html">Home</a></li>
-                        <li><a href="../index.html#tools-section-start">Tools</a></li>
-                        <li><a href="../index.html#contact-footer">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact Us</h4>
-                    <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Tools Wonder. All rights reserved.</p>
+                <button class="tool-button" id="convertBtn"><i class="fas fa-download"></i> Convert & Download</button>
             </div>
         </div>
-    </footer>
 
-    <!-- Custom JavaScript -->
-    <script src="../script.js"></script>
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tools</a>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageInput = document.getElementById('imageInput');
-            const uploadArea = document.getElementById('uploadArea');
-            const uploadLink = document.getElementById('uploadLink');
-            const converterWorkspace = document.getElementById('converterWorkspace');
-            const originalImage = document.getElementById('originalImage');
-            const imageInfo = document.getElementById('imageInfo');
-            const originalFormat = document.getElementById('originalFormat');
-            const originalSize = document.getElementById('originalSize');
-            const formatSelect = document.getElementById('formatSelect');
-            const qualityGroup = document.getElementById('qualityGroup');
-            const qualitySlider = document.getElementById('qualitySlider');
-            const qualityValue = document.getElementById('qualityValue');
-            const convertBtn = document.getElementById('convertBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const loading = document.getElementById('loading');
-            const errorMessage = document.getElementById('errorMessage');
+        const imageInput = document.getElementById('imageInput');
+        const previewArea = document.getElementById('previewArea');
+        const imagePreview = document.getElementById('imagePreview');
+        const formatSelect = document.getElementById('formatSelect');
+        const qualityInput = document.getElementById('qualityInput');
+        const qualityValue = document.getElementById('qualityValue');
+        const qualityGroup = document.getElementById('qualityGroup');
+        const convertBtn = document.getElementById('convertBtn');
+        const dropZone = document.getElementById('dropZone');
 
-            let currentImage = null;
-            let currentFile = null;
+        let currentImage = null;
+        let originalFileName = "";
 
-            // Upload link click handler
-            uploadLink.addEventListener('click', () => {
-                imageInput.click();
-            });
-
-            // File input change handler
-            imageInput.addEventListener('change', handleFileSelect);
-
-            // Drag and drop handlers
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleFile(files[0]);
-                }
-            });
-
-            // Click to upload
-            uploadArea.addEventListener('click', () => {
-                imageInput.click();
-            });
-
-            function handleFileSelect(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    handleFile(file);
-                }
-            }
-
-            function handleFile(file) {
-                if (!file.type.startsWith('image/')) {
-                    showError('Please select a valid image file.');
-                    return;
-                }
-
-                if (file.size > 10 * 1024 * 1024) { // 10MB limit
-                    showError('File size must be less than 10MB.');
-                    return;
-                }
-
-                currentFile = file;
-                hideError();
-
-                // Track tool usage
-                trackToolUsage('Image Converter');
-
+        // Handle file selection
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                originalFileName = file.name.split('.')[0]; // Get name without extension
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        currentImage = img;
-                        originalImage.src = e.target.result;
-                        originalImage.style.display = 'block';
-                        
-                        // Update image info
-                        const format = file.type.split('/')[1].toUpperCase();
-                        originalFormat.textContent = `Format: ${format}`;
-                        originalSize.textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
-                        
-                        // Show workspace
-                        converterWorkspace.style.display = 'grid';
-                        updateQualityControl();
-                    };
-                    img.src = e.target.result;
-                };
+                reader.onload = function(event) {
+                    currentImage = new Image();
+                    currentImage.onload = function() {
+                        imagePreview.src = currentImage.src;
+                        dropZone.style.display = 'none';
+                        previewArea.style.display = 'block';
+                    }
+                    currentImage.src = event.target.result;
+                }
                 reader.readAsDataURL(file);
             }
+        });
 
-            // Format change handler
-            formatSelect.addEventListener('change', updateQualityControl);
-
-            function updateQualityControl() {
-                const format = formatSelect.value;
-                if (format === 'image/jpeg' || format === 'image/webp') {
-                    qualityGroup.style.display = 'block';
-                } else {
-                    qualityGroup.style.display = 'none';
-                }
+        // Hide quality slider if PNG is selected (PNG is lossless)
+        formatSelect.addEventListener('change', function() {
+            if (this.value === 'image/png') {
+                qualityGroup.style.display = 'none';
+            } else {
+                qualityGroup.style.display = 'flex';
             }
+        });
 
-            // Quality slider handler
-            qualitySlider.addEventListener('input', function() {
-                qualityValue.textContent = qualitySlider.value + '%';
-            });
+        // Update quality text
+        qualityInput.addEventListener('input', function() {
+            qualityValue.innerText = Math.round(this.value * 100) + '%';
+        });
 
-            // Convert button handler
-            convertBtn.addEventListener('click', convertImage);
+        // Convert and Download Logic using HTML5 Canvas
+        convertBtn.addEventListener('click', function() {
+            if (!currentImage) return;
 
-            function convertImage() {
-                if (!currentImage) return;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = currentImage.width;
+            canvas.height = currentImage.height;
 
-                const format = formatSelect.value;
-                const quality = parseInt(qualitySlider.value) / 100;
+            // Draw image on canvas
+            ctx.drawImage(currentImage, 0, 0);
 
-                hideError();
-                loading.style.display = 'block';
-                convertBtn.disabled = true;
+            // Get format and quality
+            const format = formatSelect.value;
+            const quality = parseFloat(qualityInput.value);
+            const extension = format.split('/')[1];
 
-                setTimeout(() => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = currentImage.width;
-                    canvas.height = currentImage.height;
+            // Convert to data URL
+            const convertedDataUrl = canvas.toDataURL(format, format === 'image/png' ? undefined : quality);
 
-                    ctx.drawImage(currentImage, 0, 0);
-
-                    const mimeType = format;
-                    const extension = format.split('/')[1].toUpperCase();
-
-                    canvas.toBlob(function(blob) {
-                        const url = URL.createObjectURL(blob);
-                        
-                        // Update preview with converted image
-                        originalImage.src = url;
-                        originalFormat.textContent = `Format: ${extension}`;
-                        originalSize.textContent = `Size: ${(blob.size / 1024).toFixed(2)} KB`;
-
-                        // Setup download
-                        downloadBtn.style.display = 'block';
-                        downloadBtn.onclick = function() {
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `converted-image.${extension.toLowerCase()}`;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                        };
-
-                        loading.style.display = 'none';
-                        convertBtn.disabled = false;
-                    }, mimeType, quality);
-                }, 100);
-            }
-
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-            }
-
-            function hideError() {
-                errorMessage.style.display = 'none';
-            }
+            // Trigger Download
+            const link = document.createElement('a');
+            link.download = `${originalFileName}_converted.${extension === 'jpeg' ? 'jpg' : extension}`;
+            link.href = convertedDataUrl;
+            link.click();
         });
     </script>
 </body>
