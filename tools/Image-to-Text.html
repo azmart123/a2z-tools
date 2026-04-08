@@ -3,63 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OptiText Pro | Intelligent OCR</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tesseract.js v5 -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <title>Image to Text (OCR) - a2z tools</title>
+    <!-- Favicon (replace with your actual favicon.ico in the same directory or update path) -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            500: '#14b8a6', // Teal
-                            600: '#0d9488',
-                            700: '#0f766e',
-                            900: '#134e4a',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        /* Modern Scrollbar */
-        .custom-scroll::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scroll::-webkit-scrollbar-track {
-            background: transparent; 
-        }
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 10px;
-        }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
-
-        /* Glassmorphism utilities */
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../style.css">
 </head>
+<body>
+
+    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
+    <!-- ======================= Top Header ======================= -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="../index.html">Tools Wonder</a>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#tools-section-start">Tools</a></li>
+                    <li><a href="../index.html#contact-footer">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
+                    <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ======================= Tool Content ======================= -->
+    <main>
+        <section class="tool-category">
+            <div class="container">
+                <h2><i class="fas fa-file-alt"></i> Image to Text (OCR)</h2>
+                <p class="category-subheading">Extract editable text from images using advanced OCR technology. Supports JPG, PNG, and other common image formats.</p>
+                <div class="tool-interface">
+                    <div class="upload-section">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button id="uploadBtn" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </button>
+                        <p id="fileName" class="file-info">No file selected</p>
+                    </div>
+
+                    <div class="ocr-preview" id="ocrPreview" style="display: none;">
+                        <h3>Image Preview</h3>
+                        <img id="previewImage" alt="Preview">
+                        <button id="extractBtn" class="btn btn-secondary">
+                            <i class="fas fa-magic"></i> Extract Text
+                        </button>
+                    </div>
+
+                    <div class="ocr-result" id="ocrResult" style="display: none;">
+                        <h3>Extracted Text</h3>
+                        <textarea id="extractedText" readonly rows="10" placeholder="Extracted text will appear here..."></textarea>
+                        <button id="copyBtn" class="btn btn-primary">
+                            <i class="fas fa-copy"></i> Copy Text
+                        </button>
+                    </div>
+
+                    <div class="loading" id="loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Processing image...
+                    </div>
+
+                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======================= Footer ======================= -->
+    <footer id="contact-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tools Wonder</h3>
+                    <p>Your ultimate collection of online tools for productivity and creativity.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#tools-section-start">Tools</a></li>
+                        <li><a href="../index.html#contact-footer">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tools Wonder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileName = document.getElementById('fileName');
+            const ocrPreview = document.getElementById('ocrPreview');
+            const previewImage = document.getElementById('previewImage');
+            const extractBtn = document.getElementById('extractBtn');
+            const ocrResult = document.getElementById('ocrResult');
+            const extractedText = document.getElementById('extractedText');
+            const copyBtn = document.getElementById('copyBtn');
+            const loading = document.getElementById('loading');
+            const errorMessage = document.getElementById('errorMessage');
+
+            let selectedFile = null;
+
+            uploadBtn.addEventListener('click', () => {
+                imageInput.click();
+            });
+
+            imageInput.addEventListener('change', handleFileSelect);
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!file.type.startsWith('image/')) {
+                    showError('Please select a valid image file.');
+                    return;
+                }
+
+                selectedFile = file;
+                fileName.textContent = file.name;
+                hideError();
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    ocrPreview.style.display = 'block';
+                    ocrResult.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            extractBtn.addEventListener('click', extractText);
+
+            function extractText() {
+                if (!selectedFile) return;
+
+                showLoading();
+
+                const formData = new FormData();
+                formData.append('image', selectedFile);
+
+                fetch('http://localhost:5000/ocr', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        extractedText.value = data.text;
+                        ocrResult.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    showError('Failed to process image. Please try again.');
+                    console.error('Error:', error);
+                });
+            }
+
+            copyBtn.addEventListener('click', () => {
+                extractedText.select();
+                document.execCommand('copy');
+                // Visual feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            });
+
+            function showLoading() {
+                loading.style.display = 'block';
+                extractBtn.disabled = true;
+            }
+
+            function hideLoading() {
+                loading.style.display = 'none';
+                extractBtn.disabled = false;
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col lg:h-screen lg:overflow-hidden selection:bg-brand-500 selection:text-white">
 
     <!-- Navbar -->

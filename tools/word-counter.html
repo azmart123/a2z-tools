@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word & Character Counter - a2z tools</title>
+    <!-- Favicon (replace with your actual favicon.ico in the same directory or update path) -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
+    <!-- ======================= Top Header ======================= -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="../index.html">Tools Wonder</a>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#tools-section-start">Tools</a></li>
+                    <li><a href="../index.html#contact-footer">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
+                    <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ======================= Tool Content ======================= -->
+    <main>
+        <section class="tool-category">
+            <div class="container">
+                <h2><i class="fas fa-sort-numeric-down"></i> Word & Character Counter</h2>
+                <p class="category-subheading">Count words, characters, sentences, and paragraphs in your text in real-time.</p>
+                <div class="tool-interface">
+                    <textarea id="textInput" placeholder="Enter your text here..." rows="10"></textarea>
+                    <div class="results">
+                        <div class="result-item">
+                            <h3>Words</h3>
+                            <p id="wordCount">0</p>
+                        </div>
+                        <div class="result-item">
+                            <h3>Characters</h3>
+                            <p id="charCount">0</p>
+                        </div>
+                        <div class="result-item">
+                            <h3>Characters (no spaces)</h3>
+                            <p id="charNoSpaceCount">0</p>
+                        </div>
+                        <div class="result-item">
+                            <h3>Sentences</h3>
+                            <p id="sentenceCount">0</p>
+                        </div>
+                        <div class="result-item">
+                            <h3>Paragraphs</h3>
+                            <p id="paragraphCount">0</p>
+                        </div>
+                    </div>
+                    <button class="copy-button" id="copyStatsBtn"><i class="fas fa-copy"></i> Copy Statistics</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======================= Footer ======================= -->
+    <footer class="site-footer" id="contact-footer">
+        <div class="container footer-container">
+            <div class="footer-about">
+                <div class="logo">Tools Wonder</div>
+                <p>Simplifying your digital life.</p>
+                <p class="website-builder">Website by: aflah tp</p>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact & Connect</h4>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
+                <div class="social-media">
+                    <a href="https://www.instagram.com/aflah.tp?igsh=MTBjMXFzYWNuMmFseQ==" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/PremiumDealEveryDay" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Join our Telegram channel for premium deals"><i class="fab fa-telegram-plane"></i> Join Telegram Channel</a>
+                </div>
+                <p class="telegram-desc">Premium Deal Every Day: Real-time alerts for Amazon, Flipkart & Paytm loot deals, price errors, and daily steals. Track limited-stock discounts on electronics, fashion, home essentials, and more. Never miss a bargain!</p>
+
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="../index.html#image-tools">Image Tools</a></li>
+                    <li><a href="../index.html#ai-tools">AI Tools</a></li>
+                    <li><a href="../index.html#document-tools">Document Tools</a></li>
+                    <li><a href="../index.html#calculator-tools">Calculator Tools</a></li>
+                     <li><a href="../index.html#text-tools">Text Tools</a></li>
+                    <li><a href="../index.html#web-dev-tools">Web/Dev Tools</a></li>
+                    <li><a href="../index.html#color-tools">Color Tools</a></li>
+                    <li><a href="../index.html#seo-marketing-tools">SEO Tools</a></li>
+                    <li><a href="../index.html#utility-tools">Utility Tools</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="currentYear"></span> a2z tools. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textInput = document.getElementById('textInput');
+            const wordCount = document.getElementById('wordCount');
+            const charCount = document.getElementById('charCount');
+            const charNoSpaceCount = document.getElementById('charNoSpaceCount');
+            const sentenceCount = document.getElementById('sentenceCount');
+            const paragraphCount = document.getElementById('paragraphCount');
+
+            function updateCounts() {
+                const text = textInput.value;
+                const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+                const chars = text.length;
+                const charsNoSpace = text.replace(/\s/g, '').length;
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+                const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+
+                wordCount.textContent = words;
+                charCount.textContent = chars;
+                charNoSpaceCount.textContent = charsNoSpace;
+                sentenceCount.textContent = sentences;
+                paragraphCount.textContent = paragraphs;
+            }
+
+            textInput.addEventListener('input', updateCounts);
+            updateCounts(); // Initial count
+
+            document.getElementById('copyStatsBtn').addEventListener('click', async () => {
+                const stats = `Words: ${wordCount.textContent}\nCharacters: ${charCount.textContent}\nCharacters (no spaces): ${charNoSpaceCount.textContent}\nSentences: ${sentenceCount.textContent}\nParagraphs: ${paragraphCount.textContent}`;
+                try {
+                    await navigator.clipboard.writeText(stats);
+                    const btn = document.getElementById('copyStatsBtn');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-copy"></i> Copy Statistics';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                }
+            });
+        });
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">c:\Users\afeef\OneDrive\Desktop\A2Z Store\New github(2)\a2z tools\a2z-tools\tools\word-counter.html

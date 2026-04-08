@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Case Converter - a2z tools</title>
+    <!-- Favicon (replace with your actual favicon.ico in the same directory or update path) -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
+    <!-- ======================= Top Header ======================= -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="../index.html">Tools Wonder</a>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#tools-section-start">Tools</a></li>
+                    <li><a href="../index.html#contact-footer">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
+                    <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ======================= Tool Content ======================= -->
+    <main>
+        <section class="tool-category">
+            <div class="container">
+                <h2><i class="fas fa-text-height"></i> Text Case Converter</h2>
+                <p class="category-subheading">Convert your text to different case formats with ease.</p>
+                <div class="tool-interface">
+                    <textarea id="inputText" placeholder="Enter your text here..." rows="8"></textarea>
+                    <div class="case-buttons">
+                        <button class="case-button" id="uppercaseBtn">UPPERCASE</button>
+                        <button class="case-button" id="lowercaseBtn">lowercase</button>
+                        <button class="case-button" id="titlecaseBtn">Title Case</button>
+                        <button class="case-button" id="sentencecaseBtn">Sentence case</button>
+                    </div>
+                    <div class="output-section">
+                        <h3>Converted Text:</h3>
+                        <textarea id="outputText" readonly rows="8" placeholder="Converted text will appear here..."></textarea>
+                        <button class="copy-button" id="copyBtn"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======================= Footer ======================= -->
+    <footer class="site-footer" id="contact-footer">
+        <div class="container footer-container">
+            <div class="footer-about">
+                <div class="logo">Tools Wonder</div>
+                <p>Simplifying your digital life.</p>
+                <p class="website-builder">Website by: aflah tp</p>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact & Connect</h4>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
+                <div class="social-media">
+                    <a href="https://www.instagram.com/aflah.tp?igsh=MTBjMXFzYWNuMmFseQ==" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/PremiumDealEveryDay" target="_blank" rel="noopener noreferrer" class="telegram-link" aria-label="Join our Telegram channel for premium deals"><i class="fab fa-telegram-plane"></i> Join Telegram Channel</a>
+                </div>
+                <p class="telegram-desc">Premium Deal Every Day: Real-time alerts for Amazon, Flipkart & Paytm loot deals, price errors, and daily steals. Track limited-stock discounts on electronics, fashion, home essentials, and more. Never miss a bargain!</p>
+
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="../index.html#image-tools">Image Tools</a></li>
+                    <li><a href="../index.html#ai-tools">AI Tools</a></li>
+                    <li><a href="../index.html#document-tools">Document Tools</a></li>
+                    <li><a href="../index.html#calculator-tools">Calculator Tools</a></li>
+                     <li><a href="../index.html#text-tools">Text Tools</a></li>
+                    <li><a href="../index.html#web-dev-tools">Web/Dev Tools</a></li>
+                    <li><a href="../index.html#color-tools">Color Tools</a></li>
+                    <li><a href="../index.html#seo-marketing-tools">SEO Tools</a></li>
+                    <li><a href="../index.html#utility-tools">Utility Tools</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="currentYear"></span> a2z tools. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const copyBtn = document.getElementById('copyBtn');
+
+            document.getElementById('uppercaseBtn').addEventListener('click', () => {
+                outputText.value = inputText.value.toUpperCase();
+            });
+
+            document.getElementById('lowercaseBtn').addEventListener('click', () => {
+                outputText.value = inputText.value.toLowerCase();
+            });
+
+            document.getElementById('titlecaseBtn').addEventListener('click', () => {
+                outputText.value = inputText.value.replace(/\w\S*/g, (txt) => 
+                    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+                );
+            });
+
+            document.getElementById('sentencecaseBtn').addEventListener('click', () => {
+                outputText.value = inputText.value.replace(/(^\w|\.\s*\w)/g, (txt) => 
+                    txt.toUpperCase()
+                );
+            });
+
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(outputText.value);
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy to Clipboard';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                }
+            });
+        });
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">c:\Users\afeef\OneDrive\Desktop\A2Z Store\New github(2)\a2z tools\a2z-tools\tools\text-case-converter.html

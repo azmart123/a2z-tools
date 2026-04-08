@@ -10,789 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
 
-    <style>
-        /* ======================= General Styles & Variables ======================= */
-        :root {
-            --primary-blue: #007bff;        /* Main interactive blue */
-            --primary-blue-dark: #0056b3;   /* Darker blue for hover states */
-            --light-blue-bg: #e7f3ff;     /* Very light blue for subtle backgrounds */
-            --accent-blue: #3399ff;       /* A slightly lighter, brighter blue for highlights */
-            --text-dark: #212529;         /* Main text color */
-            --text-light: #6c757d;        /* Lighter text for subheadlines, descriptions */
-            --bg-white: #ffffff;
-            --bg-light-gray: #f8f9fa;     /* Light gray for alternating sections */
-            --border-color: #dee2e6;      /* Standard border color */
-            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.07); /* Softer, slightly larger shadow */
-            --card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;         /* Consistent rounded corners */
-            --font-primary: 'Roboto', sans-serif;
-            --font-headings: 'Montserrat', sans-serif;
-            --transition-speed: 0.3s;     /* Standard transition speed */
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-primary);
-            color: var(--text-dark);
-            line-height: 1.7; /* Slightly increased line-height for readability */
-            background-color: var(--bg-white);
-            -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
-            -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--primary-blue);
-            transition: color var(--transition-speed) ease;
-        }
-
-        a:hover {
-            color: var(--primary-blue-dark);
-        }
-
-        h1, h2, h3 {
-            font-family: var(--font-headings);
-            font-weight: 700;
-            margin-bottom: 0.6em; /* Adjusted margin */
-        }
-
-        h2 {
-            font-size: 2.3rem; /* Slightly larger section titles */
-            color: var(--text-dark);
-            margin-bottom: 25px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--light-blue-bg);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-align: center;
-            justify-content: center;
-        }
-
-        h2 i {
-            color: var(--accent-blue); /* Using accent blue for section icons */
-            font-size: 2.1rem; /* Slightly adjusted icon size */
-        }
-
-        p {
-            margin-bottom: 1em;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block; /* Prevents bottom space */
-        }
-
-        /* ======================= Header ======================= */
-        .site-header {
-            background-color: var(--bg-white);
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.06); /* Slightly more defined shadow */
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo a {
-            font-family: var(--font-headings);
-            font-size: 1.9rem; /* Slightly larger logo */
-            font-weight: 700; /* Already bold, ensuring it */
-            color: var(--text-dark);
-        }
-
-        .main-nav ul {
-            list-style: none;
-            display: flex;
-            gap: 30px; /* Increased gap */
-        }
-
-        .main-nav a {
-            font-weight: 500;
-            color: var(--text-light);
-            padding: 8px 0; /* Slightly more padding for easier click */
-            position: relative;
-            transition: color var(--transition-speed) ease;
-        }
-
-        .main-nav a.active,
-        .main-nav a:hover {
-            color: var(--primary-blue);
-        }
-
-        .main-nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0; /* Position underline at the very bottom of padding */
-            left: 0;
-            width: 0;
-            height: 2.5px; /* Slightly thicker underline */
-            background-color: var(--primary-blue);
-            transition: width var(--transition-speed) ease;
-        }
-
-        .main-nav a.active::after,
-        .main-nav a:hover::after {
-            width: 100%;
-        }
-
-        .header-contact .email-link {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 6px; /* Increased gap */
-        }
-        .header-contact .email-link i {
-            color: var(--primary-blue);
-            font-size: 1rem; /* Slightly larger email icon */
-        }
-
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 1001;
-        }
-
-        .hamburger {
-            display: block;
-            width: 28px; /* Slightly larger hamburger */
-            height: 3px;
-            background-color: var(--text-dark);
-            position: relative;
-            transition: background-color var(--transition-speed) ease;
-        }
-
-        .hamburger::before,
-        .hamburger::after {
-            content: '';
-            position: absolute;
-            width: 28px;
-            height: 3px;
-            background-color: var(--text-dark);
-            left: 0;
-            transition: transform var(--transition-speed) ease, top var(--transition-speed) ease;
-        }
-
-        .hamburger::before {
-            top: -9px; /* Adjusted spacing */
-        }
-
-        .hamburger::after {
-            top: 9px;
-        }
-
-        .nav-toggle.active .hamburger {
-            background-color: transparent;
-        }
-        .nav-toggle.active .hamburger::before {
-            top: 0;
-            transform: rotate(45deg);
-        }
-        .nav-toggle.active .hamburger::after {
-            top: 0;
-            transform: rotate(-45deg);
-        }
-
-        /* ======================= Hero Section ======================= */
-        .hero-section {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 40%, var(--light-blue-bg) 80%, var(--bg-white) 100%); /* Refined gradient */
-            padding: 90px 0; /* Increased padding */
-            text-align: center;
-            color: var(--text-dark);
-            overflow: hidden; /* For animations */
-        }
-
-        .hero-section h1 {
-            font-size: 3rem; /* Larger headline */
-            color: var(--bg-white);
-            margin-bottom: 25px;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.25);
-        }
-
-        .hero-section .subheadline {
-            font-size: 1.3rem; /* Larger subheadline */
-            color: var(--light-blue-bg); /* Brighter color on the darker part of gradient */
-            max-width: 750px; /* Slightly wider */
-            margin: 0 auto 35px auto;
-        }
-
-        .cta-button {
-            background-color: var(--bg-white);
-            color: var(--primary-blue);
-            padding: 16px 35px; /* Larger CTA */
-            font-size: 1.15rem;
-            font-weight: 700;
-            border-radius: var(--border-radius);
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform 0.2s ease, box-shadow var(--transition-speed) ease;
-            display: inline-block;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.18);
-            border: 2px solid transparent;
-        }
-
-        .cta-button:hover {
-            background-color: var(--primary-blue-dark);
-            color: var(--bg-white);
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 7px 15px rgba(0,0,0,0.22);
-        }
-
-        .hero-icons {
-            margin-top: 45px;
-            display: flex;
-            justify-content: center;
-            gap: 35px; /* Increased gap */
-            flex-wrap: wrap;
-        }
-
-        .hero-icons span {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            background-color: rgba(255, 255, 255, 0.8); /* More pronounced background */
-            padding: 12px 18px; /* Adjusted padding */
-            border-radius: var(--border-radius);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.08);
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-        }
-        .hero-icons span:hover {
-            transform: translateY(-4px) scale(1.05); /* More pronounced hover */
-            box-shadow: 0 5px 10px rgba(0,0,0,0.12);
-        }
-
-        .hero-icons span i {
-            color: var(--accent-blue);
-            font-size: 2rem; /* Larger icons */
-        }
-
-        /* ======================= Search Bar Section ======================= */
-        .search-section {
-            padding: 50px 0; /* Increased padding */
-            background-color: var(--bg-white);
-        }
-
-        #toolSearchForm {
-            display: flex;
-            max-width: 750px; /* Slightly wider */
-            margin: 0 auto;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08); /* More prominent shadow */
-        }
-
-        #toolSearchInput {
-            flex-grow: 1;
-            padding: 18px 22px; /* Increased padding for larger feel */
-            font-size: 1.05rem; /* Slightly larger font */
-            border: none;
-            outline: none;
-        }
-        #toolSearchInput::placeholder {
-            color: var(--text-light);
-            opacity: 0.8; /* Make placeholder slightly less prominent */
-        }
-        #toolSearchInput:focus {
-            box-shadow: inset 0 0 0 2px var(--primary-blue); /* Focus indicator */
-        }
-
-
-        #toolSearchForm button {
-            background-color: var(--primary-blue);
-            color: var(--bg-white);
-            border: none;
-            padding: 0 28px; /* Increased padding */
-            cursor: pointer;
-            font-size: 1.15rem; /* Matched input font size */
-            transition: background-color var(--transition-speed) ease;
-        }
-
-        #toolSearchForm button:hover {
-            background-color: var(--primary-blue-dark);
-        }
-        #no-results-message-container {
-            margin-top: 15px;
-        }
-        #no-results-message {
-            text-align: center;
-            padding: 20px;
-            font-size: 1.1rem;
-            color: var(--text-light);
-            background-color: var(--light-blue-bg);
-            border-radius: var(--border-radius);
-            border: 1px dashed var(--border-color);
-        }
-
-
-        /* ======================= Tool Categories ======================= */
-        .tool-category {
-            padding: 70px 0; /* Increased padding */
-        }
-        .tool-category:nth-child(even) {
-            background-color: var(--light-blue-bg);
-        }
-        .tool-category:nth-child(odd) {
-            background-color: var(--bg-white);
-        }
-
-        .category-subheading {
-            font-size: 1.15rem; /* Slightly larger */
-            color: var(--text-light);
-            text-align: center;
-            margin-bottom: 45px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: -15px;
-        }
-
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Min card width */
-            gap: 35px; /* Increased gap */
-        }
-
-        .tool-card {
-            background-color: var(--bg-white);
-            border-radius: var(--border-radius);
-            padding: 28px; /* Increased padding */
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid var(--border-color);
-        }
-
-        .tool-card.hidden {
-            display: none;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-6px) scale(1.02); /* More pronounced lift */
-            box-shadow: var(--card-hover-shadow);
-            border-color: var(--primary-blue);
-        }
-
-        .tool-icon {
-            font-size: 2.8rem; /* Larger tool icons */
-            color: var(--primary-blue);
-            margin-bottom: 18px;
-            transition: transform var(--transition-speed) ease; /* Icon animation on hover */
-        }
-        .tool-card:hover .tool-icon {
-            transform: scale(1.1) rotate(-5deg); /* Slight scale and rotate on card hover */
-        }
-        .tool-icon .fa-stack {
-            font-size: 1em;
-        }
-
-
-        .tool-card h3 {
-            font-size: 1.35rem; /* Slightly larger card title */
-            color: var(--text-dark);
-            margin-bottom: 12px;
-            min-height: 2.8em; /* Ensure space for two lines if needed */
-            display: flex; /* To center vertically if only one line */
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tool-card p {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 22px;
-            flex-grow: 1;
-            min-height: 45px;
-        }
-
-        .tool-button {
-            background-color: var(--primary-blue);
-            color: var(--bg-white);
-            padding: 12px 24px; /* Increased padding */
-            border-radius: var(--border-radius);
-            font-weight: 500;
-            display: inline-block;
-            transition: background-color var(--transition-speed) ease, transform 0.2s ease;
-            border: 1px solid var(--primary-blue);
-            text-transform: uppercase;
-            font-size: 0.88rem; /* Slightly adjusted */
-            letter-spacing: 0.6px;
-        }
-
-        .tool-button:hover {
-            background-color: var(--primary-blue-dark);
-            border-color: var(--primary-blue-dark);
-            color: var(--bg-white);
-            transform: translateY(-2px) scale(1.02); /* Slight lift and scale */
-        }
-
-        /* ======================= Footer ======================= */
-        .site-footer {
-            background-color: var(--text-dark);
-            color: #c0c8d1; /* Slightly lighter footer text */
-            padding: 60px 0 0; /* Increased padding */
-        }
-
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Min col width */
-            gap: 35px; /* Increased gap */
-            padding-bottom: 45px;
-        }
-
-        .footer-about .logo {
-            font-family: var(--font-headings);
-            font-size: 1.9rem; /* Match header logo */
-            font-weight: 700;
-            color: var(--bg-white);
-            margin-bottom: 12px;
-        }
-
-        .footer-about p, .footer-contact p {
-            font-size: 0.92rem; /* Slightly larger */
-            margin-bottom: 12px;
-            line-height: 1.8; /* Increased for footer readability */
-        }
-        .website-builder {
-            font-size: 0.82rem;
-            color: #9098a1; /* Lighter gray */
-            margin-top: 18px;
-        }
-
-        .footer-contact h4, .footer-links h4 {
-            color: var(--bg-white);
-            font-size: 1.25rem; /* Slightly larger footer headings */
-            margin-bottom: 18px;
-            font-family: var(--font-headings);
-        }
-
-        .footer-contact a {
-            color: #c0c8d1;
-            transition: color var(--transition-speed) ease;
-        }
-        .footer-contact a:hover {
-            color: var(--bg-white);
-        }
-        .footer-contact .social-media {
-            margin-top: 18px;
-            margin-bottom: 12px;
-        }
-        .footer-contact .social-media a {
-            color: var(--bg-white);
-            font-size: 1.6rem; /* Larger social icons */
-            margin-right: 18px;
-            transition: color var(--transition-speed) ease, transform 0.2s ease;
-            display: inline-block;
-        }
-        .footer-contact .social-media a:hover {
-            color: var(--accent-blue); /* Use accent blue for hover */
-            transform: scale(1.15) translateY(-2px); /* More pronounced hover */
-        }
-        .footer-contact .social-media .telegram-link {
-            font-size: 0.92rem;
-            vertical-align: middle;
-        }
-        .footer-contact .social-media .telegram-link i {
-             font-size: 1.25rem;
-             margin-right: 6px;
-        }
-
-        .footer-contact .telegram-desc {
-            font-size: 0.82rem;
-            color: #9098a1;
-            line-height: 1.5;
-        }
-
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px; /* Increased spacing */
-        }
-
-        .footer-links a {
-            color: #c0c8d1;
-            transition: color var(--transition-speed) ease, padding-left var(--transition-speed) ease;
-            font-size: 0.92rem;
-        }
-
-        .footer-links a:hover {
-            color: var(--bg-white);
-            padding-left: 8px; /* More indent on hover */
-        }
-        .footer-links a::before { /* Optional: add a small bullet or dash */
-            content: "• ";
-            color: var(--primary-blue);
-            margin-right: 5px;
-            opacity: 0.6;
-        }
-        .footer-links a:hover::before {
-            opacity: 1;
-        }
-
-
-        .footer-bottom {
-            text-align: center;
-            padding: 25px 0; /* Increased padding */
-            border-top: 1px solid #404850; /* Slightly adjusted border color */
-            font-size: 0.92rem;
-        }
-
-        /* Animation Helper Classes */
-        .anim-slide-in-up {
-            opacity: 0;
-            transform: translateY(30px); /* Start further down */
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Smoother, longer transition */
-        }
-        .anim-slide-in-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .anim-slide-in-up.delay-1 { transition-delay: 0.1s; }
-        .anim-slide-in-up.delay-2 { transition-delay: 0.2s; }
-        .anim-slide-in-up.delay-3 { transition-delay: 0.3s; }
-        .anim-slide-in-up.delay-4 { transition-delay: 0.4s; }
-        .anim-slide-in-up.delay-5 { transition-delay: 0.5s; }
-
-
-        /* ======================= Responsive Design ======================= */
-        @media (max-width: 992px) {
-            .hero-section h1 {
-                font-size: 2.6rem;
-            }
-            .hero-section .subheadline {
-                font-size: 1.2rem;
-            }
-            .tool-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            }
-            h2 {
-                font-size: 2.1rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-container {
-                position: relative;
-            }
-            .main-nav {
-                position: fixed; /* Fixed position for full screen overlay feel */
-                top: 0; /* Start from top of viewport */
-                left: -100%; /* Start off-screen */
-                width: 80%; /* Not full width for an overlay effect */
-                max-width: 300px; /* Max width for the nav panel */
-                height: 100vh; /* Full viewport height */
-                background-color: var(--bg-white);
-                box-shadow: 5px 0 15px rgba(0,0,0,0.15); /* Shadow on the panel */
-                overflow-y: auto;
-                transition: left 0.4s ease-in-out; /* Smoother transition for slide-in */
-                padding-top: 70px; /* Space for a close button or logo */
-            }
-            .main-nav.active {
-                left: 0; /* Slide in from left */
-            }
-            .nav-overlay { /* Optional overlay for behind the nav */
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0,0,0,0.5);
-                z-index: 999; /* Below header, above content */
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
-            }
-            .nav-overlay.active {
-                opacity: 1;
-                visibility: visible;
-            }
-
-
-            .main-nav ul {
-                flex-direction: column;
-                padding: 20px 0; /* Padding inside the nav panel */
-                gap: 0;
-            }
-            .main-nav li {
-                width: 100%;
-            }
-            .main-nav a {
-                display: block;
-                padding: 15px 25px; /* Generous padding for tap targets */
-                text-align: left;
-                width: 100%;
-                border-bottom: 1px solid var(--light-blue-bg);
-                font-size: 1.05rem; /* Larger font for mobile nav */
-            }
-            .main-nav li:last-child a {
-                border-bottom: none;
-            }
-            .main-nav a::after {
-                display: none;
-            }
-
-            .nav-toggle {
-                display: block;
-                order: 1; /* Ensure it's on the right */
-                position: relative; /* To ensure it's clickable */
-                z-index: 1002; /* Above overlay and nav when nav is closed */
-            }
-            .nav-toggle.active { /* Style when nav is open */
-                 /* Position inside nav panel, or keep in header */
-            }
-
-            .header-contact {
-                display: none;
-            }
-            .logo a {
-                font-size: 1.7rem;
-            }
-
-            .hero-section {
-                padding: 70px 0;
-            }
-            .hero-section h1 {
-                font-size: 2.2rem;
-            }
-            .hero-icons {
-                gap: 18px;
-            }
-            .hero-icons span {
-                font-size: 0.9rem;
-                padding: 10px 15px;
-            }
-            .hero-icons span i {
-                font-size: 1.6rem;
-            }
-
-            .search-section {
-                padding: 40px 0;
-            }
-            #toolSearchInput, #toolSearchForm button {
-                font-size: 1rem;
-                padding: 14px 18px;
-            }
-            #toolSearchForm button {
-                padding: 0 22px;
-            }
-
-            h2 {
-                font-size: 1.9rem;
-                justify-content: flex-start;
-                text-align: left;
-            }
-             h2 i { font-size: 1.9rem; }
-            .category-subheading {
-                font-size: 1.05rem;
-                margin-bottom: 35px;
-                text-align: left;
-            }
-            .tool-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-             .tool-card {
-                padding: 22px;
-            }
-            .tool-card h3 {
-                min-height: auto;
-            }
-
-
-            .footer-container {
-                grid-template-columns: 1fr;
-                text-align: left;
-            }
-            .footer-about .logo, .footer-contact h4, .footer-links h4 {
-                text-align: left;
-            }
-            .footer-contact .social-media {
-                justify-content: flex-start;
-            }
-             .footer-contact .social-media a {
-                margin-right: 18px;
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-section h1 {
-                font-size: 2rem;
-            }
-            .hero-section .subheadline {
-                font-size: 1.05rem;
-            }
-            .cta-button {
-                padding: 14px 28px;
-                font-size: 1.05rem;
-            }
-            .hero-icons {
-                gap: 12px;
-            }
-            .hero-icons span {
-                 flex-basis: calc(50% - 12px);
-                 text-align: center;
-            }
-
-            #toolSearchForm {
-                flex-direction: column;
-                border-radius: 0;
-                box-shadow: none;
-                border: none;
-            }
-            #toolSearchInput {
-                border-radius: var(--border-radius);
-                border: 1px solid var(--border-color);
-                margin-bottom: 12px;
-            }
-            #toolSearchForm button {
-                border-radius: var(--border-radius);
-            }
-             .tool-grid {
-                gap: 20px; /* Slightly less gap on very small screens */
-            }
-            .tool-card {
-                padding: 20px; /* Adjust card padding */
-            }
-            h2 { font-size: 1.7rem; }
-            h2 i { font-size: 1.7rem; }
-        }
-    </style>
 </head>
 <body>
 
@@ -815,6 +36,9 @@
                     <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
                 </a>
             </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
                 <span class="hamburger"></span>
             </button>
@@ -848,6 +72,16 @@
     </section>
 
     <main id="tools-section-start">
+        <!-- ======================= Recent Tools ======================= -->
+        <section id="recent-tools" class="recent-tools-section">
+            <div class="container">
+                <h2><i class="fas fa-history"></i> Recently Used Tools</h2>
+                <div id="recent-tools-grid" class="recent-tools-grid">
+                    <!-- Recent tools will be populated here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
         <!-- ======================= Image Tools ======================= -->
         <section id="image-tools" class="tool-category">
             <div class="container">
@@ -858,43 +92,43 @@
                         <div class="tool-icon"><i class="fas fa-exchange-alt"></i></div>
                         <h3>Image Converter</h3>
                         <p>Convert images to various formats like JPG, PNG, WEBP.</p>
-                        <a href="image-converter.html" class="tool-button">Use Tool</a>
+                        <a href="tools/image-converter.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="image compressor reduce size optimize shrink">
                         <div class="tool-icon"><i class="fas fa-compress-arrows-alt"></i></div>
                         <h3>Image Compressor</h3>
                         <p>Reduce image file size without losing significant quality.</p>
-                        <a href="image-compressor.html" class="tool-button">Use Tool</a>
+                        <a href="tools/image-compressor.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="image resizer change dimensions scale crop width height">
                         <div class="tool-icon"><i class="fas fa-expand-arrows-alt"></i></div>
                         <h3>Image Resizer</h3>
                         <p>Change the dimensions (width/height) of your images.</p>
-                        <a href="image-resizer.html" class="tool-button">Use Tool</a>
+                        <a href="tools/image-resizer.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="image cropper cut trim select area photo aspect ratio">
                         <div class="tool-icon"><i class="fas fa-crop-alt"></i></div>
                         <h3>Image Cropper</h3>
                         <p>Crop images to a specific area or aspect ratio.</p>
-                        <a href="Image-Cropper.html" class="tool-button">Use Tool</a>
+                        <a href="tools/Image-Cropper.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="image to text ocr optical character recognition extract scan">
                         <div class="tool-icon"><i class="fas fa-file-alt"></i></div>
                         <h3>Image to Text (OCR)</h3>
                         <p>Extract editable text from images using OCR technology.</p>
-                        <a href="Image-to-Text.html" class="tool-button">Use Tool</a>
+                        <a href="tools/Image-to-Text.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="image rotator flipper rotate flip mirror orientation correct">
                         <div class="tool-icon"><i class="fas fa-sync-alt"></i></div>
                         <h3>Image Rotator/Flipper</h3>
                         <p>Rotate or flip your images to the correct orientation.</p>
-                        <a href="Image-Rotator.html" class="tool-button">Use Tool</a>
+                        <a href="tools/Image-Rotator.html" class="tool-button">Use Tool</a>
                     </div>
                      <div class="tool-card anim-slide-in-up" data-keywords="image background remover transparent erase cut out photo editor ai">
                         <div class="tool-icon"><i class="fas fa-eraser"></i></div>
                         <h3>Image background remover</h3>
                         <p>Automatically remove the background from any image.</p>
-                        <a href="background-removal.html" class="tool-button">Use Tool</a>
+                        <a href="tools/background-removal.html" class="tool-button">Use Tool</a>
                     </div>
                 </div>
             </div>
@@ -910,7 +144,7 @@
                         <div class="tool-icon"><i class="fas fa-comments"></i></div>
                         <h3>Chat aflu ai</h3>
                         <p>Engage in intelligent conversations with our AI chatbot.</p>
-                        <a href="#" class="tool-button">Use Tool</a>
+                        <a href="tools/chat-aflu-ai.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="text to image generator art creation dalle midjourney stable diffusion ai image artwork">
                         <div class="tool-icon"><i class="fas fa-paint-brush"></i></div>
@@ -1046,7 +280,7 @@
                         <div class="tool-icon"><i class="fas fa-file-image"></i></div>
                         <h3>PDF to JPG / JPG to PDF</h3>
                         <p>Convert PDF pages to JPG images or JPGs to PDF format.</p>
-                        <a href="image-converter.html" class="tool-button">Use Tool</a>
+                        <a href="tools/image-converter.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="watermark pdf text image stamp protect brand copyright overlay">
                         <div class="tool-icon"><i class="fas fa-stamp"></i></div>
@@ -1256,7 +490,7 @@
                         <div class="tool-icon"><i class="fas fa-percentage"></i></div>
                         <h3>Percentage Calculator</h3>
                         <p>Calculate percentages, increases, discounts, & more.</p>
-                        <a href="#" class="tool-button">Use Tool</a>
+                        <a href="tools/percentage-calculator.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="random number generator rng dice math statistics picker range custom">
                         <div class="tool-icon"><i class="fas fa-random"></i></div>
@@ -1503,13 +737,13 @@
                         <div class="tool-icon"><i class="fas fa-text-height"></i></div>
                         <h3>Text Case Converter</h3>
                         <p>Change text to uppercase, lowercase, title case, etc.</p>
-                        <a href="#" class="tool-button">Use Tool</a>
+                        <a href="tools/text-case-converter.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="word character counter count length statistics analysis writing seo sentences paragraphs">
                         <div class="tool-icon"><i class="fas fa-sort-numeric-down"></i></div>
                         <h3>Word & Character Counter</h3>
                         <p>Count words, characters, sentences, and paragraphs.</p>
-                        <a href="#" class="tool-button">Use Tool</a>
+                        <a href="tools/word-counter.html" class="tool-button">Use Tool</a>
                     </div>
                     <div class="tool-card anim-slide-in-up" data-keywords="remove duplicate lines unique filter distinct list text cleaning data processing">
                         <div class="tool-icon"><i class="fas fa-stream"></i></div>
@@ -1789,137 +1023,6 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navToggle = document.getElementById('navToggle');
-            const mainNav = document.getElementById('mainNav');
-            const navOverlay = document.querySelector('.nav-overlay'); // Get the overlay
-
-            // --- Mobile Navigation ---
-            if (navToggle && mainNav && navOverlay) {
-                navToggle.addEventListener('click', () => {
-                    const isExpanded = mainNav.classList.toggle('active');
-                    navToggle.classList.toggle('active');
-                    navToggle.setAttribute('aria-expanded', isExpanded);
-                    navOverlay.classList.toggle('active', isExpanded); // Toggle overlay with nav
-                    document.body.style.overflow = isExpanded ? 'hidden' : '';
-                });
-
-                // Close nav when overlay is clicked
-                navOverlay.addEventListener('click', () => {
-                    mainNav.classList.remove('active');
-                    navToggle.classList.remove('active');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                    navOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-
-            // --- Smooth Scroll & Close Mobile Nav ---
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        const headerOffset = document.querySelector('.site-header')?.offsetHeight || 0;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-            
-                        window.scrollTo({
-                             top: offsetPosition,
-                             behavior: "smooth"
-                        });
-
-                        // Close mobile nav if active
-                        if (mainNav?.classList.contains('active')) {
-                            mainNav.classList.remove('active');
-                            navToggle.classList.remove('active');
-                            navToggle.setAttribute('aria-expanded', 'false');
-                            navOverlay.classList.remove('active');
-                            document.body.style.overflow = '';
-                        }
-                    }
-                });
-            });
-
-            // --- Live Search Functionality ---
-            const searchInput = document.getElementById('toolSearchInput');
-            const toolCards = document.querySelectorAll('.tool-card');
-            const toolCategories = document.querySelectorAll('.tool-category');
-            const noResultsContainer = document.getElementById('no-results-message-container');
-            let noResultsMessageElement = null;
-
-            function performSearch() {
-                const searchTerm = searchInput.value.toLowerCase().trim();
-                let hasVisibleResults = false;
-
-                toolCards.forEach(card => {
-                    const toolName = card.querySelector('h3').textContent.toLowerCase();
-                    const toolDescription = card.querySelector('p').textContent.toLowerCase();
-                    const keywords = card.dataset.keywords?.toLowerCase() || '';
-                    
-                    const isMatch = searchTerm === '' || toolName.includes(searchTerm) || toolDescription.includes(searchTerm) || keywords.includes(searchTerm);
-                    
-                    // More efficient show/hide
-                    if (isMatch) {
-                        card.style.display = '';
-                        card.classList.remove('hidden'); // For any CSS relying on .hidden
-                         hasVisibleResults = true;
-                    } else {
-                        card.style.display = 'none';
-                        card.classList.add('hidden');
-                    }
-                });
-
-                toolCategories.forEach(category => {
-                    const visibleCardsInCategory = category.querySelectorAll('.tool-card:not([style*="display: none"])'); // Check actual visibility
-                    category.style.display = (searchTerm === '' || visibleCardsInCategory.length > 0) ? '' : 'none';
-                });
-
-                // Manage "No Results" message
-                if (!hasVisibleResults && searchTerm !== '') {
-                    if (!noResultsMessageElement) {
-                        noResultsMessageElement = document.createElement('p');
-                        noResultsMessageElement.id = 'no-results-message';
-                        noResultsContainer.appendChild(noResultsMessageElement);
-                    }
-                    noResultsMessageElement.textContent = `No tools found for "${searchInput.value}". Try different keywords.`;
-                    noResultsMessageElement.style.display = 'block';
-                } else if (noResultsMessageElement) {
-                    noResultsMessageElement.style.display = 'none';
-                }
-            }
-
-            if (searchInput && toolCards.length > 0) {
-                searchInput.addEventListener('input', performSearch);
-            }
-            
-            const searchForm = document.getElementById('toolSearchForm');
-            if(searchForm){
-                searchForm.addEventListener('submit', (e) => e.preventDefault()); // Prevent page reload on Enter
-            }
-
-            // --- Footer: Current Year ---
-            const currentYearSpan = document.getElementById('currentYear');
-            if (currentYearSpan) {
-                currentYearSpan.textContent = new Date().getFullYear();
-            }
-
-            // --- Intersection Observer for Animations ---
-            const animatedElements = document.querySelectorAll('.anim-slide-in-up');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Unobserve after animation for performance
-                    }
-                });
-            }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
-
-            animatedElements.forEach(el => observer.observe(el));
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

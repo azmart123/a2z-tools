@@ -3,36 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixelConvert | Professional Image Converter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .drop-zone--over {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        #previewCanvas {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-    </style>
+    <title>Image Converter - a2z tools</title>
+    <!-- Favicon (replace with your actual favicon.ico in the same directory or update path) -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../style.css">
 </head>
-<body class="min-h-screen text-slate-800">
+<body>
+
+    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
+    <!-- ======================= Top Header ======================= -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="../index.html">Tools Wonder</a>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#tools-section-start">Tools</a></li>
+                    <li><a href="../index.html#contact-footer">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
+                    <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ======================= Tool Content ======================= -->
+    <main>
+        <section class="tool-category">
+            <div class="container">
+                <h2><i class="fas fa-exchange-alt"></i> Image Converter</h2>
+                <p class="category-subheading">Convert your images between different formats (JPG, PNG, WEBP) with ease. Upload an image and select your desired output format.</p>
+                <div class="tool-interface">
+                    <div class="upload-section">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button id="uploadBtn" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </button>
+                        <p id="fileName" class="file-info">No file selected</p>
+                    </div>
+                    
+                    <div class="convert-controls" id="convertControls" style="display: none;">
+                        <div class="format-selection">
+                            <label for="formatSelect">Output Format:</label>
+                            <select id="formatSelect">
+                                <option value="image/jpeg">JPG</option>
+                                <option value="image/png">PNG</option>
+                                <option value="image/webp">WEBP</option>
+                            </select>
+                        </div>
+                        <div class="quality-control" id="qualityControl" style="display: none;">
+                            <label for="qualitySlider">Quality (JPG/WEBP only):</label>
+                            <input type="range" id="qualitySlider" min="10" max="100" value="90">
+                            <span id="qualityValue">90%</span>
+                        </div>
+                        <button id="convertBtn" class="btn btn-secondary">
+                            <i class="fas fa-exchange-alt"></i> Convert Image
+                        </button>
+                    </div>
+                    
+                    <div class="preview-section" id="previewSection" style="display: none;">
+                        <h3>Converted Preview</h3>
+                        <canvas id="previewCanvas"></canvas>
+                        <div class="preview-info">
+                            <span id="previewFormat">Format: -</span> | <span id="previewSize">Size: -</span>
+                        </div>
+                        <button id="downloadBtn" class="btn btn-primary" style="display: none;">
+                            <i class="fas fa-download"></i> Download Converted Image
+                        </button>
+                    </div>
+                    
+                    <div class="loading" id="loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Converting...
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======================= Footer ======================= -->
+    <footer id="contact-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tools Wonder</h3>
+                    <p>Your ultimate collection of online tools for productivity and creativity.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#tools-section-start">Tools</a></li>
+                        <li><a href="../index.html#contact-footer">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tools Wonder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileName = document.getElementById('fileName');
+            const convertControls = document.getElementById('convertControls');
+            const formatSelect = document.getElementById('formatSelect');
+            const qualityControl = document.getElementById('qualityControl');
+            const qualitySlider = document.getElementById('qualitySlider');
+            const qualityValue = document.getElementById('qualityValue');
+            const convertBtn = document.getElementById('convertBtn');
+            const previewSection = document.getElementById('previewSection');
+            const previewCanvas = document.getElementById('previewCanvas');
+            const previewFormat = document.getElementById('previewFormat');
+            const previewSize = document.getElementById('previewSize');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loading = document.getElementById('loading');
+            const errorMessage = document.getElementById('errorMessage');
+
+            let originalImage = null;
+
+            uploadBtn.addEventListener('click', () => {
+                imageInput.click();
+            });
+
+            imageInput.addEventListener('change', handleFileSelect);
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!file.type.startsWith('image/')) {
+                    showError('Please select a valid image file.');
+                    return;
+                }
+
+                fileName.textContent = file.name;
+                hideError();
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        originalImage = img;
+                        convertControls.style.display = 'block';
+                        previewSection.style.display = 'none';
+                        downloadBtn.style.display = 'none';
+                        updateQualityControl();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            formatSelect.addEventListener('change', updateQualityControl);
+
+            function updateQualityControl() {
+                const format = formatSelect.value;
+                if (format === 'image/jpeg' || format === 'image/webp') {
+                    qualityControl.style.display = 'block';
+                } else {
+                    qualityControl.style.display = 'none';
+                }
+            }
+
+            qualitySlider.addEventListener('input', function() {
+                qualityValue.textContent = qualitySlider.value + '%';
+            });
+
+            convertBtn.addEventListener('click', convertImage);
+
+            function convertImage() {
+                if (!originalImage) return;
+
+                const format = formatSelect.value;
+                const quality = parseInt(qualitySlider.value) / 100;
+
+                hideError();
+                loading.style.display = 'block';
+
+                setTimeout(() => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = originalImage.width;
+                    canvas.height = originalImage.height;
+
+                    ctx.drawImage(originalImage, 0, 0);
+
+                    const mimeType = format;
+                    const extension = format.split('/')[1].toUpperCase();
+
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const img = new Image();
+                        img.onload = function() {
+                            previewCanvas.width = img.width;
+                            previewCanvas.height = img.height;
+                            const previewCtx = previewCanvas.getContext('2d');
+                            previewCtx.drawImage(img, 0, 0);
+
+                            previewFormat.textContent = `Format: ${extension}`;
+                            previewSize.textContent = `Size: ${(blob.size / 1024).toFixed(2)} KB`;
+                            previewSection.style.display = 'block';
+                            downloadBtn.style.display = 'inline-block';
+                            loading.style.display = 'none';
+
+                            downloadBtn.onclick = function() {
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `converted-image.${extension.toLowerCase()}`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                            };
+                        };
+                        img.src = url;
+                    }, mimeType, quality);
+                }, 100); // Small delay for loading effect
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
 
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-md">

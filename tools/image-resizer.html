@@ -1,53 +1,267 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Resizer | Watermark & Filter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-light: #f1f5f9; --bg-dark: #0f172a;
-            --card-light: #ffffff; --card-dark: #1e293b;
-            --text-light: #0f172a; --text-dark: #e2e8f0;
-            --text-muted-light: #64748b; --text-muted-dark: #94a3b8;
-            --border-light: #e2e8f0; --border-dark: #334155;
-            --primary: #4f46e5; --primary-hover: #4338ca;
-            --secondary: #10b981; --secondary-hover: #059669;
-        }
-        html.dark { --bg: var(--bg-dark); --card: var(--card-dark); --text: var(--text-dark); --text-muted: var(--text-muted-dark); --border: var(--border-dark); }
-        html:not(.dark) { --bg: var(--bg-light); --card: var(--card-light); --text: var(--text-light); --text-muted: var(--text-muted-light); --border: var(--border-light); }
-        
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: background-color 0.3s, color 0.3s; }
-        .card { background-color: var(--card); transition: background-color 0.3s; }
-        .text-muted { color: var(--text-muted); }
-        .border-color { border-color: var(--border); }
-        .input-field { background-color: var(--bg); border: 1px solid var(--border); color: var(--text); }
-        .input-field:focus { border-color: var(--primary); outline: 2px solid transparent; outline-offset: 2px; box-shadow: 0 0 0 2px var(--primary); }
-        
-        .drop-zone { border: 2px dashed var(--border); transition: all 0.2s ease-in-out; }
-        .drop-zone.dragover { background-color: rgba(79, 70, 229, 0.1); border-color: var(--primary); }
-        
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.25rem; font-weight: 600; border-radius: 0.5rem; transition: all 0.2s; white-space: nowrap; }
-        .btn-primary { background-color: var(--primary); color: white; }
-        .btn-primary:hover { background-color: var(--primary-hover); }
-        .btn-secondary { background-color: var(--secondary); color: white; }
-        .btn-secondary:hover { background-color: var(--secondary-hover); }
-        .btn-tertiary { background-color: var(--bg); color: var(--text); border: 1px solid var(--border); }
-        .btn-tertiary:hover { background-color: rgba(100, 116, 139, 0.1); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    <title>Image Resizer - a2z tools</title>
+    <!-- Favicon (replace with your actual favicon.ico in the same directory or update path) -->
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
 
-        /* Accordion */
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out; }
-        .accordion-header.active + .accordion-content { max-height: 500px; }
-        .accordion-header .icon { transition: transform 0.3s; }
-        .accordion-header.active .icon { transform: rotate(180deg); }
+    <div class="nav-overlay"></div> <!-- For mobile nav background effect -->
+    <!-- ======================= Top Header ======================= -->
+    <header class="site-header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="../index.html">Tools Wonder</a>
+            </div>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../index.html#tools-section-start">Tools</a></li>
+                    <li><a href="../index.html#contact-footer">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <a href="mailto:a2zstorekerala@gmail.com" class="email-link" aria-label="Contact us via email at a2zstorekerala@gmail.com">
+                    <i class="fas fa-envelope"></i> a2zstorekerala@gmail.com
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mainNav">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
 
-        /* Comparison Slider */
-        .comparison-slider { position: relative; overflow: hidden; }
+    <!-- ======================= Tool Content ======================= -->
+    <main>
+        <section class="tool-category">
+            <div class="container">
+                <h2><i class="fas fa-expand-arrows-alt"></i> Image Resizer</h2>
+                <p class="category-subheading">Resize your images to custom dimensions while maintaining quality. Upload an image, set new width and height, and download the resized version.</p>
+                <div class="tool-interface">
+                    <div class="upload-section">
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        <button id="uploadBtn" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Choose Image
+                        </button>
+                        <p id="fileName" class="file-info">No file selected</p>
+                    </div>
+                    
+                    <div class="resize-controls" id="resizeControls" style="display: none;">
+                        <div class="dimension-inputs">
+                            <div class="input-group">
+                                <label for="widthInput">Width (px):</label>
+                                <input type="number" id="widthInput" min="1" max="5000" placeholder="Width">
+                            </div>
+                            <div class="input-group">
+                                <label for="heightInput">Height (px):</label>
+                                <input type="number" id="heightInput" min="1" max="5000" placeholder="Height">
+                            </div>
+                        </div>
+                        <div class="aspect-ratio">
+                            <label>
+                                <input type="checkbox" id="aspectRatioLock" checked>
+                                Lock aspect ratio
+                            </label>
+                        </div>
+                        <button id="resizeBtn" class="btn btn-secondary">
+                            <i class="fas fa-compress"></i> Resize Image
+                        </button>
+                    </div>
+                    
+                    <div class="preview-section" id="previewSection" style="display: none;">
+                        <h3>Preview</h3>
+                        <canvas id="previewCanvas"></canvas>
+                        <div class="preview-info">
+                            <span id="previewSize">Size: -</span>
+                        </div>
+                        <button id="downloadBtn" class="btn btn-primary" style="display: none;">
+                            <i class="fas fa-download"></i> Download Resized Image
+                        </button>
+                    </div>
+                    
+                    <div class="loading" id="loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Processing...
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ======================= Footer ======================= -->
+    <footer id="contact-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tools Wonder</h3>
+                    <p>Your ultimate collection of online tools for productivity and creativity.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../index.html#tools-section-start">Tools</a></li>
+                        <li><a href="../index.html#contact-footer">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:a2zstorekerala@gmail.com">a2zstorekerala@gmail.com</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tools Wonder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileName = document.getElementById('fileName');
+            const resizeControls = document.getElementById('resizeControls');
+            const widthInput = document.getElementById('widthInput');
+            const heightInput = document.getElementById('heightInput');
+            const aspectRatioLock = document.getElementById('aspectRatioLock');
+            const resizeBtn = document.getElementById('resizeBtn');
+            const previewSection = document.getElementById('previewSection');
+            const previewCanvas = document.getElementById('previewCanvas');
+            const previewSize = document.getElementById('previewSize');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loading = document.getElementById('loading');
+            const errorMessage = document.getElementById('errorMessage');
+
+            let originalImage = null;
+            let originalWidth = 0;
+            let originalHeight = 0;
+
+            uploadBtn.addEventListener('click', () => {
+                imageInput.click();
+            });
+
+            imageInput.addEventListener('change', handleFileSelect);
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                if (!file.type.startsWith('image/')) {
+                    showError('Please select a valid image file.');
+                    return;
+                }
+
+                fileName.textContent = file.name;
+                hideError();
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        originalImage = img;
+                        originalWidth = img.width;
+                        originalHeight = img.height;
+                        widthInput.value = originalWidth;
+                        heightInput.value = originalHeight;
+                        resizeControls.style.display = 'block';
+                        previewSection.style.display = 'none';
+                        downloadBtn.style.display = 'none';
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            widthInput.addEventListener('input', handleDimensionChange);
+            heightInput.addEventListener('input', handleDimensionChange);
+
+            function handleDimensionChange(event) {
+                if (!aspectRatioLock.checked) return;
+
+                const aspectRatio = originalWidth / originalHeight;
+                if (event.target.id === 'widthInput') {
+                    heightInput.value = Math.round(widthInput.value / aspectRatio);
+                } else {
+                    widthInput.value = Math.round(heightInput.value * aspectRatio);
+                }
+            }
+
+            resizeBtn.addEventListener('click', resizeImage);
+
+            function resizeImage() {
+                if (!originalImage) return;
+
+                const newWidth = parseInt(widthInput.value);
+                const newHeight = parseInt(heightInput.value);
+
+                if (newWidth < 1 || newHeight < 1 || newWidth > 5000 || newHeight > 5000) {
+                    showError('Please enter valid dimensions (1-5000px).');
+                    return;
+                }
+
+                hideError();
+                loading.style.display = 'block';
+
+                setTimeout(() => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+
+                    ctx.drawImage(originalImage, 0, 0, newWidth, newHeight);
+
+                    previewCanvas.width = newWidth;
+                    previewCanvas.height = newHeight;
+                    const previewCtx = previewCanvas.getContext('2d');
+                    previewCtx.drawImage(canvas, 0, 0);
+
+                    previewSize.textContent = `Size: ${newWidth} x ${newHeight} px`;
+                    previewSection.style.display = 'block';
+                    downloadBtn.style.display = 'inline-block';
+                    loading.style.display = 'none';
+
+                    downloadBtn.onclick = function() {
+                        canvas.toBlob(function(blob) {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'resized-image.png';
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        });
+                    };
+                }, 100); // Small delay for loading effect
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+
+            function hideError() {
+                errorMessage.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
         .comparison-slider img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
         .comparison-slider .img-resized { clip-path: inset(0 50% 0 0); }
         .comparison-slider .slider-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background-color: rgba(255, 255, 255, 0.8); cursor: ew-resize; transform: translateX(-50%); }
